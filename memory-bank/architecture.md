@@ -1,14 +1,14 @@
 # PsychTalk Hub — 架构记录
 
-日期：2026-10-04｜最后验收步骤：08｜状态：用户确认本地验收通过；GitHub CI 待验证，第 09 步未开始
+日期：2026-10-04｜最后验收步骤：08｜状态：用户确认本地验收通过；基础后端 GitHub CI 已通过，第 09 步未开始
 
-本文记录当前仓库事实与后续计划的架构边界，不代表完整应用、接口或部署已经实现。测试由用户执行；用户已分别确认第 01–08 步“通过”。第 08 步按用户确认记录本地验收，未提供逐项输出；GitHub CI 和 Linux 兼容性仍待验证。收到本步确认后已先请求打开并更新 [progress.md](progress.md)，再补充本文件的文件职责、验收与洞察；助手未代运行检查或测试，第 09 步未开始。
+本文记录当前仓库事实与后续计划的架构边界，不代表完整应用、接口或部署已经实现。用户已分别确认第 01–08 步本地“通过”，未提供逐项输出。2026-10-04，另按用户授权提交、推送，并核对基础后端 GitHub CI 成功；助手未在本机代运行验收测试。先更新 [progress.md](progress.md)，再同步本文件；第 09 步未开始。第 6–20 节保留各步骤交接当时的历史状态，最新远程验证见第 21 节。
 
 ## 1. 当前仓库状态
 
-仓库已初始化 Git，已有本地提交及 GitHub 远程；本次不提交或推送。当前复用功能分支 `docs/clarify-implementation-plan`，保留此前文档的未提交修改，不覆盖或撤销这些改动。
+仓库复用功能分支 `docs/clarify-implementation-plan`，跟踪 `origin/docs/clarify-implementation-plan`。第 01–08 步现有文档及实现已提交并推送为 `66b4140`，未合并默认分支，未创建 PR。
 
-第 03 步已在 backend 建立 Django config 项目和唯一的 events 业务应用，并移除 backend/.gitkeep。第 04 步已加入环境配置、独立 PostgreSQL 17、健康检查、基础测试与 backend CI 工作流，移除工作流占位文件；frontend 仍只有占位文件。第 05 步的 Event 模型、初始迁移和 9 个模型测试已由用户确认本地验收。第 06 步增加 Resource、0002_resource 迁移及 14 个测试，已由用户确认本地验收；助手只生成迁移，未应用迁移或代运行验收。第 07 步增加 EventResource、0003_event_resource 和 13 个测试，已由用户确认本地验收；助手只生成迁移，未应用迁移或运行检查/测试。第 08 步增加基础 Admin、三份确认模板和 21 个测试，已由用户确认本地验收，累计 69 个测试方法；助手未代运行验收，无逐项输出。活动 API、React、DOI 导入及演示数据尚未实现。新增文件均未暂存或提交，本次没有 GitHub 更新，CI 线上运行仍未验证。
+第 03 步已在 backend 建立 Django config 项目和唯一的 events 业务应用，并移除 backend/.gitkeep。第 04 步已加入环境配置、独立 PostgreSQL 17、健康检查、基础测试与 backend CI 工作流，移除工作流占位文件；frontend 仍只有占位文件。第 05–07 步分别加入 Event、Resource、EventResource 及三份迁移、9/14/13 个模型测试，用户已确认本地验收；助手在实施时只生成业务迁移，未代运行本地验收。第 08 步增加基础 Admin、三份确认模板和 21 个测试，用户已确认本地验收，累计 69 个方法。上述文件已随阶段提交推送，基础后端 CI 在线成功。活动 API、React、DOI 导入及演示数据尚未实现。
 
 独立 CPython 3.13.16 安装于项目内被忽略的 .tools/python313，项目虚拟环境位于 backend/.venv，不读取系统 site-packages。安装未修改 PATH、文件关联或启动器，未替换 Anaconda 3.11.5 或既有 Python 3.10。后端直接与传递依赖已按精确版本锁定并安装到该虚拟环境；Gunicorn 限定 Linux 安装，未在 Windows 安装或运行。环境准备日志不等同于用户验收通过。
 
@@ -24,9 +24,9 @@
 | `memory-bank/design-document.md` | 英文产品与交互规范，规定两页公开体验、管理流程、内容规则、视觉及验收 |
 | `memory-bank/design-document.zh-CN.md` | 相同产品规范的中文对应版本，两种语言需同步维护 |
 | `memory-bank/tech-stack.md` | 技术选型、部署边界、数据一致性、预览会话与权限要求；Public API contract 为字段与类型的唯一详细规范 |
-| `memory-bank/implementation-plan.md` | 40 个依赖有序的实施步骤；第 01–08 步已按用户确认本地验收，第 09 步未开始；GitHub CI 待验证 |
+| `memory-bank/implementation-plan.md` | 40 个依赖有序的实施步骤；第 01–08 步用户确认本地验收，基础后端 CI 已通过，第 09 步未开始 |
 | `memory-bank/architecture.md` | 本文件，记录初始事实、计划职责及验收后洞察，后续随实际功能更新，不把设计目标写成已有代码 |
-| `memory-bank/progress.md` | 第 01–08 步的改动、用户验收来源、未验证边界与下一步交接；区分本地通过和 GitHub CI 未验证 |
+| `memory-bank/progress.md` | 第 01–08 步的改动、本地验收来源与交接，以及阶段提交和线上 CI 的独立证据 |
 | `frontend/.gitkeep` | 保留前端目录骨架的占位文件，无 React 项目或依赖配置；实际脚手架留到第 13 步 |
 | `.python-version` | 记录独立 CPython 的准确版本 3.13.16，供后续开发、CI 与部署统一运行时；不会自动切换系统解释器 |
 | `backend/requirements.in` | 直接依赖约束与平台条件的维护来源；更新时需要重新解析，不能当作锁定安装文件 |
@@ -56,7 +56,7 @@
 | `backend/events/tests/test_event_resource.py` | 13 个测试：关联存取、独立活动语境、唯一性、负数及同值排序、字段/外键约束、移除与删除保留规则，以及空 PostgreSQL 测试库迁移；用户确认本地验收，无逐项输出；Admin 权限测试位于 test_admin.py，API 仍未实现 |
 | `backend/events/tests/__init__.py` | 后端测试包标识 |
 | `.tools/`、`backend/.venv/` | 被忽略的本机解释器、下载/解析中间产物和隔离依赖；不随 Git 克隆分发，另一台机器需独立重建 |
-| `.github/workflows/backend.yml` | Linux 使用锁定 Python、PostgreSQL 17.11，检查依赖、系统、迁移和测试；尚未提交/推送或线上运行 |
+| `.github/workflows/backend.yml` | push/PR 时在 Linux 使用锁定 Python 和 PostgreSQL 17.11，检查依赖、系统、迁移和隔离测试；已推送且线上成功，尚无前端检查 |
 | `backend/config/environment.py` | django-environ 配置入口：开发/测试读取对应私有文件，生产仅读进程变量；校验密钥、PostgreSQL、隔离测试库及生产 TLS/主机/DEBUG |
 | `backend/config/test_runner.py` | 标准 DiscoverRunner 的保护层，数据库测试初始化前拒绝生产配置 |
 | `backend/config/health.py` | GET/HEAD readiness probe：SELECT 1，成功 200，故障安全 JSON 503，不缓存、不访问 Crossref，其他方法 405 |
@@ -69,7 +69,7 @@
 
 ## 3. 计划架构与实现边界
 
-backend/config 已有环境配置与健康检查，backend/events 的三个业务模型与基础 Admin 已由用户确认本地验收；公开 API、DOI 服务与 frontend/src 尚不存在。工作流文件已准备但没有线上运行结果。下表描述完整产品的未来职责，不表示对应功能已运行或验证。
+backend/config 已有环境配置与健康检查，backend/events 的三个业务模型与基础 Admin 已由用户确认本地验收，基础后端 CI 已在线通过；公开 API、DOI 服务与 frontend/src 尚不存在。下表描述完整产品的未来职责，不表示全部功能已运行或验证。
 
 | 计划位置 | 计划职责 |
 | --- | --- |
@@ -246,3 +246,10 @@ backend/config 已有环境配置与健康检查，backend/events 的三个业�
 - **书目身份和活动语境在表单层继续分开。** ResourceAdmin 管理共享书目，保留 DOI/来源；EventResourceAdmin 新增时选择已有记录，编辑时锁定外键身份，仅改当前理由/顺序。手动同内容资料仍独立，后续 DOI 查询/并发保存不应依赖标题或 URL 合并。
 - **公开地址先于公开页面。** EventAdmin 提供 /events/{id} 字符串、保存消息和 View on site；这只验证路径契约。活动 API、React 页面与刷新入口仍留到后续步骤，当前地址返回 404 不能写成页面发布成功。
 - **后台测试不能代替整个权限闭环。** test_admin.py 使用隔离库中的测试用户、真实 Admin 请求和启用 CSRF 的客户端，覆盖当前基础操作；第 24–28 步仍须验证 DOI 预览/确认时权限重查、会话及完整矩阵。69 个方法按用户确认记录本地通过，不推断 GitHub CI、Linux、生产或可选手动浏览通过。
+
+## 21. 基础后端 CI 线上验证与架构洞察
+
+- **工作流已有独立远程证据。** 2026-10-04，阶段提交 `66b41404f0d3e6aa91c0b6209faf768bb99f86ee` 触发 [Backend checks #37208404049](https://github.com/1uxury/psych-talk-hub/actions/runs/37208404049)，运行、backend job 和所有检查步骤均成功。证据来自 GitHub API 的运行及步骤状态，不是本地用户确认，也不是逐项日志。
+- **版本锁在干净 Linux 环境中可安装。** .python-version、requirements.txt 与 backend.yml 分别定义解释器、精确依赖及执行环境；此次 Python 设置、Linux 依赖安装和一致性检查成功，包含 Linux 条件依赖。尚未验证 Gunicorn 生产启动、静态集成或部署。
+- **CI 数据库是可丢弃的独立实例。** backend.yml 提供 PostgreSQL 17.11 容器；environment.py 和 test_runner.py 继续约束测试配置及独立测试库。迁移与后端测试步骤成功，没有访问本机开发库或生产库。
+- **Git 发布边界与产品发布边界不同。** 当前实现已推送到功能分支，私有配置、解释器和数据库仍被忽略；未合并默认分支、未创建 PR、未部署。第 13 步将扩展前端检查，第 34 步仍需完整可复现性和失败检测验收；第 09 步未开始。

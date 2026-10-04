@@ -1,12 +1,15 @@
 # PsychTalk Hub backend
 
-Steps 01–08 have **user-confirmed local acceptance**. GitHub CI remains unverified.
+Steps 01–08 have **user-confirmed local acceptance**. Basic backend GitHub CI passed
+on 4 October 2026 for commit 66b4140; see the CI section for remote evidence.
 Step 05 adds Event, an initial migration and nine tests, accepted locally by the user.
 Step 06 adds Resource, migration 0002_resource and 14 tests, accepted locally by the user.
 Step 07 adds EventResource, migration 0003_event_resource and 13 tests, accepted locally by the user.
 Step 08 adds basic Admin management and 21 tests (69 total), accepted locally by the user.
 Event API, React and deployment remain unimplemented. Step 09 has not started.
-No commit or push was made.
+The stage implementation was committed and pushed to docs/clarify-implementation-plan.
+The numbered handoff sections retain their historical validation status; the CI
+section below records the later remote verification.
 
 ## Runtime and dependencies
 
@@ -19,7 +22,8 @@ On another workstation, independently install Python 3.13 and create the virtual
 environment. Install requirements.txt with its interpreter; requirements.in is
 the update source. Direct and transitive versions are locked. Gunicorn installs
 only on Linux; Windows uses runserver. tzdata supports London time on both.
-Actual Linux installation remains unverified until CI runs.
+Locked Linux dependency installation passed in CI. Production server startup and
+deployment remain unverified.
 
 ## Independent PostgreSQL
 
@@ -111,9 +115,14 @@ administrator authentication or online deployment.
 The root .github/workflows/backend.yml configures PostgreSQL 17.11 and the pinned
 Python on Linux. Push/PR checks install the lock, check dependencies and Django,
 apply migrations, check missing migrations and run isolated database tests.
-Credentials there are disposable CI-only values. It has not run on GitHub
-because no commit/push was made. Record its eventual run URL/result separately;
-local tests cannot establish that GitHub CI passed.
+Credentials there are disposable CI-only values. On 4 October 2026, commit
+66b41404f0d3e6aa91c0b6209faf768bb99f86ee was pushed to the feature branch.
+[Backend checks #37208404049](https://github.com/1uxury/psych-talk-hub/actions/runs/37208404049)
+completed successfully. GitHub API results confirm successful Linux dependency
+installation, dependency consistency, Django checks, migrations, missing-migration
+checks and isolated PostgreSQL tests. The repository defines 69 test methods;
+individual test logs were not read. This is separate from user-confirmed local
+acceptance and does not establish production deployment or full MVP acceptance.
 
 ## Step 04 validation — run by the user
 
@@ -181,8 +190,7 @@ needed to check the login page. Stop runserver with Ctrl+C afterward.
 Inspect Git status from the repository root: filled environment files, database
 data/logs, downloads and .venv must be absent. .env.example and the workflow must
 be eligible for tracking. Review changed files for accidental real credentials.
-GitHub CI remains pending until an explicitly authorised commit/push and a
-successful workflow run.
+The later authorised stage push and successful CI run are recorded above.
 
 ## Step 05: Event model — user-confirmed local acceptance
 
@@ -513,8 +521,9 @@ Following user confirmation, progress.md was requested in the editor and updated
 first, then architecture file responsibilities, acceptance and insights were recorded,
 followed by README/AGENTS synchronisation. This handoff changes documentation only;
 no checks, tests, code or database operations were performed. Step 09 has not started
-and requires a new instruction. GitHub CI/Linux remain unverified; no commit or push
-was made.
+and requires a new instruction. At this handoff, GitHub CI/Linux were unverified
+and no commit or push had been made. The later stage push and successful Linux
+backend CI are recorded in the CI section above.
 
 ## References and boundaries
 
