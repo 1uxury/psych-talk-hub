@@ -97,7 +97,7 @@ class AdminManagementTests(TestCase):
         self.assertContains(page, f'href="{address}"')
         self.assertContains(page, "View public talk")
         network.assert_not_called()
-        # Only the address is verified: the public React route is not implemented.
+        # This test verifies the address; step 17 separately tests the page entry.
 
     def test_edit_event_preserves_identifier_and_offers_public_address(self):
         response = self.client.post(self.url("event", "change", self.event), self.event_data(

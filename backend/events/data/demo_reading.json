@@ -1,0 +1,123 @@
+{
+  "verified_on": "2026-10-04",
+  "resources": [
+    {
+      "key": "sleep-role",
+      "verification_url": "https://api.crossref.org/works/10.1152%2Fphysrev.00032.2012",
+      "fields": {
+        "title": "About Sleep's Role in Memory",
+        "authors": "Björn Rasch; Jan Born",
+        "year": 2013,
+        "original_url": "https://doi.org/10.1152/physrev.00032.2012",
+        "doi": "10.1152/physrev.00032.2012",
+        "resource_type": "research_paper",
+        "metadata_source": "crossref",
+        "seed_key": null
+      }
+    },
+    {
+      "key": "memory-function",
+      "verification_url": "https://api.crossref.org/works/10.1038%2Fnrn2762",
+      "fields": {
+        "title": "The memory function of sleep",
+        "authors": "Susanne Diekelmann; Jan Born",
+        "year": 2010,
+        "original_url": "https://doi.org/10.1038/nrn2762",
+        "doi": "10.1038/nrn2762",
+        "resource_type": "research_paper",
+        "metadata_source": "crossref",
+        "seed_key": null
+      }
+    },
+    {
+      "key": "nih-sleep",
+      "verification_url": "https://newsinhealth.nih.gov/2013/04/sleep-it",
+      "fields": {
+        "title": "Sleep On It",
+        "authors": "NIH News in Health",
+        "year": 2013,
+        "original_url": "https://newsinhealth.nih.gov/2013/04/sleep-it",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nih-sleep-on-it-v1"
+      }
+    },
+    {
+      "key": "social-relationships",
+      "verification_url": "https://api.crossref.org/works/10.1371%2Fjournal.pmed.1000316",
+      "fields": {
+        "title": "Social Relationships and Mortality Risk: A Meta-analytic Review",
+        "authors": "Julianne Holt-Lunstad; Timothy B. Smith; J. Bradley Layton",
+        "year": 2010,
+        "original_url": "https://doi.org/10.1371/journal.pmed.1000316",
+        "doi": "10.1371/journal.pmed.1000316",
+        "resource_type": "research_paper",
+        "metadata_source": "crossref",
+        "seed_key": null
+      }
+    },
+    {
+      "key": "weak-ties",
+      "verification_url": "https://api.crossref.org/works/10.1177%2F0146167214529799",
+      "fields": {
+        "title": "Social Interactions and Well-Being",
+        "authors": "Gillian M. Sandstrom; Elizabeth W. Dunn",
+        "year": 2014,
+        "original_url": "https://doi.org/10.1177/0146167214529799",
+        "doi": "10.1177/0146167214529799",
+        "resource_type": "research_paper",
+        "metadata_source": "crossref",
+        "seed_key": null
+      }
+    },
+    {
+      "key": "who-connection",
+      "verification_url": "https://www.who.int/news/item/30-06-2025-social-connection-linked-to-improved-heath-and-reduced-risk-of-early-death",
+      "fields": {
+        "title": "Social connection linked to improved health and reduced risk of early death",
+        "authors": "World Health Organization",
+        "year": 2025,
+        "original_url": "https://www.who.int/news/item/30-06-2025-social-connection-linked-to-improved-heath-and-reduced-risk-of-early-death",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-who-social-connection-v1"
+      }
+    }
+  ],
+  "events": [
+    {
+      "seed_key": "demo-event-sleep-memory-v1",
+      "offset_days": 30,
+      "fields": {
+        "title": "Example event: Sleep, learning and memory",
+        "description": "A fictional psychology talk exploring how sleep and learning connect. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Sleep and memory",
+        "speaker": "Alex Morgan (fictional speaker)",
+        "is_example": true
+      },
+      "reading": [
+        {"resource": "nih-sleep", "recommendation": "An accessible starting point for discussing sleep and memory. This selection is illustrative.", "display_order": 10},
+        {"resource": "memory-function", "recommendation": "A review to explore alongside the introductory reading. This selection is illustrative.", "display_order": 20},
+        {"resource": "sleep-role", "recommendation": "Further reading for questions about memory research. This selection is illustrative.", "display_order": 30}
+      ]
+    },
+    {
+      "seed_key": "demo-event-social-connection-v1",
+      "offset_days": -7,
+      "fields": {
+        "title": "Example event: Everyday connections and belonging",
+        "description": "A fictional psychology talk inviting discussion of social connection and belonging. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Social connection",
+        "speaker": "Sam Taylor (fictional speaker)",
+        "is_example": true
+      },
+      "reading": [
+        {"resource": "who-connection", "recommendation": "Public-health context for a discussion of social connection. This selection is illustrative.", "display_order": 10},
+        {"resource": "weak-ties", "recommendation": "A study to discuss when considering everyday acquaintances. This selection is illustrative.", "display_order": 20},
+        {"resource": "social-relationships", "recommendation": "A research review for further discussion of social relationships. This selection is illustrative.", "display_order": 30}
+      ]
+    }
+  ]
+}

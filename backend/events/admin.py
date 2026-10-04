@@ -46,7 +46,7 @@ class EventAdmin(admin.ModelAdmin):
     delete_selected_confirmation_template = "admin/events/event/delete_selected_confirmation.html"
 
     def view_on_site(self, obj):
-        # The public route is specified now; its React page is implemented later.
+        # Django serves this declared page; React reads its data through the API.
         return f"/events/{obj.pk}"
 
     @admin.display(description="Public page")
