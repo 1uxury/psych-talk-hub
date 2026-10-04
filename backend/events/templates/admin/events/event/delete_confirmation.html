@@ -1,0 +1,6 @@
+{% extends "admin/delete_confirmation.html" %}
+
+{% block delete_confirm %}
+  <p>Delete this talk and its reading links? Shared resources will be kept.</p>
+  {{ block.super }}
+{% endblock %}
