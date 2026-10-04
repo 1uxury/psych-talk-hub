@@ -5,14 +5,17 @@ deployment is externally blocked and unverified.** This session has no callable
 Render account connector, supplied existing service/database identifiers or
 production configuration. No account login was inspected, and no claim is made
 about whether the user personally has a Render account. No service was created,
-modified or deployed. Steps 09–17 are uncommitted; the successful historical CI
-only covers steps 01–08. A new verified commit is a separate release prerequisite.
+modified or deployed. Steps 09–17 were committed/pushed as a174723 on 5 October
+2026 (London); both frontend/backend jobs passed in
+[Project checks 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180).
+This implementation SHA is now CI-verified; any later release SHA requires its
+own successful checks before deployment.
 
 User-authorised local checks passed frontend lint/30 tests/build, all 135 backend
 tests, dependency/system/migration checks, collectstatic and 20 browser scenarios.
 DEBUG=False checks used a local development database; Admin publication used a
 disposable test database. Test-only services were closed afterwards. This does
-not verify Render, production TLS, remote CI or actual Linux Gunicorn startup;
+not verify Render, production TLS or actual Linux Gunicorn startup;
 startup sequencing is covered by mocked tests. See
 [progress.md](../memory-bank/progress.md) for evidence and pending work.
 
@@ -116,7 +119,7 @@ zero-paid-services constraint. Do not assume Free prevents every usage charge.
 | Web Service / region / URL | Not connected or verified |
 | PostgreSQL instance / major / region | Not connected or verified |
 | Database created / expires | Unknown until actual existing database is inspected |
-| Release SHA / current CI / remote build | Not available for steps 09–17 |
+| Implementation SHA / CI / Render build | a174723 / frontend and backend success (run 37242589180) / Render build not performed |
 | Initialization / remote acceptance | Not performed |
 | Backup / restore | Pending; manually export before expiry, store outside Git, verify restore into a separately provisioned free database |
 

@@ -18,8 +18,11 @@ and project PostgreSQL 17 restored to its prior stopped state.
 Full commands and the DEBUG=False, Vite-stopped walkthrough are in
 [backend Step 17 validation](../backend/README.md#step-17-validation--run-by-the-user).
 [Free deployment status/settings](../backend/DEPLOYMENT.md) record the external
-account/resource blocker; no remote deployment occurred. Steps 09–17 are
-uncommitted and remote CI is pending. Step 18 search has not started.
+account/resource blocker; no remote deployment occurred. Steps 09–17 were
+committed/pushed as a174723 on 5 October 2026 (London); both jobs passed in
+[Project checks 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180).
+The frontend build was transferred to the successful backend job. Actual
+Gunicorn/Render startup remains unverified. Step 18 search has not started.
 
 ### Historical step 16 handoff
 

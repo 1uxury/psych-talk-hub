@@ -10,14 +10,22 @@ and 20 browser scenarios. Five browser checks use a disposable database for real
 Admin login, rejected missing-CSRF submission, save and anonymous publication.
 Test databases were destroyed; development data was read-only. Test-only browser
 and server processes were closed, and project PostgreSQL 17 restored to its prior
-stopped state. No schema/dependency changes, installations, commit/push or remote
-deployment occurred. Step 17 awaits user confirmation; step 18 has not started.
+stopped state. Those checks made no schema/dependency changes or installations.
+On 5 October 2026 (London), the user authorised commit/push/CI verification:
+implementation commit a174723 was pushed and both Linux CI jobs passed.
+No remote deployment occurred. Step 17 awaits user confirmation; step 18 has not started.
 Older sections retain their historical counts/evidence; current results are in
 [progress.md](../memory-bank/progress.md).
 
 Remote deployment is blocked: this session has no callable Render account
-connection or supplied authorised existing free service/database. Current changes
-are uncommitted and remote CI is pending. See [deployment handoff](DEPLOYMENT.md).
+connection or supplied authorised existing free service/database. Current
+implementation a174723 has successful frontend/backend CI in
+[Project checks 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180).
+All workflow steps passed, including frontend tests/build/artifact transfer and
+backend checks/migrations/static collection/tests. Actual Gunicorn/Render startup
+remains unverified. See [deployment handoff](DEPLOYMENT.md).
+
+### Historical step handoffs
 
 Steps 01–08 have **user-confirmed local acceptance**. Basic backend GitHub CI passed
 on 4 October 2026 for commit 66b4140; see the CI section for remote evidence.

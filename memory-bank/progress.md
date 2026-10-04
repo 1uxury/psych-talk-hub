@@ -1,8 +1,8 @@
 # PsychTalk Hub — 实施进度
 
-日期：2026-10-04｜最后用户确认步骤：16｜第 17 步助手授权本地测试通过，待用户确认｜第 09–17 步 GitHub CI 未验证｜远程部署外部阻塞｜第 18 步未开始
+日期：2026-10-05｜最后用户确认步骤：16｜第 17 步助手本地测试通过，待用户确认｜第 09–17 步已推送，GitHub 前后端 CI 通过（a174723）｜Render/Gunicorn 实际启动未验证｜第 18 步未开始
 
-以下各步骤保留交接当时的事实，包括当时尚未执行的历史描述。第 01–08 步阶段提交已通过线上 CI，第 09–17 步尚未提交/推送。用户最近确认第 16 步；随后授权实施第 17 步并要求“你帮我测试”，本版本前端 30 项、后端 135 项及浏览器 20 组检查均通过，具体来源见末尾记录。尚未收到用户对第 17 步的确认，不推进第 18 步。文件职责与洞察见 [architecture.md](architecture.md)，复现方法与远程边界见 [backend/README.md](../backend/README.md) 和 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
+以下各步骤保留交接当时的事实，包括当时未提交或未执行的历史描述。第 09–17 步现已提交并推送为 a174723，GitHub Actions 的 frontend/backend 均通过，具体证据见末尾 CI 记录。用户最近确认第 16 步；第 17 步前端 30 项、后端 135 项及浏览器 20 组本地检查通过，仍待用户确认。CI 不代表 Render 已部署或 Gunicorn 实际启动，第 18 步不推进。文件职责与洞察见 [architecture.md](architecture.md)，复现方法与远程边界见 [backend/README.md](../backend/README.md) 和 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
 
 ## 第 01 步：核对必读文档并初始化架构记录
 
@@ -498,3 +498,15 @@
 ### 交接
 
 已先请求打开 progress.md（queued）并记录实际结果，再更新 architecture.md 和指南。第 17 步只标记为助手本地测试通过，等待用户确认；第 18 步搜索需确认后新的明确指令，不自动开始。
+
+## 第 17 步补充：GitHub 提交、推送与前后端 CI
+
+2026-10-05（Europe/London），用户选中“GitHub CI：提交并推送当前代码”并明确要求“执行”。本轮仅执行该范围，没有部署 Render 或开始第 18 步。
+
+- 检查并暂存第 09–17 步的 52 个文件变更（其中一个删除）。暂存内容无私有环境文件、本地工具、依赖目录、生成产物或数据库备份；扫描未发现真实密钥/token/凭据 URL，git diff --cached --check 通过。
+- 提交 a174723b8517de9b30dc9c7df194327d68eee87e，消息为 feat: add public talk pages and production integration，推送到 origin/docs/clarify-implementation-plan。没有合并默认分支、强制推送或创建 PR。
+- GitHub Actions [Project checks / 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180) 对应上述完整 SHA，整次 conclusion 为 success；frontend/backend 均 completed/success，所有步骤成功，无失败或修复。
+- 前端任务成功执行锁定依赖安装、lint、当前 30 项测试、构建和产物上传；后端在 Ubuntu/PostgreSQL 17.11 上成功下载同次产物、安装依赖、检查、迁移、静态收集和当前 135 项测试。后端于 UTC 2026-10-04T23:08:36Z 完成，即伦敦 2026-10-05 00:08:36 BST；以 GitHub 任务状态作为线上执行证据，没有编造日志耗时/覆盖率。
+- GitHub API 结果保存于忽略的 .tools/step17-browser/github-ci-a174723.json。受限网络首次查询无法解析域名，获准使用网络后读取成功；没有自动审批拒绝。只读查询使用公开 API，不输出认证凭据。
+- 已先请求打开并更新 progress.md，再同步 architecture.md、AGENTS 和 README/DEPLOYMENT 中当前 CI 状态；历史“未提交/未验证”保留为当时事实。此次文档交接将以独立提交推送，记录实现提交的已验证 SHA，避免自引用提交号。
+- CI 验证 Linux 依赖与测试流程；Gunicorn 实际启动、生产 TLS/数据库及 Render 发布仍未验证。第 17 步待用户确认，第 18 步未开始。
