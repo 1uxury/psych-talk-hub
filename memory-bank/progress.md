@@ -1,8 +1,8 @@
 # PsychTalk Hub — 实施进度
 
-日期：2026-10-05｜最后用户确认步骤：16｜第 17 步助手本地测试通过，待用户确认｜第 09–17 步已推送，GitHub 前后端 CI 通过（a174723）｜Render/Gunicorn 实际启动未验证｜第 18 步未开始
+日期：2026-10-05｜最后用户确认步骤：16｜第 17 步本地检查、GitHub CI、免费 Render 发布及线上检查通过，待用户确认｜发布提交 d8bdd29｜最终构建命令重部署 Live｜第 18 步未开始
 
-以下各步骤保留交接当时的事实，包括当时未提交或未执行的历史描述。第 09–17 步现已提交并推送为 a174723，GitHub Actions 的 frontend/backend 均通过，具体证据见末尾 CI 记录。用户最近确认第 16 步；第 17 步前端 30 项、后端 135 项及浏览器 20 组本地检查通过，仍待用户确认。CI 不代表 Render 已部署或 Gunicorn 实际启动，第 18 步不推进。文件职责与洞察见 [architecture.md](architecture.md)，复现方法与远程边界见 [backend/README.md](../backend/README.md) 和 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
+以下各步骤保留交接当时的事实，包括当时未提交或未执行的历史描述。第 09–17 步实现提交 a174723 及文档提交 d8bdd29 的 GitHub 前后端 CI 均通过。用户随后授权助手部署，并明确回复“允许”创建两项免费资源；最终 Render 发布已 Live，生产迁移、Gunicorn 和线上 HTTP/浏览器检查通过，详见末尾。生产示例资料与管理员尚未初始化，完整线上业务验收未完成，第 17 步仍待用户确认，第 18 步不推进。文件职责与洞察见 [architecture.md](architecture.md)，复现方法与远程边界见 [backend/README.md](../backend/README.md) 和 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
 
 ## 第 01 步：核对必读文档并初始化架构记录
 
@@ -510,3 +510,69 @@
 - GitHub API 结果保存于忽略的 .tools/step17-browser/github-ci-a174723.json。受限网络首次查询无法解析域名，获准使用网络后读取成功；没有自动审批拒绝。只读查询使用公开 API，不输出认证凭据。
 - 已先请求打开并更新 progress.md，再同步 architecture.md、AGENTS 和 README/DEPLOYMENT 中当前 CI 状态；历史“未提交/未验证”保留为当时事实。此次文档交接将以独立提交推送，记录实现提交的已验证 SHA，避免自引用提交号。
 - CI 验证 Linux 依赖与测试流程；Gunicorn 实际启动、生产 TLS/数据库及 Render 发布仍未验证。第 17 步待用户确认，第 18 步未开始。
+
+## 第 17 步补充：授权免费 Render 创建、部署与线上检查
+
+2026-10-05（Europe/London），用户要求助手完成 Render/Gunicorn，私下保存 API key 后回复“已保存”，并对两项新 Free 资源创建明确回复“允许”。该授权扩展此前只用已有资源的范围；没有开启付费功能、修改付款方式或推进第 18 步。
+
+### 资源与发布证据
+
+- 使用 Render 官方 REST API 创建 Frankfurt 的 Free PostgreSQL 17 `psych-talk-hub-db`（dpg-db1e4g7avr4c73bfs90g-a）和单实例 Free Python Web Service `psych-talk-hub`（srv-db1e5ak9v7es73f565d0）。API 已核对两项 plan=free、区域相同、数据库 available、autoDeploy=no；禁用数据库 HA、自动扩容和连接池。
+- 发布 SHA 为 d8bdd2923304475f05281d5d56a71018eb43cf4f；部署前重新核对 [Project checks 37242897644](https://github.com/1uxury/psych-talk-hub/actions/runs/37242897644) 两个任务成功。仓库、分支和根目录保持既有配置；没有改应用源码、锁文件、迁移或重新提交代码。
+- 首次成功部署 dep-db1ed66gekts73dehfsg 于 UTC 2026-10-04T23:56:43.549294Z 进入 Live，即伦敦 2026-10-05 00:56:43 BST。公开地址为 [PsychTalk Hub](https://psych-talk-hub.onrender.com)。
+- 数据库实际创建于 UTC 2026-10-04T23:33:20.802631Z（伦敦 10 月 5 日 00:33:20 BST），expiresAt 为 2026-11-03T23:33:20.802631Z（伦敦 **11 月 3 日 23:33:20 GMT**）。没有托管备份；备份/恢复尚待后续受控操作，不能到期后静默升级。
+
+### 构建排查与实际运行
+
+- 前三次构建因严格运行时校验 ValueError 停止，未安装应用依赖或迁移业务库。诊断证实 shell 命令为 Node 24.14.0/npm 11.9.0，但 Python 子进程从 /usr/bin 调用系统默认 24.21.0/11.19.0。仅添加 Node 实际目录及 npm 全局前缀的 bin 到 **Render 构建进程** PATH；保持精确版本检查和本机安装不变。
+- 修复后子进程实际调用 /opt/render/project/nodes/node-24.14.0/bin 下的 node/npm，输出 v24.14.0/11.9.0。Python 为 3.13.16；依赖锁安装与 pip check 成功，Vite 8.3.2 构建成功，Django check 无问题，165 静态文件复制、155 后处理。
+- 生产启动日志显示 events 三项及 Django 基础迁移成功；events.0003 于 UTC 23:56:29.068167112Z 完成，随后 UTC 23:56:34.145638581Z Starting gunicorn 26.2.0，23:56:34.149795572Z Booting worker。真实 Linux 启动顺序已有证据，不再只依赖 mock。
+- 已清理构建命令中的临时诊断打印，保留 PATH 修复；最终命令对同一 SHA 的重部署 dep-db1egmdg1s2s739qisag 已于 UTC 2026-10-05T00:04:05.947081Z（伦敦 01:04:05 BST）Live。实际日志 No migrations to apply 后启动 Gunicorn/worker，11 组 HTTP 与 6 组浏览器检查再次全部通过；仅核验最终配置发布结果，不重跑未变的本地套件。
+
+### 线上检查与边界
+
+- 实际 **11 组 HTTP 检查通过**：HTTPS 健康 JSON 200；Django 入口 no-store 和真实 JS/CSS 200/类型；数字详情直接入口；真实空列表；活动缺失/未知 API JSON 404；不支持的表示 JSON 406；公开 POST 405；HEAD 无正文/OPTIONS 只读；未知页面 404；Admin 登录/安全 CSRF Cookie/原生静态资源；HTTP 转 HTTPS。
+- HTTP 检查器最初对有效详情发送 Accept:text/html 并错期待 404，实际得到 DRF JSON-only 的 406。已按前端实际 application/json 检查活动 404，并单独覆盖 406；这是检查器修正，没有修改应用行为。Gunicorn 对 HEAD 丢弃 WSGI 正文的日志伴随实际 200/零正文，不是启动失败。
+- 独立隐藏 Headless Edge、项目专用 profile 与本机端口 9238 完成 **6 组真实浏览器检查**：线上 React 空首页/两组提示/声明/样式、375 px 无溢出、缺失活动直达和完整刷新、返回首页、Admin 登录样式、实际生产 API/资产请求且零未捕获 JS 异常/无 Vite。已查看桌面、手机和 Admin 截图；不使用用户个人浏览器或登录账号。
+- 生产仅执行启动迁移，没有 seed_demo、管理员创建或测试数据库操作。线上列表实际为 []；示例数据、私有管理员、登录后保存/CSRF及有资料原文流程、非空业务数据重部署保留、备份恢复仍待验证，不能将当前检查写为完整 MVP 验收。
+- API key、随机生产 SECRET_KEY 与数据库连接仅位于 Render 环境配置及忽略的 .tools 私有文件；没有输出/提交密钥。脱敏日志、HTTP/浏览器检查器、结果和截图同样位于忽略的 .tools，不新增仓库依赖或正式测试框架。
+- 已先请求打开本文件（queued）并记录实际部署结果，再同步 architecture.md 与相关指南。已核对专用 profile/PID 后关闭本次 Edge 进程树，9238 无监听；Render 服务保持上线。本轮本地仓库仅六份文档改动，未另行提交/推送。第 17 步等待用户确认，第 18 步搜索不开始。
+
+## 第 17 步补充：生产示例、私有管理员与发布验证
+
+2026-10-05（Europe/London），用户对导入两场示例、创建私有管理员和验证线上发布回复“执行”，了解公网 IP 查询的影响后明确回复“允许”。本次完成该授权范围；第 17 步仍待用户确认，第 18 步未开始。前节“生产为空/尚未初始化”为初始化前的历史状态。
+
+### 初始化与访问恢复
+
+- 自动审批最初拒绝访问 api.ipify.org 查询本机公网 IP，原因是该项向第三方暴露 IP 尚未获明确授权。没有绕过拒绝；本地网络/路由器读取未取得公网 IPv4，原数据库外部规则为 []。用户明确允许后查询 IPv4，不输出 IP 或任何密码。
+- 临时将 Frankfurt Free PostgreSQL 的外部规则限定为当前公网 IPv4 /32，使用本地独立 Python 子进程及外部连接初始化。实际核对数据库 psych_talk_prod、PostgreSQL 17.11、TLS=true、待迁移数为零；不调用生产测试套件，也不改变本机开发配置。
+- 调用既有 seed_demo_data，和管理员创建一起处于事务中：新增 2 个活动、6 个 Resource、6 个 EventResource。两场均明确标记虚构示例，各三条真实资料；管理员为独立、active/staff/superuser 的私有账号，不公开演示登录凭据。
+- 首次导入统一时刻为 UTC 2026-10-05T11:51:46.331147Z：ID 1 的 Sleep, learning and memory 定于伦敦 2026-11-04 11:51 GMT；ID 2 的 Everyday connections and belonging 定于伦敦 2026-09-28 12:51 BST。遵守 +30/-7 天规则，之后不自动调整日期。未来示例日期晚于当前免费数据库到期日，仅为虚构演示时间，不是延长资源期限的依据。
+- 同一初始化事务内再次导入，新增计数均为零；对三种模型前后完整字段快照比较相同，现有日期、内容及关联未被覆盖。这是此次未编辑数据的重复导入证据，不替代本地“人工修改后重导入”测试。
+- 操作结束在 finally 恢复外部规则 []，官方 API 再读确认外部连接禁用；线上服务继续使用内部连接。记录时间 UTC 11:51:56.1057103Z。没有开放 0.0.0.0/0、开通付费功能或新增初始化 HTTP 入口。
+
+### 真实线上验收
+
+- 首次后台检查遇到 ReadTimeout；重新读取健康接口返回 200/ok，并核对推荐理由仍为原值后才重试。仅增加忽略目录检查器的等待时间，不修改应用运行代码。
+- 用新建管理员通过实际 HTTPS Admin 表单登录；缺少 CSRF 的保存返回 403、内容不变；携带有效 CSRF 保存 ID 1 关联的临时推荐理由，匿名 API 和独立浏览器重新导航/完整刷新均看到修改。身份与排序未变。随后通过 Admin 恢复原推荐理由，匿名 API/浏览器再次验证原值，临时文案已清除，两次成功检查会话均已退出。
+- 另行核对真实管理员 sessionid Cookie 的 Secure、HttpOnly、SameSite=Lax 标记均正确，随即退出该检查会话；脱敏结果保存于 production-session-results.json。没有输出或保存会话 Cookie 值。
+- 独立隐藏 Edge 的 10 组检查全部通过：真实两场/每场三条 API 数据；桌面 Upcoming/Past 各一场、示例声明和双列轨道；375 px 首页单列无溢出；两场直达、真实请求刷新、三条 10/20/30 顺序卡片及安全原文属性；匿名页面显示后台保存；NIH 原文实际在新标签页打开且详情保留；手机阅读单列；返回真实首页；生产资产/API、零未捕获应用 JS 异常和无 Vite 请求。恢复内容后另有一次匿名刷新/关联身份/排序验证通过，最终截图已保存。
+- 浏览器工具初始化仍报 kernel assets 路径错误，改用既有专用 profile/9238 检查器。最初检查器的选择器引号和缺少点击用户手势导致检查失败；修正检查器后通过，没有修改应用。已查看桌面首页、详情和手机截图。结束核对专用 profile/PID 后关闭本次进程树，9238 无监听；用户日常浏览器未关闭。
+- 六个原文 URL 均与卡片相符，四个 DOI 请求均解析到预期出版商。HTTP 自动读取中 Nature、PLOS、WHO 返回 200；Physiology、SAGE、NIH 返回 403。NIH 新标签页目标已验证，网站拒绝自动请求不等于全文可读；不声称六篇全文均开放可访问，不绕过出版商访问限制。
+
+### 文件、证据与交接
+
+- 忽略的 .tools/production-initialize.py 负责受控数据库身份/TLS/迁移检查、显式导入及管理员创建；production-initialization-results.json 保存脱敏计数/时间，production-db-access-results.json 保存恢复证据。
+- .tools/production-admin.private.json 保存登录地址、用户名及随机密码；production-association-baseline.private.json 仅供恢复当前示例关联。凭据未输出、未加入 Git；管理员登录入口为 [Admin](https://psych-talk-hub.onrender.com/admin/)。不要把私有文件贴进聊天或演示视频。
+- production-admin-check.py 负责真实表单/CSRF/匿名读取/退出，publish/restore-results.json 留存结果；production-original-link-results.json 留存原文响应。render-browser/initialized-check.mjs、restored-check.mjs、对应结果和截图记录真实公开页面。所有临时工具都不进入应用、CI 或部署启动。
+- 已先请求打开本 progress.md（queued）并记录，再添加 architecture.md 的文件职责与洞察，同步 AGENTS、两份 README 和 DEPLOYMENT。没有安装依赖、修改应用/迁移/锁文件、重跑本地套件、创建部署、提交或推送；生产 SHA 仍为 d8bdd29。
+- 第 17 步仍等待用户确认。非空业务数据在重部署后的保留、备份/恢复及后续完整 MVP 验收仍待执行，不把本次初始化/发布检查写成完整验收；第 18 步搜索不开始。
+
+## 第 17 步确认与文档提交交接
+
+2026-10-05（Europe/London），用户回复“通过 推送git”，确认第 17 步并授权提交、推送当前分支。第 01–17 步现均有用户确认，第 18 步未开始，等待下一次明确实施指令。
+
+- 确认依据为前述本地 30/135 项及浏览器检查、a174723/d8bdd29 的成功 GitHub CI、免费 Render 实际迁移/Gunicorn/静态运行，以及生产 2 场/6 条资料/6 个关联、私有管理员、TLS、重复导入、真实 CSRF/保存/匿名刷新/恢复与会话安全检查。不重跑未变应用套件，不追加未执行的测试结论。
+- 先请求打开并更新本 progress.md，再补充 architecture.md 的确认与职责交接，同步 AGENTS、backend/README.md、frontend/README.md 和 backend/DEPLOYMENT.md。初始化前的空状态、此前等待确认及未提交描述保留为历史事实，当前指南明确为第 17 步已确认。
+- 本次提交仅包含这六份公开文档，记录实际免费部署、生产初始化及验收状态；所有 .tools 工具、登录凭据、API key、连接地址、截图/profile 和生成产物均保持忽略。沿用现有 docs/clarify-implementation-plan 分支，常规推送到 GitHub origin；不合并默认分支、不创建 PR、不重新部署。
+- 当前生产 release 仍是已验证的 d8bdd29；文档提交的 GitHub 检查与已有发布证据分别看待。非空重部署数据保留、备份/恢复及后续完整 MVP 验收仍为待办，第 17 步的用户确认不将这些未完成事项标成通过。

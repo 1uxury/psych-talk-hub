@@ -1,8 +1,8 @@
 # PsychTalk Hub frontend
 
-## Current handoff: step 17 local checks passed, awaiting user confirmation
+## Current handoff: step 17 user-confirmed on 5 October 2026
 
-Step 16 remains the last user-accepted step. Step 17 adds production asset
+Step 17 is the last user-accepted step. Step 17 adds production asset
 integration: build URLs use /static/frontend/ while Vite development remains at
 /. Django now serves the generated entry on Home/numeric details and WhiteNoise
 serves collected React/Admin assets. No frontend dependencies or test definitions
@@ -13,16 +13,24 @@ At the user's request the assistant passed lint, all 30 tests and build, plus
 built pages/static files, refresh/navigation, keyboard, responsive layout, errors
 and Admin styles; five more verify real Admin/CSRF/anonymous publication in a
 disposable database. Screenshots were reviewed; no application JS exceptions were
-captured. Step 17 still awaits user confirmation. Test-only processes were closed
+captured. The user confirmed step 17 on 5 October 2026. Test-only processes were closed
 and project PostgreSQL 17 restored to its prior stopped state.
 Full commands and the DEBUG=False, Vite-stopped walkthrough are in
 [backend Step 17 validation](../backend/README.md#step-17-validation--run-by-the-user).
-[Free deployment status/settings](../backend/DEPLOYMENT.md) record the external
-account/resource blocker; no remote deployment occurred. Steps 09–17 were
-committed/pushed as a174723 on 5 October 2026 (London); both jobs passed in
-[Project checks 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180).
-The frontend build was transferred to the successful backend job. Actual
-Gunicorn/Render startup remains unverified. Step 18 search has not started.
+[Free deployment status/settings](../backend/DEPLOYMENT.md) record the subsequent
+user-authorised Free resource creation and actual Live release d8bdd29. Both
+frontend/backend jobs passed in [Project checks 37242897644](https://github.com/1uxury/psych-talk-hub/actions/runs/37242897644),
+including frontend artifact transfer. Actual migrations/Gunicorn, 11 HTTP and
+six isolated browser checks passed on the [live site](https://psych-talk-hub.onrender.com).
+The final build command's redeployment is also Live; all online checks passed again.
+Subsequent authorised production initialization added two fictional talks, six
+resources/links and a private administrator. Ten nonempty browser checks passed,
+including direct details/reload, ordered cards, mobile layout, original new-tab
+links and actual private Admin save visible on anonymous refresh. Temporary text
+was restored; test login sessions/browser were closed and external database access
+disabled. Publisher access restrictions remain possible; targets do not guarantee
+readable full text. Nonempty redeploy preservation, backup/restore and full MVP
+acceptance remain pending. Step 17 is user-confirmed; step 18 search has not started.
 
 ### Historical step 16 handoff
 

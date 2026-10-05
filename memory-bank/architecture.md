@@ -1,8 +1,8 @@
 # PsychTalk Hub — 架构记录
 
-日期：2026-10-05｜最后用户确认步骤：16｜第 17 步助手本地测试通过，待用户确认｜第 09–17 步 GitHub 前后端 CI 通过（a174723）｜Render/Gunicorn 实际启动未验证｜第 18 步未开始
+日期：2026-10-05｜最后用户确认步骤：16｜第 17 步本地/CI/免费 Render 部署及线上检查通过，待用户确认｜发布 SHA d8bdd29｜最终命令重部署 Live｜第 18 步未开始
 
-本文记录当前仓库事实与后续计划的架构边界，不代表完整应用或部署已经实现。用户已确认第 01–16 步本地验收。第 09–17 步已推送为 a174723，前后端 GitHub CI 均通过；第 6–41 节保留历史交接和本地验证来源，第 42 节记录随后授权的远程 CI。已先更新 progress.md。第 17 步待用户确认，Render 部署仍阻塞，第 18 步未开始。
+本文记录当前仓库事实与后续计划的架构边界，不代表完整 MVP 已完成。用户已确认第 01–16 步本地验收。a174723 与 d8bdd29 的前后端 GitHub CI 均通过；第 6–42 节保留历史交接与验证来源，第 43 节记录用户另行授权的免费资源创建、真实 Render/Gunicorn 启动和线上检查。已先更新 progress.md。最终构建命令的重部署已 Live，线上检查再次全部通过；生产示例数据与管理员初始化、完整业务验收仍待办。第 17 步待用户确认，第 18 步未开始。
 
 第 15 步助手独立实测的 28 项测试及 19 组浏览器证据保留在第 37 节。第 16 步首次验收来源是用户确认；随后第 17 步实测当前 lint、30 项前端测试、构建、135 项后端回归及 20 组浏览器流程，均通过。历史记录中的未执行描述属于当时事实，不替代当前版本证据。
 
@@ -10,7 +10,7 @@
 
 仓库复用功能分支 `docs/clarify-implementation-plan`，跟踪 `origin/docs/clarify-implementation-plan`。第 01–08 步现有文档及实现已提交并推送为 `66b4140`，未合并默认分支，未创建 PR。
 
-当前第 09–17 步实现已另行提交并推送为 a174723b8517de9b30dc9c7df194327d68eee87e，Project checks 37242589180 的 frontend/backend 均成功。下列逐步描述保留当时未提交/未执行事实，当前发布状态以本段和第 42 节为准；仍未合并默认分支、创建 PR 或部署 Render。
+当前第 09–17 步实现提交 a174723 与文档提交 d8bdd29 均已推送并通过前后端 CI，实际 Render 发布使用 d8bdd2923304475f05281d5d56a71018eb43cf4f。下列逐步描述保留当时未提交/未执行事实，当前发布状态以本段和第 43 节为准；未合并默认分支或创建 PR。
 
 第 03 步已在 backend 建立 Django config 项目和唯一的 events 业务应用，并移除 backend/.gitkeep。第 04 步已加入环境配置、独立 PostgreSQL 17、健康检查、基础测试与 backend CI 工作流，移除工作流占位文件；当时 frontend 仅为占位。第 05–07 步分别加入 Event、Resource、EventResource 及三份迁移、9/14/13 个模型测试，用户已确认本地验收；助手在实施时只生成业务迁移，未代运行本地验收。第 08 步增加基础 Admin、三份确认模板和 21 个测试，用户已确认本地验收，累计 69 个方法。上述文件已随阶段提交推送，基础后端 CI 在线成功。后续演示内容、公开接口和 React 脚手架见下段，DOI 导入未实现。
 
@@ -84,12 +84,12 @@
 | `frontend/dist/index.html`、`frontend/dist/assets/` | 被忽略的 Vite 生成模板与哈希资产，须构建后才可用；第 17 步授权实测已重新构建，真实产物经后端与浏览器验证 |
 | `backend/staticfiles/` | 被忽略的 collectstatic 输出，合并 frontend/assets 与原生 Admin 资产；生成入口不作为静态文件提供；此轮未收集或运行验证 |
 | `backend/scripts/deploy.py` | 第 17 步标准库 Linux 发布入口；明确 production 与精确运行时，锁安装/构建/检查/收集；启动检查产物、配置与迁移，成功后 exec 单 worker Gunicorn；不导入示例或初始化管理员 |
-| `backend/DEPLOYMENT.md` | 免费 Render 当天官方依据、已有授权资源配置表、独立初始化/备份边界及远程阻塞记录；未知资源/创建/到期日期不填造假值，不声称已部署 |
+| `backend/DEPLOYMENT.md` | 免费 Render 配置、构建 PATH 修复、实际资源/发布/到期证据与独立初始化/备份待办；区分真实发布和完整业务验收 |
 | `backend/events/tests/test_public_pages.py` | 第 17 步六个无数据库页面/静态边界方法，以及一个隔离 PostgreSQL Admin 手动新增+关联→匿名 API 重读测试；静态夹具与真实构建检查分开，尚未执行 |
 | `backend/events/tests/test_production_build.py` | 第 17 步两个实际 Vite 构建测试：DEBUG=False 入口与直接详情、临时收集后的真实前端/Admin 资产正文和类型；没有 dist 或前缀错误必须失败，不跳过，也不证明浏览器交互 |
 | `backend/events/tests/test_deployment.py` | 第 17 步十个标准库入口测试，mock 所有子进程、Linux 和 exec：固定依赖/顺序、迁移失败不启动、运行时/端口/产物拒绝、安全异常；不执行真实 Linux 发布或生产迁移 |
 | `backend/config/api_errors.py` | 第 11 步 API 前缀判断、未知地址安全 JSON 404 与中间件；视图/序列化/渲染异常转安全 500，其他 API 500 响应也脱敏；自定义日志仅异常类别，不改非 API 错误；用户确认本地验收 |
-| `backend/config/wsgi.py` | WSGI application 入口，供未来 Gunicorn 使用，当前没有运行生产服务器 |
+| `backend/config/wsgi.py` | WSGI application 入口；第 17 步真实 Render Linux 上已由 Gunicorn 26.2.0 单 worker 启动 |
 | `backend/config/asgi.py` | Django 默认生成的 ASGI 入口，保留但未配置对应服务器；生产设计仍使用 WSGI |
 | `backend/events/__init__.py` | 唯一业务应用的 Python 包标识 |
 | `backend/events/apps.py` | EventsConfig 应用注册与默认主键类型 |
@@ -592,3 +592,35 @@ backend/config 已有环境配置与健康检查，backend/events 的三个业�
 - **平台通过和生产运行仍有边界。** CI 成功证明锁定 Linux 依赖安装及测试流程正常；test_deployment.py 的 mock 仍只验证启动顺序和失败阻断，不能证明 Gunicorn 真实绑定端口、Render 运行时、生产 TLS 或线上数据初始化。DEPLOYMENT.md 继续记录独立远程阻塞。
 - **提交号、任务号和接受状态各自保存。** progress.md 记录实现 SHA、任务 URL、结果与授权来源；本文件解释结构影响；README/AGENTS 指向当前通过证据。文档交接使用后续独立提交，引用已验证实现 SHA，不假定新文档提交自动通过，也不将 CI 成功写成用户确认或默认分支合并。
 - **忽略目录是证据缓存，不是交付来源。** .tools/step17-browser/github-ci-a174723.json 保存公开 API 的任务/步骤状态，未进入 Git。提交前检查 52 个文件的路径和潜在凭据，没有包含私有 .env、数据库、node_modules、dist/staticfiles 或测试浏览器 profile；无应用代码修复、生产数据或资源操作。
+
+## 43. 第 17 步真实免费部署后的文件职责与洞察
+
+2026-10-05（Europe/London），用户另行授权部署并回复“允许”创建两项 Free 资源。Frankfurt 的单实例 Python Web Service 与 PostgreSQL 17 已建立；首次成功部署 dep-db1ed66gekts73dehfsg 使用已通过 CI 的 d8bdd29，实际 Live、迁移成功后 Gunicorn 启动、11 组 HTTP 与 6 组浏览器检查均有证据。最终命令的重部署 dep-db1egmdg1s2s739qisag 于 UTC 2026-10-05T00:04:05.947081Z（伦敦 01:04:05 BST）Live，No migrations to apply 后实际启动 Gunicorn/worker，两组线上检查再次全部通过。已先记录 progress.md；生产示例资料及私有账号未初始化，第 17 步待用户确认，第 18 步未开始。
+
+- **平台命令和子进程寻址需要一致。** Render shell 可调用指定 Node/npm，但 Python 子进程原先使用 /usr/bin 默认版本。部署构建命令把实际 Node 目录及 npm 前缀的 bin 显式加入进程 PATH，之后仍由 scripts/deploy.py 精确核验。该修复属于服务配置；不放宽版本、不修改本机全局安装或应用代码。首次构建包含 Python 源码编译，不能将其探测输出误判为应用错误。
+- **build、start、readiness 的实际证据分别交接。** deploy.py build 已安装锁、构建及收集真实资产；start 在生产执行 events 三项与 Django 基础迁移后 exec Gunicorn 26.2.0 并启动 worker；health.py SELECT 1 的线上 JSON 200 证明应用能读生产库。CI 的测试数据库没有连接这项生产资源，生产测试保护层未绕过。
+- **入口、内容和协商状态分别验证。** public_pages.py 对 /events/1 返回构建入口 200，生产尚无活动时 API 按 application/json 返回 404，React 显示未找到。DRF 对有效端点不支持的 text/html 返回 JSON 406；未知 API 回退即使 Accept HTML 仍为 JSON 404。检查器应按实际请求契约区分这些状态，不为测试改变应用行为。Gunicorn 对 HEAD 丢弃正文，线上 HEAD 实际零正文。
+- **上线配置不包含数据初始化。** Django 迁移只建立结构；seed_demo、私有管理员须另行通过受控 TLS 数据库连接执行。当前 [] 和匿名空首页是真实生产状态，有内容详情、登录后发布/CSRF、非空内容重部署保留及备份恢复仍待验收。没有新增初始化 HTTP 入口、自动 seed 或付费 Shell。
+- **服务状态、版本与数据库生命周期分别保存。** DEPLOYMENT.md 记录准确构建命令、真实公开 URL、资源 ID、同区 Free/auto-deploy off、release/deploy/CI，以及数据库实际 2026-11-03 23:33:20 GMT 到期时间。progress.md 记录授权、失败排查和测试来源；本文件解释职责。指南引用实际发布，不把旧阻塞或历史未提交状态当成当前事实，也不把首次 Live 当作完整 MVP。
+- **私有配置与验证缓存都不属于仓库源码。** 忽略的 .tools/render.env 提供用户私存 API key；render-database.private.json 保存连接信息；render-production-env.private.json 保存随机生产配置；仅按需读取，不输出凭据。render-state.json 和 render-deployment-plan.json 跟踪资源/部署及零付费约束。render-resources-public.json、render-deployment-evidence.json 保存公开元数据与脱敏日志。
+- **临时检查器保留可追溯作用。** .tools/render-http-check.mjs 验证实际健康、资产、Cookie、API/方法/错误；render-http-results.json 只保存安全结果和资产路径。render-browser/cdp.mjs、check.mjs 仅连接本次专用 9238 隐藏 Edge，results.json 和 PNG 保存真实桌面/手机/Admin 证据。检查未使用个人会话、登录管理员或写业务记录，不新增依赖或正式框架；核对 profile/PID 后已关闭本次浏览器，9238 无监听。六份交接文档的本地改动未另行提交/推送；部署 SHA 仍为 CI 验证的 d8bdd29。
+
+## 44. 第 17 步生产初始化后的文件职责与洞察
+
+2026-10-05，用户授权初始化并明确允许查询公网 IP。生产新增两场虚构讲座、六条真实资料、六个阅读关联及私有管理员；TLS/数据库身份/迁移状态、重复导入、真实 Admin 保存与匿名刷新已验证。已先记录 progress.md，再更新本文件；第 17 步仍待用户确认，第 18 步未开始。
+
+- **结构发布与内容初始化各有入口。** scripts/deploy.py 仍只构建、收集、迁移和启动；events/demo_seed.py 仍负责显式事务及稳定标识补缺。忽略的 .tools/production-initialize.py 仅是本次本地操作工具，读取私有外部连接，在独立子进程核对 psych_talk_prod/PostgreSQL 17.11/TLS/零待迁移，然后把 seed 与管理员创建置于事务中。没有应用内初始化路由、启动 seed 或账号默认密码；既有模型/约束均未修改。
+- **外部运维连接与线上内部连接分离。** 操作前记录外部规则 []，临时添加当前公网 IPv4 /32，结束恢复并再次读取确认 []。Web 的内部连接保持正常。本次访问恢复结果在 production-db-access-results.json；原始规则仅在 render-db-access-original.private.json。自动审批曾拒绝未经授权的第三方 IP 查询，直到用户明确允许才执行，不绕过拒绝、不把公网 IP 或凭据写入公开文档。
+- **幂等导入和用户会话验证证明不同事项。** production-initialization-results.json 保存 2/6/6 新增、再次导入 0/0/0、三模型字段快照相同及实际日期；这不证明部署后的数据保留。production-admin-check.py 通过真实 HTTPS 表单/CSRF 登录与保存，再用独立匿名请求确认发布，且用原关联基线恢复临时推荐理由并退出会话。测试运行器的生产保护保持原样，没有调用生产测试套件。
+- **临时编辑必须有可核对的恢复基线。** production-association-baseline.private.json 保存关联 ID、资源 ID、活动 ID、理由与排序；检查器仅在当前值匹配原值或本次临时值时保存，避免覆盖他人修改。publish/restore-results.json 保存脱敏结果；恢复后独立匿名浏览器核对原值、身份及顺序，临时文案已清除。管理员身份与随机密码只保存于 production-admin.private.json，退出检查会话不删除持久管理员账号。
+- **公开浏览器证据不能替代出版商访问承诺。** render-browser/initialized-check.mjs 验证两场非空页面、三条排序资料、原文属性/新标签页、1280/375 px、后台保存可见性及真实生产请求；restored-check.mjs 验证恢复后的公开页面。对应结果和 PNG 都在忽略目录，应用异常为零，专用浏览器已关闭。production-original-link-results.json 记录 DOI 解析到预期出版商，Nature/PLOS/WHO 为 200，Physiology/SAGE/NIH 的自动读取为 403；没有绕过限制或保证全文开放。首次检查器引号/用户手势及请求超时的修正仅涉及临时工具。
+- **日期、验收与交付状态独立交接。** 首次导入时刻决定 +30/-7 天，当前未来示例为 11 月 4 日，数据库仍在 11 月 3 日到期，不能因演示日期改变生命周期。progress.md 记录授权、实测、限制和待办；DEPLOYMENT.md 记录公开地址、初始化状态及运营期限；AGENTS/README 指向当前证据。非空重部署保留、备份恢复及完整 MVP 验收仍待执行，文档交接未提交/推送，发布 SHA 仍为 d8bdd29。
+- **会话安全属性需要实际响应证据。** 另行真实登录核对 sessionid 的 Secure、HttpOnly、SameSite=Lax，立即退出，production-session-results.json 仅保留布尔结果。数据库初始化成功或登录页 CSRF Cookie 正常不能替代已认证会话 Cookie 的核验；不在文档或证据中保存 Cookie 值。
+
+## 45. 第 17 步用户确认与 Git 交接
+
+2026-10-05，用户回复“通过 推送git”。第 17 步现已用户确认；先记录 progress.md，再同步本文件及指南。第 18 步未开始，后续实施需新的明确指令。
+
+- progress.md 保存确认来源、既有验证依据、此次仅文档提交范围与待办；本文件解释实际部署/初始化与文件职责，保留此前未确认的历史记录。AGENTS 和两份 README 的当前状态指向第 17 步已接受，DEPLOYMENT.md 指向实际非空生产状态及固定部署配置。
+- Git 文档提交不修改已发布应用或数据库；Render auto-deploy 保持关闭，生产仍运行 d8bdd29。本次常规推送沿用既有功能分支，不等同默认分支合并、PR 或部署。私有初始化工具/凭据及运行证据缓存保持 .tools 忽略规则，不成为公共交付源码。
+- 用户确认不代替尚未执行的非空重部署保留、备份恢复及完整 MVP 后续验收；当前结构及功能没有新增变更，因此只验证文档格式/链接、待提交范围与凭据排除，不重复应用套件。

@@ -1,8 +1,8 @@
 # PsychTalk Hub backend
 
-## Current handoff: step 17 local checks passed, awaiting user confirmation
+## Current handoff: step 17 user-confirmed on 5 October 2026
 
-Last user-accepted step is 16. Step 17 adds the built React template, declared
+Last user-accepted step is 17. Step 17 adds the built React template, declared
 page routes, WhiteNoise/static collection and a fail-closed Linux deployment
 entry. At the user's request the assistant passed frontend lint, all 30 frontend
 tests and build; pip/Django/migration checks; all 135 backend tests; collectstatic;
@@ -13,17 +13,28 @@ and server processes were closed, and project PostgreSQL 17 restored to its prio
 stopped state. Those checks made no schema/dependency changes or installations.
 On 5 October 2026 (London), the user authorised commit/push/CI verification:
 implementation commit a174723 was pushed and both Linux CI jobs passed.
-No remote deployment occurred. Step 17 awaits user confirmation; step 18 has not started.
+The user subsequently authorised Free resource creation/deployment. Release
+d8bdd29 is Live on Render; actual migrations preceded Gunicorn startup and
+11 HTTP/six browser checks passed. The final build command's redeployment also
+reached Live and all online checks passed again. The user confirmed step 17 on
+5 October 2026;
+step 18 has not started.
 Older sections retain their historical counts/evidence; current results are in
 [progress.md](../memory-bank/progress.md).
 
-Remote deployment is blocked: this session has no callable Render account
-connection or supplied authorised existing free service/database. Current
-implementation a174723 has successful frontend/backend CI in
-[Project checks 37242589180](https://github.com/1uxury/psych-talk-hub/actions/runs/37242589180).
-All workflow steps passed, including frontend tests/build/artifact transfer and
-backend checks/migrations/static collection/tests. Actual Gunicorn/Render startup
-remains unverified. See [deployment handoff](DEPLOYMENT.md).
+Both a174723 and actual release d8bdd29 have successful frontend/backend CI;
+the release check is [Project checks 37242897644](https://github.com/1uxury/psych-talk-hub/actions/runs/37242897644).
+The [live site](https://psych-talk-hub.onrender.com) uses one Free Python service
+and Free PostgreSQL 17 in Frankfurt, with auto-deploy off. Subsequent user-authorised
+TLS initialization created two fictional talks, six resources/links and a private
+administrator; repeat import created nothing and preserved existing fields.
+Ten nonempty browser checks and actual Admin login/CSRF/save/anonymous refresh
+passed. Temporary recommendation text was restored, check sessions logged out and
+external database access disabled again. Some source websites return 403 to
+automated reads; no guarantee of freely accessible full text is implied.
+Nonempty redeploy preservation, backup/restore and complete MVP acceptance remain
+pending. See [deployment handoff](DEPLOYMENT.md) for the build PATH fix,
+private login handoff and actual database expiry. Step 18 has not started.
 
 ### Historical step handoffs
 
@@ -1128,12 +1139,14 @@ that browser subcheck as pending; the isolated automated test remains separate.
 ### 5. Remote status and handoff
 
 Read [DEPLOYMENT.md](DEPLOYMENT.md) for the checked platform facts and exact
-settings. No connected/authorised free resources are available to this session,
-and current steps have no pushed CI result. Remote service runtime, database
-capacity/dates, deployment, HTTPS/Cookies and online acceptance therefore remain
-**externally blocked / unverified**. Local acceptance cannot be reported as online
-success. No paid feature, Shell, pre-deploy command, seeding or admin initialization
-was used or added to the deployment lifecycle.
+settings and actual resource/release evidence. Release d8bdd29 passed both CI
+jobs and the Free Render deployment is Live, with real migrations/Gunicorn,
+11 HTTP and six browser checks. The final build command's redeployment is also
+Live; all online checks passed again. Empty Home is expected until controlled example/
+private-admin initialization; authenticated publication, nonempty redeploy data
+preservation and backup/restore remain pending. Local checks and these smoke
+checks do not establish full online business acceptance. No paid feature, Shell,
+pre-deploy command, seeding or admin initialization was added to deployment startup.
 
 Stop the temporary server with Ctrl+C after checking; the finally block restores
 its process environment. You can then resume the ordinary Django/Vite development
