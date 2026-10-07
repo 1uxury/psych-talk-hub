@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#EDD9CF"/>
+  <g fill="#613E3C" font-family="Arial, sans-serif">
+    <text x="64" y="85" font-size="18" letter-spacing="4">PSYCHTALK HUB / IDEAS TO EXPLORE</text>
+    <text x="64" y="266" font-family="Georgia, serif" font-size="76">A busy mind.</text>
+    <text x="64" y="356" font-family="Georgia, serif" font-size="76">A little space.</text>
+    <text x="66" y="422" font-size="23" opacity=".8">Stress &amp; everyday life</text>
+  </g>
+  <path d="M725 170c210-160 340 85 100 150s-105-195 90-150 245 245 35 245-235-210-70-175 180 150 45 220" fill="none" stroke="#BF795E" stroke-width="20" stroke-linecap="round"/><circle cx="1040" cy="475" r="30" fill="#613E3C"/>
+  <path d="M64 578H1136" stroke="#613E3C" stroke-opacity=".25"/>
+  <g fill="#613E3C" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">
+    <text x="64" y="621">A FICTIONAL TALK / A REAL CURIOSITY</text>
+    <text x="1136" y="621" text-anchor="end">EXAMPLE SERIES</text>
+  </g>
+</svg>

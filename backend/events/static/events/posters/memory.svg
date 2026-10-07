@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#DCE5E9"/>
+  <g fill="#36566B" font-family="Arial, sans-serif">
+    <text x="64" y="85" font-size="18" letter-spacing="4">PSYCHTALK HUB / IDEAS TO EXPLORE</text>
+    <text x="64" y="266" font-family="Georgia, serif" font-size="76">What stays</text>
+    <text x="64" y="356" font-family="Georgia, serif" font-size="76">with us?</text>
+    <text x="66" y="422" font-size="23" opacity=".8">Learning &amp; remembering</text>
+  </g>
+  <g fill="none" stroke="#82A0AF" stroke-width="3"><path d="M765 145h268v330H765z" transform="rotate(-14 900 310)"/><path d="M765 145h268v330H765z" transform="rotate(12 900 310)"/></g><rect x="765" y="145" width="268" height="330" rx="4" fill="#36566B"/><circle cx="900" cy="285" r="78" fill="#DCE5E9"/><path d="M805 412h185" stroke="#82A0AF" stroke-width="4"/><circle cx="1075" cy="500" r="14" fill="#AD765E"/>
+  <path d="M64 578H1136" stroke="#36566B" stroke-opacity=".25"/>
+  <g fill="#36566B" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">
+    <text x="64" y="621">A FICTIONAL TALK / A REAL CURIOSITY</text>
+    <text x="1136" y="621" text-anchor="end">EXAMPLE SERIES</text>
+  </g>
+</svg>

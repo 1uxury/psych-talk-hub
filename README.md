@@ -4,6 +4,11 @@ English public talk pages with curated reading lists, title search and a private
 Django Admin DOI import workflow. One Django application, two React pages and
 PostgreSQL; no public write API.
 
+The 7 October 2026 extension adds promotional images on talk cards/details and an
+eight-talk fictional demo with 11 real reading resources and 24 associations.
+Administrators can set an HTTPS image address and accessible description; demo artwork
+is bundled with the code. Current extension status: [progress](memory-bank/progress.md).
+
 - [GitHub](https://github.com/1uxury/psych-talk-hub)
 - [Public Demo](https://psych-talk-hub.onrender.com)
 - [Delivery status and demonstration checklist](DELIVERY.md)

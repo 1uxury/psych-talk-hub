@@ -19,13 +19,15 @@ def load_demo_manifest():
         return json.load(manifest_file)
 
 
-def seed_demo_data(*, seed_at=None):
+def seed_demo_data(*, seed_at=None, fill_missing_covers=False):
     """Fill missing records in one transaction, using one aware seed instant."""
     seed_at = timezone.now() if seed_at is None else seed_at
     if not isinstance(seed_at, datetime) or timezone.is_naive(seed_at):
         raise ValidationError("Provide a timezone-aware demo import instant.")
     manifest = load_demo_manifest()
     created_counts = {"events": 0, "resources": 0, "associations": 0}
+    if fill_missing_covers:
+        created_counts["covers"] = 0
     resources = {}
 
     with transaction.atomic():
@@ -56,6 +58,17 @@ def seed_demo_data(*, seed_at=None):
                 },
             )
             created_counts["events"] += int(created)
+            # Explicit enrichment only: never replace a chosen image or alt text.
+            # Normal repeat imports still preserve intentionally cleared fields.
+            if fill_missing_covers and not created:
+                event = Event.objects.select_for_update().get(pk=event.pk)
+                if (event.is_example and event.title == entry["fields"]["title"]
+                        and not event.cover_image_url and not event.cover_image_alt):
+                    event.cover_image_url = entry["fields"].get("cover_image_url", "")
+                    event.cover_image_alt = entry["fields"].get("cover_image_alt", "")
+                    if event.cover_image_url:
+                        event.save(update_fields=["cover_image_url", "cover_image_alt"])
+                        created_counts["covers"] += 1
             for reading in entry["reading"]:
                 _, created = EventResource.objects.get_or_create(
                     event=event,

@@ -13,6 +13,8 @@ from django.db import models
 from django.db.models.functions import Lower
 from django.utils import timezone
 
+from .validators import validate_cover_image_url
+
 
 class Event(models.Model):
     title = models.CharField(
@@ -24,6 +26,15 @@ class Event(models.Model):
     starts_at = models.DateTimeField()
     speaker = models.CharField(max_length=255, blank=True, default="")
     is_example = models.BooleanField(default=False)
+    cover_image_url = models.CharField(
+        "Promotional image URL", max_length=2048, blank=True, default="",
+        validators=[validate_cover_image_url],
+        help_text="Paste an HTTPS image address, or a bundled /static/events/posters/name.svg path. Leave empty for the default artwork.",
+    )
+    cover_image_alt = models.CharField(
+        "Promotional image description", max_length=255, blank=True, default="",
+        help_text="Describe meaningful image content for screen readers; leave empty for decorative artwork. Keep essential event information in the title and description too.",
+    )
     seed_key = models.CharField(max_length=100, blank=True, null=True, unique=True, default=None)
 
     class Meta:

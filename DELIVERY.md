@@ -1,5 +1,11 @@
 # Delivery record — 7 October 2026
 
+Latest user-requested extension: promotional images and expanded demo are implemented
+and locally verified (325 backend/32 frontend tests, 15 browser groups). Eight original
+posters, eight fictional talks, eleven real resources and twenty-four reading links.
+Exact-commit CI, existing Free Render deployment and controlled production enrichment
+are pending; the previous release and evidence below remain historical.
+
 Current stage: core implementation, final checks, exact-commit GitHub CI and
 controlled deployment passed. Application release **06f98e2 is Live**. Last explicit user
 acceptance is step 31. The latest instruction authorizes necessary finishing

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#E8DCBA"/>
+  <g fill="#575039" font-family="Arial, sans-serif">
+    <text x="64" y="85" font-size="18" letter-spacing="4">PSYCHTALK HUB / IDEAS TO EXPLORE</text>
+    <text x="64" y="266" font-family="Georgia, serif" font-size="76">Where does</text>
+    <text x="64" y="356" font-family="Georgia, serif" font-size="76">your mind go?</text>
+    <text x="66" y="422" font-size="23" opacity=".8">Attention &amp; focus</text>
+  </g>
+  <g fill="none" stroke="#AE9863" stroke-width="2"><path d="M710 130h400v400H710zM810 130v400m100-400v400m100-400v400M710 230h400m-400 100h400m-400 100h400"/></g><circle cx="910" cy="330" r="104" fill="#575039"/><circle cx="910" cy="330" r="54" fill="#E8DCBA"/><circle cx="1055" cy="185" r="22" fill="#C37D59"/>
+  <path d="M64 578H1136" stroke="#575039" stroke-opacity=".25"/>
+  <g fill="#575039" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">
+    <text x="64" y="621">A FICTIONAL TALK / A REAL CURIOSITY</text>
+    <text x="1136" y="621" text-anchor="end">EXAMPLE SERIES</text>
+  </g>
+</svg>

@@ -4,6 +4,8 @@ Current stage / 当前阶段 (7 October 2026): verified release **06f98e2** is L
 
 Version: MVP v0.2 | Date: 3 October 2026 | Status: Design specification; implementation not yet verified
 
+User-requested extension (7 October 2026): optional promotional images and eight fictional demo talks are implemented and locally verified; current evidence is at the top of progress.md and architecture.md. The original MVP specification below remains the baseline.
+
 [中文版](design-document.zh-CN.md) · [Technology stack](tech-stack.md)
 
 This document is the product requirements and interaction-design reference. Its Chinese counterpart specifies the same behaviour. Technical choices and deployment guidance are maintained in the technology-stack document.
@@ -52,14 +54,14 @@ The interface should feel like a warm learning community: calm, readable and wel
 | Border | `#DDDCD4` |
 | Error text | `#A32626`, accompanied by an explanatory message |
 | Font | System sans-serif stack; no external font dependency |
-| Type sizes | Body 16 px; section title 24 px; page title 36 px desktop / 28 px mobile |
+| Type sizes | Body 16 px; section title 24 px; page title 36 px desktop / 28 px mobile; Home introduction scales from 32 to 60 px |
 | Spacing | 8 px base; use 8, 16, 24 and 32 px increments |
 | Content width | Maximum 1080 px; horizontal padding 24 px desktop / 16 px mobile |
 | Cards and controls | Card radius 12 px; input/button radius 8 px; controls at least 44 px high |
 
 Below 768 px, talk cards use one column; at 768 px and above, they use two columns. Resource cards always use one column. Long titles and links wrap without horizontal scrolling.
 
-Use visible keyboard focus, explicit input labels, semantic headings and text explanations for errors. Do not rely on colour alone to convey status. Check text contrast before implementation is accepted. No cover images, icon pack or complex animation is required. Django Admin retains its standard styling; custom import screens use its existing forms and messages.
+Use visible keyboard focus, explicit input labels, semantic headings and text explanations for errors. Do not rely on colour alone to convey status. Check text contrast before implementation is accepted. The user-requested 7 October 2026 extension adds optional promotional images on Home cards and talk details, edited through Admin using HTTPS image addresses or bundled poster paths. Reserve a 16:9 space, lazy-load card images, use meaningful alt text or empty alt for decoration, and show fallback artwork when absent or unavailable. Essential event information remains in text. Demo posters are original self-contained SVG assets served with the deployment; file uploads are outside this extension. Django Admin retains its standard styling; custom import screens use its existing forms and messages.
 
 ## 4. Home page
 
@@ -193,7 +195,7 @@ Remove an association through `Remove from this talk`, with the confirmation **R
 - Sort resources by display order ascending, then association ID ascending. Default display order is `0`; equal values preserve association creation order.
 - Missing authors/year are allowed; a non-empty title and valid HTTP(S) original URL are required before saving.
 - Imported metadata is bibliographic information, not an endorsement of research quality. Save only the fields needed for the cards; do not add automated summaries or import abstracts in the MVP.
-- Every seeded demonstration event carries an `Example event` label. The public footer states: `Independent portfolio prototype. Not affiliated with Conn8cting.` Developers select and verify real papers and articles for two fictional talks, with at least three resources each. Show `Reading selections are illustrative; these talks are fictional.` on example-event details. Never invent paper titles, authors or DOIs.
+- Every seeded demonstration event carries an `Example event` label. The public footer states: `Independent portfolio prototype. Not affiliated with Conn8cting.` Developers select and verify real papers and articles for eight fictional talks, with three resources each and distinct promotional posters. Show `Reading selections are illustrative; these talks are fictional.` on example-event details. Never invent paper titles, authors or DOIs.
 - Use stable seed identifiers for events and resources without DOIs, and normalised DOIs for imported resources. Repeated seeding only fills missing records and associations; it never overwrites edits. On initial creation, set the upcoming event 30 days after the seed instant and the past event 7 days before it. Later imports never shift dates automatically; recheck the demo's upcoming/past mix when reviewing it.
 
 ### DOI and bibliographic conversion

@@ -12,6 +12,8 @@
  * @property {string} speaker Optional text, empty string when absent.
  * @property {boolean} is_example Whether the talk is fictional demo content.
  * @property {number} resource_count Non-negative integer association count.
+ * @property {string} cover_image_url Optional HTTPS or bundled poster path; empty when absent.
+ * @property {string} cover_image_alt Optional image description; empty for decorative art.
  *
  * @typedef {Object} EventReading
  * @property {number} association_id Integer EventResource identity.

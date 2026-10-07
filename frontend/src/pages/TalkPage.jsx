@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { readTalk } from '../api/client.js'
 import RequestState from '../components/RequestState.jsx'
 import ResourceCard from '../components/ResourceCard.jsx'
+import TalkCover from '../components/TalkCover.jsx'
 import useApiRequest from '../hooks/useApiRequest.js'
 import { formatTalkTime, getTalkStatus } from '../utils/talks.js'
 
@@ -22,6 +23,7 @@ function TalkDetails({ talk }) {
   return (
     <>
       <header className="talk-details">
+        <TalkCover talk={talk} priority />
         <div className="talk-labels">
           {talk.is_example && <p className="example-label">Example event</p>}
           <p className="talk-status">{getTalkStatus(talk.starts_at, now)}</p>

@@ -39,8 +39,13 @@ export default function HomePage() {
 
   return (
     <section aria-labelledby="home-title">
-      <h1 id="home-title">Keep learning beyond the talk.</h1>
-      <p>Explore reading for upcoming and past psychology talks.</p>
+      <header className="home-intro">
+        <p className="intro-eyebrow">Psychology · Ideas · Conversation</p>
+        <h1 id="home-title">Keep learning<br />beyond the talk.</h1>
+        <p className="intro-description">Big questions, fresh perspectives, and something good to read.
+          Explore the ideas behind upcoming and past psychology talks.</p>
+        <a className="intro-link" href="#upcoming-title">Find your next curiosity <span aria-hidden="true">↘</span></a>
+      </header>
       <RequestState status={status} context="home" onRetry={retry} />
       {status === 'success' && <TalkGroups talks={talks} />}
     </section>

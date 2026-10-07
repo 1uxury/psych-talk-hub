@@ -1,5 +1,39 @@
 # PsychTalk Hub backend
 
+## Promotional images and richer demo — 7 October 2026
+
+Event migration 0004 adds optional `cover_image_url` / `cover_image_alt` in Admin
+and both read-only public endpoints. Events → edit a talk → **Promotional image URL**:
+paste an HTTPS image address. Fill **Promotional image description** for meaningful
+content, or leave blank for decoration. Save and refresh the public page. An image
+address must identify an image rather than a web page. HTTP, credentials, executable
+schemes and arbitrary relative paths are rejected. The server never downloads images.
+No upload/storage service was added.
+
+Eight original posters are collected by the existing static deployment. Paths use
+`/static/events/posters/` followed by `sleep.svg`, `connection.svg`, `stress.svg`,
+`mindfulness.svg`, `music.svg`, `attention.svg`, `memory.svg` or `habits.svg`.
+Blank/failed images show default artwork; essential event information stays in text.
+
+The expanded offline manifest has **8 fictional talks / 11 verified shared resources /
+24 links**, initially four upcoming and four past. Default `manage.py seed_demo` only
+fills missing records. To explicitly fill empty covers on old demo talks:
+
+```powershell
+.venv/Scripts/python.exe manage.py seed_demo --fill-missing-covers
+```
+
+The flag additionally fills covers only for stable seeded fictional talks with their
+original title and both image fields empty. Custom images/alt/title and other fields
+are preserved. Default repeat imports preserve deliberately cleared covers. Seeding
+never runs during startup/deployment. Select the intended environment; production
+requires a controlled separately authorized connection.
+
+Local lint/32 frontend tests/build, Django/migration checks, collectstatic and
+**325 PostgreSQL backend tests / OK (47.142 s)** passed. Ten new image cases cover
+validation, permissions, API/no server fetch, preservation/backfill and poster assets.
+Production extension pending. Counts/statuses below are historical evidence.
+
 Current stage delivery (7 October 2026): application release **06f98e2** passed [current frontend/backend CI](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) and is **Live** on the existing Free Render service. Clean local lint/30 frontend/build/checks and **315 PostgreSQL backend tests (43.307 s)** passed, as did nine time/layout/keyboard groups, eleven production HTTP/Admin checks and seven fresh anonymous browser groups. Nonempty redeployment preserved every public field; explicitly authorized private backup/isolated restore matched all business/admin/migration fields. See [README](../README.md), [delivery](../DELIVERY.md) and [backup procedure](../backend/BACKUP.md). Management video and the full production management matrix remain pending; this is a stage delivery, not full MVP acceptance. Last explicit user acceptance is step 31; latest instruction authorizes finishing work. Earlier statuses below are historical.
 
 Current work: **step 31 public page states are user-accepted on 7 October 2026,

@@ -1,5 +1,23 @@
 # PsychTalk Hub frontend
 
+## Promotional images validation — 7 October 2026
+
+Home now has an introduction and image-led cards; details reuse `TalkCover`.
+Card images are lazy, detail images eager, with reserved 16:9 layout/no-referrer.
+Empty/unsafe/broken images show default decoration. Missing cover properties are
+tolerated during deployment. Vite proxies bundled `/static/events` to Django.
+
+Lint, **32 Node tests** and build passed; 15 offline actual-build browser groups passed:
+1280/768/375 px, eight talk details, search/clear/focus/Back and blank/broken/unsafe-image
+fallback. Normal poster/JS/CSS were 200, zero JS exceptions; screenshots reviewed.
+Current online extension pending.
+
+Manual check: Home initially has four upcoming/four past talks with distinct posters.
+Open each talk: cover, three readings, fictional disclosure, search and Back. In Admin
+edit Promotional image URL/description, save, refresh. Clear the URL or temporarily use
+a missing HTTPS image: fallback appears and readings stay usable. Restore your image.
+Existing timezone/original-link checks remain required. Earlier records are historical.
+
 Current stage delivery (7 October 2026): application release **06f98e2** passed [current frontend/backend CI](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) and is **Live** on the existing Free Render service. Clean local lint/30 frontend/build/checks and **315 PostgreSQL backend tests (43.307 s)** passed, as did nine time/layout/keyboard groups, eleven production HTTP/Admin checks and seven fresh anonymous browser groups. Nonempty redeployment preserved every public field; explicitly authorized private backup/isolated restore matched all business/admin/migration fields. See [README](../README.md), [delivery](../DELIVERY.md) and [backup procedure](../backend/BACKUP.md). Management video and the full production management matrix remain pending; this is a stage delivery, not full MVP acceptance. Last explicit user acceptance is step 31; latest instruction authorizes finishing work. Earlier statuses below are historical.
 
 Current work: **step 31 public states are user-accepted on 7 October 2026,

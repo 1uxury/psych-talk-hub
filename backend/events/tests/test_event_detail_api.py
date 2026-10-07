@@ -19,7 +19,7 @@ from events.models import Event, EventResource, Resource
 class EventDetailAPITests(APITestCase):
     event_fields = {
         "id", "title", "description", "topic", "starts_at", "speaker",
-        "is_example", "resource_count",
+        "is_example", "resource_count", "cover_image_url", "cover_image_alt",
     }
     reading_fields = {
         "association_id", "resource_id", "title", "authors", "year",

@@ -1,5 +1,17 @@
 # PsychTalk Hub — 架构记录
 
+## 当前架构扩展：宣传图与示例内容（2026-10-07）
+
+本次用户明确授权活动宣传图与线上 demo 扩充。已先更新 progress.md；下文旧阶段限制与发布 SHA 为历史记录。
+
+Event 的迁移 0004 增加 `cover_image_url`（可空字符串、2048）与 `cover_image_alt`（可空字符串、255）。普通 Admin Event 权限/CSRF 编辑，列表与详情序列化器显式公开两字段，不新增写 API。`events.validators.validate_cover_image_url` 允许无凭据 HTTPS 或 `/static/events/posters/[a-z0-9-]+.svg`，禁止其他协议/相对路径/空白/反斜线；应用服务端不取远程图片。图片由浏览器加载，`referrerPolicy=no-referrer`。
+
+`TalkCover` 共享卡片及详情的固定 16:9 图片布局；卡片 lazy、详情 eager。空值/不安全地址/加载失败使用装饰性默认图案；通过按 URL keyed 子组件重置失败状态。无替代文字的装饰海报使用空 alt；必要活动信息仍在文字标题和描述中。首页引导区、双色正文与原创静态海报保持暖白/深绿主题。Vite 为 `/static/events` 添加开发代理；Django staticfiles/WhiteNoise 发布海报，不依赖 Render 临时上传目录或新增存储服务。
+
+精选清单扩展到 8 场虚构活动、11 条真实共享资源、24 条关联；原两场 seed_key、日期及原书目不变，新活动首次导入使用同一时刻偏移 +7/+14/+21/-14/-21/-28 天。8 张原生 SVG 不含脚本、链接或外部资产。新增机构文章来源包含 NIMH stress、NCCIH mindfulness/music、NIH habits 两篇，清单记录核对 URL 和日期，未知年份为 null。
+
+默认导入仍 preserve existing records。显式 `seed_demo --fill-missing-covers` 在同一 atomic 中锁定现有活动，仅补符合原题名/示例/两图片字段为空的预置记录；自定义封面、替代文字、题名及非示例不变。既有已清空封面在普通重复导入时不会填回。325 后端/32 前端及15组只读浏览器检查通过，迁移及静态收集通过；线上扩展待交付。检查入口 backend/README.md、frontend/README.md。
+
 日期：2026-10-07｜最后明确用户确认步骤：31｜第 30 步本地验证通过、当前版本远程 CI 待办｜第 31 步用户验收通过｜生产 SHA 仍为 d8bdd29｜第 32 步未开始
 
 最新状态以第 73–74 节为准：收到明确实施第 31 步的新指令后核对公开状态并完成 13 组只读夹具浏览器验证，用户随后回复“通过”，确认第 31 步本地验收。已先记录 progress.md；验收指引在 frontend/README.md。没有补写用户“通过30”或远程 CI 结果；下列待验收/未开始的描述为历史交接。第 32 步等待新的明确实施指令。

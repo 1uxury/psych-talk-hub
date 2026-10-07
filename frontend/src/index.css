@@ -53,6 +53,39 @@ a { color: var(--primary); }
 }
 .talk-card h3, .resource-card h3 { margin: 0; font-size: 1.25rem; line-height: 1.4; }
 .talk-card p, .resource-card p { margin: 0; }
+.home-intro {
+  position: relative;
+  overflow: hidden;
+  padding: 48px;
+  border-radius: 20px;
+  background: #E7EDE4;
+  margin: 8px 0 48px;
+}
+.home-intro::after {
+  content: "";
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  right: -110px;
+  top: 32px;
+  border: 48px solid #CEDACD;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.intro-eyebrow { margin: 0; color: var(--primary); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.home-intro h1 { position: relative; z-index: 1; font-size: clamp(2rem, 5vw, 3.75rem); margin: 20px 0; letter-spacing: -0.04em; }
+.intro-description { position: relative; z-index: 1; max-width: 560px; color: var(--secondary); font-size: 1.125rem; }
+.intro-link { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 16px; min-height: 44px; font-weight: 600; }
+.talk-group h2 { display: flex; align-items: center; gap: 16px; }
+.talk-group h2::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+.talk-card { padding: 0; overflow: hidden; gap: 0; }
+.talk-card-content { padding: 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; flex: 1; width: 100%; }
+.talk-cover { width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #E7EDE4; flex: none; }
+.talk-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cover-fallback { position: relative; display: flex; align-items: flex-end; height: 100%; padding: 24px; background: #E7EDE4; overflow: hidden; }
+.cover-orbit { position: absolute; width: 70%; aspect-ratio: 1; right: -15%; top: -35%; border: 28px solid #BCD0C0; border-radius: 50%; }
+.cover-fallback-label { position: relative; max-width: 240px; color: var(--primary); font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+.talk-details > .talk-cover { border-radius: 16px; margin-bottom: 32px; max-height: 440px; }
 .talk-topic, .talk-time, .resource-type, .resource-authors, .resource-year {
   color: var(--secondary);
 }
@@ -119,6 +152,9 @@ footer { font-size: 0.875rem; }
 @media (width < 768px) {
   .site-header, main, footer { padding: 16px; }
   .request-state { padding: 16px; }
-  .talk-card, .resource-card { padding: 16px; }
+  .resource-card, .talk-card-content { padding: 16px; }
+  .home-intro { padding: 28px 24px; margin-bottom: 32px; }
+  .home-intro::after { opacity: 0.5; right: -170px; }
+  .intro-description { font-size: 1rem; }
   h1 { font-size: 1.75rem; }
 }

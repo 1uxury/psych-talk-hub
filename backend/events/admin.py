@@ -33,7 +33,8 @@ class EventAdminForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ("title", "description", "topic", "starts_at", "speaker", "is_example")
+        fields = ("title", "description", "topic", "starts_at", "speaker", "is_example",
+                  "cover_image_url", "cover_image_alt")
 
 
 @admin.register(Event)

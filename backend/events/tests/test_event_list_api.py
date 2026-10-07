@@ -15,7 +15,7 @@ class EventListAPITests(APITestCase):
     url = reverse("events:event-list")
     public_fields = {
         "id", "title", "description", "topic", "starts_at", "speaker",
-        "is_example", "resource_count",
+        "is_example", "resource_count", "cover_image_url", "cover_image_alt",
     }
 
     def create_event(self, title="Reading talk", **fields):
@@ -53,6 +53,7 @@ class EventListAPITests(APITestCase):
             "id": event.pk, "title": event.title, "description": event.description,
             "topic": event.topic, "starts_at": "2026-11-03T19:30:00Z",
             "speaker": event.speaker, "is_example": True, "resource_count": 1,
+            "cover_image_url": "", "cover_image_alt": "",
         })
         for name in ("id", "resource_count"):
             self.assertIs(type(row[name]), int)

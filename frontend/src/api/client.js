@@ -29,6 +29,8 @@ function hasTalkFields(talk) {
     && typeof talk.starts_at === 'string' && Number.isFinite(Date.parse(talk.starts_at))
     && typeof talk.topic === 'string' && typeof talk.speaker === 'string'
     && typeof talk.is_example === 'boolean'
+    && (talk.cover_image_url === undefined || typeof talk.cover_image_url === 'string')
+    && (talk.cover_image_alt === undefined || typeof talk.cover_image_alt === 'string')
     && Number.isInteger(talk.resource_count) && talk.resource_count >= 0)
 }
 

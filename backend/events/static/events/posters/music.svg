@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#DCD9EC"/>
+  <g fill="#493F66" font-family="Arial, sans-serif">
+    <text x="64" y="85" font-size="18" letter-spacing="4">PSYCHTALK HUB / IDEAS TO EXPLORE</text>
+    <text x="64" y="266" font-family="Georgia, serif" font-size="76">Feel the</text>
+    <text x="64" y="356" font-family="Georgia, serif" font-size="76">frequency.</text>
+    <text x="66" y="422" font-size="23" opacity=".8">Music &amp; emotion</text>
+  </g>
+  <g fill="#8B7EB0"><rect x="730" y="255" width="32" height="150" rx="16"/><rect x="785" y="188" width="32" height="285" rx="16"/><rect x="840" y="125" width="32" height="410" rx="16"/><rect x="895" y="222" width="32" height="216" rx="16"/><rect x="950" y="166" width="32" height="328" rx="16"/><rect x="1005" y="255" width="32" height="150" rx="16"/><rect x="1060" y="295" width="32" height="70" rx="16"/></g><rect x="895" y="222" width="32" height="216" rx="16" fill="#493F66"/>
+  <path d="M64 578H1136" stroke="#493F66" stroke-opacity=".25"/>
+  <g fill="#493F66" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">
+    <text x="64" y="621">A FICTIONAL TALK / A REAL CURIOSITY</text>
+    <text x="1136" y="621" text-anchor="end">EXAMPLE SERIES</text>
+  </g>
+</svg>

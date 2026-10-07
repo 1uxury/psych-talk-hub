@@ -30,13 +30,15 @@ class DemoSeedTests(TestCase):
             "associations": list(EventResource.objects.order_by("id").values()),
         }
 
-    def test_first_import_has_two_fictional_talks_three_readings_each_and_fixed_dates(self):
-        self.assertEqual(self.import_demo(), {"events": 2, "resources": 6, "associations": 6})
+    def test_first_import_has_eight_fictional_talks_three_readings_each_and_fixed_dates(self):
+        self.assertEqual(self.import_demo(), {"events": 8, "resources": 11, "associations": 24})
         upcoming = Event.objects.get(seed_key=self.sleep_key)
         past = Event.objects.get(seed_key=self.social_key)
         self.assertEqual(upcoming.starts_at, self.seed_at + timedelta(days=30))
         self.assertEqual(past.starts_at, self.seed_at - timedelta(days=7))
-        for event in (upcoming, past):
+        self.assertEqual(Event.objects.filter(starts_at__gt=self.seed_at).count(), 4)
+        self.assertEqual(Event.objects.filter(starts_at__lt=self.seed_at).count(), 4)
+        for event in Event.objects.all():
             self.assertTrue(event.is_example)
             self.assertIn("Example event", event.title)
             self.assertIn("fictional speaker", event.speaker)
@@ -123,7 +125,7 @@ class DemoSeedTests(TestCase):
         manifest = deepcopy(load_demo_manifest())
         manifest["resources"][1]["fields"]["doi"] = "  10.1038/NRN2762  "
         with patch("events.demo_seed.load_demo_manifest", return_value=manifest):
-            self.assertEqual(self.import_demo(), {"events": 2, "resources": 5, "associations": 6})
+            self.assertEqual(self.import_demo(), {"events": 8, "resources": 10, "associations": 24})
         existing.refresh_from_db()
         other_link.refresh_from_db()
         self.assertEqual((existing.title, existing.authors, existing.metadata_source),
@@ -132,7 +134,7 @@ class DemoSeedTests(TestCase):
         self.assertIsNone(existing.seed_key)
         self.assertEqual(other_link.recommendation, "Keep this")
         self.assertTrue(EventResource.objects.filter(event__seed_key=self.sleep_key, resource=existing).exists())
-        self.assertEqual((Event.objects.count(), Resource.objects.count(), EventResource.objects.count()), (3, 6, 7))
+        self.assertEqual((Event.objects.count(), Resource.objects.count(), EventResource.objects.count()), (9, 11, 25))
 
     def test_unkeyed_manual_records_with_identical_titles_and_urls_are_not_merged(self):
         existing_ids = []
@@ -140,8 +142,8 @@ class DemoSeedTests(TestCase):
             if entry["fields"]["doi"] is None:
                 fields = {**entry["fields"], "seed_key": None}
                 existing_ids.append(Resource.objects.create(**fields).pk)
-        self.assertEqual(self.import_demo(), {"events": 2, "resources": 6, "associations": 6})
-        self.assertEqual(Resource.objects.count(), 8)
+        self.assertEqual(self.import_demo(), {"events": 8, "resources": 11, "associations": 24})
+        self.assertEqual(Resource.objects.count(), 18)
         for resource in Resource.objects.filter(pk__in=existing_ids):
             self.assertIsNone(resource.seed_key)
             self.assertFalse(resource.event_resources.exists())
@@ -176,7 +178,7 @@ class DemoSeedTests(TestCase):
         article.event_resources.all().delete()
         article.delete()  # Ordinary ORM deletion; Admin still prohibits resource deletion.
         before = self.snapshot()
-        self.assertEqual(self.import_demo(), {"events": 0, "resources": 1, "associations": 1})
+        self.assertEqual(self.import_demo(), {"events": 0, "resources": 1, "associations": 3})
         self.assertEqual(self.snapshot()["events"], before["events"])
         for row in before["resources"]:
             self.assertIn(row, self.snapshot()["resources"])
@@ -193,16 +195,16 @@ class DemoSeedTests(TestCase):
 
         def fail_last_link(instance, *args, **kwargs):
             calls.append(instance)
-            if len(calls) == 6:
+            if len(calls) == 24:
                 raise ValidationError("Simulated final reading failure")
             return original_save(instance, *args, **kwargs)
 
         with patch.object(EventResource, "save", new=fail_last_link):
             with self.assertRaises(ValidationError):
                 self.import_demo()
-        self.assertEqual(len(calls), 6)
+        self.assertEqual(len(calls), 24)
         self.assertEqual(self.snapshot(), {"events": [], "resources": [], "associations": []})
-        self.assertEqual(self.import_demo(), {"events": 2, "resources": 6, "associations": 6})
+        self.assertEqual(self.import_demo(), {"events": 8, "resources": 11, "associations": 24})
 
     def test_management_command_is_explicit_offline_and_reports_created_counts(self):
         output = StringIO()
@@ -211,7 +213,7 @@ class DemoSeedTests(TestCase):
                 call_command("seed_demo", stdout=output)
                 call_command("seed_demo", stdout=output)
         request.assert_not_called()
-        self.assertIn("2 talks, 6 resources, 6 reading links", output.getvalue())
+        self.assertIn("8 talks, 11 resources, 24 reading links", output.getvalue())
         self.assertIn("0 talks, 0 resources, 0 reading links", output.getvalue())
         self.assertIn("Existing records were kept.", output.getvalue())
 

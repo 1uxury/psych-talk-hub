@@ -1,5 +1,6 @@
 {
   "verified_on": "2026-10-04",
+  "expanded_on": "2026-10-07",
   "resources": [
     {
       "key": "sleep-role",
@@ -84,6 +85,76 @@
         "metadata_source": "manual",
         "seed_key": "demo-resource-who-social-connection-v1"
       }
+    },
+    {
+      "key": "nimh-stress",
+      "verification_url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet",
+      "fields": {
+        "title": "I'm So Stressed Out! Fact Sheet",
+        "authors": "National Institute of Mental Health",
+        "year": null,
+        "original_url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nimh-stress-v1"
+      }
+    },
+    {
+      "key": "nccih-mindfulness",
+      "verification_url": "https://www.nccih.nih.gov/health/meditation-and-mindfulness-effectiveness-and-safety",
+      "fields": {
+        "title": "Meditation and Mindfulness: Effectiveness and Safety",
+        "authors": "National Center for Complementary and Integrative Health",
+        "year": null,
+        "original_url": "https://www.nccih.nih.gov/health/meditation-and-mindfulness-effectiveness-and-safety",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nccih-mindfulness-v1"
+      }
+    },
+    {
+      "key": "nccih-music",
+      "verification_url": "https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know",
+      "fields": {
+        "title": "Music and Health: What You Need To Know",
+        "authors": "National Center for Complementary and Integrative Health",
+        "year": null,
+        "original_url": "https://www.nccih.nih.gov/health/music-and-health-what-you-need-to-know",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nccih-music-v1"
+      }
+    },
+    {
+      "key": "nih-bad-habits",
+      "verification_url": "https://newsinhealth.nih.gov/2012/01/breaking-bad-habits",
+      "fields": {
+        "title": "Breaking Bad Habits",
+        "authors": "NIH News in Health",
+        "year": 2012,
+        "original_url": "https://newsinhealth.nih.gov/2012/01/breaking-bad-habits",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nih-bad-habits-v1"
+      }
+    },
+    {
+      "key": "nih-healthy-habits",
+      "verification_url": "https://newsinhealth.nih.gov/2018/03/creating-healthy-habits",
+      "fields": {
+        "title": "Creating Healthy Habits",
+        "authors": "NIH News in Health",
+        "year": 2018,
+        "original_url": "https://newsinhealth.nih.gov/2018/03/creating-healthy-habits",
+        "doi": null,
+        "resource_type": "article",
+        "metadata_source": "manual",
+        "seed_key": "demo-resource-nih-healthy-habits-v1"
+      }
     }
   ],
   "events": [
@@ -94,13 +165,27 @@
         "title": "Example event: Sleep, learning and memory",
         "description": "A fictional psychology talk exploring how sleep and learning connect. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
         "topic": "Sleep and memory",
+        "cover_image_url": "/static/events/posters/sleep.svg",
+        "cover_image_alt": "",
         "speaker": "Alex Morgan (fictional speaker)",
         "is_example": true
       },
       "reading": [
-        {"resource": "nih-sleep", "recommendation": "An accessible starting point for discussing sleep and memory. This selection is illustrative.", "display_order": 10},
-        {"resource": "memory-function", "recommendation": "A review to explore alongside the introductory reading. This selection is illustrative.", "display_order": 20},
-        {"resource": "sleep-role", "recommendation": "Further reading for questions about memory research. This selection is illustrative.", "display_order": 30}
+        {
+          "resource": "nih-sleep",
+          "recommendation": "An accessible starting point for discussing sleep and memory. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "memory-function",
+          "recommendation": "A review to explore alongside the introductory reading. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "sleep-role",
+          "recommendation": "Further reading for questions about memory research. This selection is illustrative.",
+          "display_order": 30
+        }
       ]
     },
     {
@@ -110,13 +195,207 @@
         "title": "Example event: Everyday connections and belonging",
         "description": "A fictional psychology talk inviting discussion of social connection and belonging. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
         "topic": "Social connection",
+        "cover_image_url": "/static/events/posters/connection.svg",
+        "cover_image_alt": "",
         "speaker": "Sam Taylor (fictional speaker)",
         "is_example": true
       },
       "reading": [
-        {"resource": "who-connection", "recommendation": "Public-health context for a discussion of social connection. This selection is illustrative.", "display_order": 10},
-        {"resource": "weak-ties", "recommendation": "A study to discuss when considering everyday acquaintances. This selection is illustrative.", "display_order": 20},
-        {"resource": "social-relationships", "recommendation": "A research review for further discussion of social relationships. This selection is illustrative.", "display_order": 30}
+        {
+          "resource": "who-connection",
+          "recommendation": "Public-health context for a discussion of social connection. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "weak-ties",
+          "recommendation": "A study to discuss when considering everyday acquaintances. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "social-relationships",
+          "recommendation": "A research review for further discussion of social relationships. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-stress-v1",
+      "offset_days": 7,
+      "fields": {
+        "title": "Example event: Making sense of stress",
+        "description": "Why can the same busy day feel energising one week and overwhelming the next? A fictional conversation about stress, everyday routines and what research can tell us. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Stress and everyday life",
+        "speaker": "Jamie Ellis (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/stress.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nimh-stress",
+          "recommendation": "Start with an institutional introduction to stress and anxiety. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "nccih-mindfulness",
+          "recommendation": "Discuss both the evidence and the limitations of mindfulness research. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "nih-healthy-habits",
+          "recommendation": "Consider how everyday routines relate to a conversation about wellbeing. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-mindfulness-v1",
+      "offset_days": 14,
+      "fields": {
+        "title": "Example event: Mindfulness, beyond the buzzword",
+        "description": "What does paying attention to the present actually mean? A fictional discussion separating everyday curiosity from claims about meditation, with room for questions about evidence and safety. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Mindfulness and awareness",
+        "speaker": "Robin Chen (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/mindfulness.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nccih-mindfulness",
+          "recommendation": "An overview of meditation research, its uncertainties and safety considerations. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "nimh-stress",
+          "recommendation": "Background for discussing stress without treating a talk as clinical advice. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "nih-healthy-habits",
+          "recommendation": "Explore how a new practice might fit into existing routines. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-music-v1",
+      "offset_days": 21,
+      "fields": {
+        "title": "Example event: Why music moves us",
+        "description": "A favourite song can bring back a place, a person or an entire summer. This fictional talk invites conversation about music, emotion, memory and shared experiences. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Music, emotion and memory",
+        "speaker": "Casey Reed (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/music.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nccih-music",
+          "recommendation": "An institutional overview of music and health, including limitations in the evidence. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "weak-ties",
+          "recommendation": "A companion study for discussing the social side of shared experiences. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "who-connection",
+          "recommendation": "Wider public-health context for conversations about connection. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-attention-v1",
+      "offset_days": -14,
+      "fields": {
+        "title": "Example event: Attention in a distracted world",
+        "description": "Notifications, unfinished tasks and wandering thoughts: where does our attention go? A fictional discussion of focus, rest and the routines that shape a working day. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Attention and daily routines",
+        "speaker": "Jordan Lee (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/attention.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nccih-mindfulness",
+          "recommendation": "A starting point for asking what attention practices have actually been studied. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "nih-sleep",
+          "recommendation": "Background on sleep and learning for a broader discussion of working routines. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "nih-healthy-habits",
+          "recommendation": "An accessible companion on developing everyday routines. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-memory-v1",
+      "offset_days": -21,
+      "fields": {
+        "title": "Example event: The things we remember",
+        "description": "How does an experience become something we can recall tomorrow? A fictional conversation about learning, remembering and the role of a good night's sleep. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Learning and remembering",
+        "speaker": "Taylor Brooks (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/memory.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nih-sleep",
+          "recommendation": "Begin with an accessible introduction to sleep and memory. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "sleep-role",
+          "recommendation": "A research review for exploring how experiences are retained. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "memory-function",
+          "recommendation": "A companion review to support questions about memory consolidation. This selection is illustrative.",
+          "display_order": 30
+        }
+      ]
+    },
+    {
+      "seed_key": "demo-event-habits-v1",
+      "offset_days": -28,
+      "fields": {
+        "title": "Example event: Small habits, everyday change",
+        "description": "Why do some routines feel automatic while new ones take effort? A fictional psychology conversation about habits, change and the contexts that shape what we do. Reading selections are illustrative; these talks are fictional. Independent portfolio prototype. Not affiliated with Conn8cting.",
+        "topic": "Habits and behaviour",
+        "speaker": "Morgan Blake (fictional speaker)",
+        "is_example": true,
+        "cover_image_url": "/static/events/posters/habits.svg",
+        "cover_image_alt": ""
+      },
+      "reading": [
+        {
+          "resource": "nih-bad-habits",
+          "recommendation": "An accessible introduction to why established routines can be hard to change. This selection is illustrative.",
+          "display_order": 10
+        },
+        {
+          "resource": "nih-healthy-habits",
+          "recommendation": "A companion article about developing and maintaining new routines. This selection is illustrative.",
+          "display_order": 20
+        },
+        {
+          "resource": "nimh-stress",
+          "recommendation": "Context for discussing everyday stress alongside behaviour change. This selection is illustrative.",
+          "display_order": 30
+        }
       ]
     }
   ]

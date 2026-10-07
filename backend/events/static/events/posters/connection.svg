@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <rect width="1200" height="675" fill="#E9E3D5"/>
+  <g fill="#284D44" font-family="Arial, sans-serif">
+    <text x="64" y="85" font-size="18" letter-spacing="4">PSYCHTALK HUB / IDEAS TO EXPLORE</text>
+    <text x="64" y="266" font-family="Georgia, serif" font-size="76">Better,</text>
+    <text x="64" y="356" font-family="Georgia, serif" font-size="76">together.</text>
+    <text x="66" y="422" font-size="23" opacity=".8">Connection &amp; belonging</text>
+  </g>
+  <g fill="none" stroke="#748F78" stroke-width="32"><circle cx="825" cy="295" r="128"/><circle cx="1008" cy="295" r="128"/></g><path d="M915 210a128 128 0 0 1 0 170" fill="none" stroke="#C38358" stroke-width="32"/><g fill="#284D44"><circle cx="825" cy="490" r="9"/><circle cx="915" cy="490" r="9"/><circle cx="1008" cy="490" r="9"/></g>
+  <path d="M64 578H1136" stroke="#284D44" stroke-opacity=".25"/>
+  <g fill="#284D44" font-family="Arial, sans-serif" font-size="16" letter-spacing="2">
+    <text x="64" y="621">A FICTIONAL TALK / A REAL CURIOSITY</text>
+    <text x="1136" y="621" text-anchor="end">EXAMPLE SERIES</text>
+  </g>
+</svg>

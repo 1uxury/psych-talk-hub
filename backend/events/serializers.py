@@ -17,7 +17,7 @@ class EventListSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             "id", "title", "description", "topic", "starts_at", "speaker",
-            "is_example", "resource_count",
+            "is_example", "resource_count", "cover_image_url", "cover_image_alt",
         )
         read_only_fields = fields
 
