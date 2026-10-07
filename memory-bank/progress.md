@@ -1077,3 +1077,25 @@
 - 根 README/DELIVERY 为当前可复现入口与演示脚本；未录制视频，不提供不存在的视频链接。第37–40步进行中，仍为阶段交付，不能宣称完整MVP。
 
 只读 Render API 确认原 Frankfurt Web/PG17 仍 Free、自动部署 no、外部访问规则 []、数据库 expiresAt=2026-11-03T23:33:20.802631Z，生产仍 d8bdd29。拟发布当前已验证源代码到现有分支，经对应 GitHub CI 成功后才部署同一提交；无付费资源/升级。PG17初始 PID29760 已运行，保持原状态；PG11未操作。
+
+### 第 37–40 步：当前阶段版本实际发布与交付
+
+已验证应用提交 **06f98e21e0d8ac3eb269d0bacc016c1c657ee0d7** 推送现有 docs/clarify-implementation-plan 分支，无强推/合并/PR。实际 [GitHub CI 37552097967](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) 前后端 jobs及全部steps success：Linux准确锁定依赖、PG17.11、迁移、实际frontend artifact、lint/30Node/build/315后端。提交前12文档96本地链接/当前私有密钥值扫描/git diff --check通过，无工具、环境或构建产物进入Git。
+
+用户明确批准备份与恢复验证后，TLS只读导出到仓库外 **G:/STUDY/psych-talk-hub-backups/psychtalk-20261007T003052Z.dump（43,568bytes）**。临时仅允许本机IPv4/32，导出后立即恢复规则[]；独立5433新库test_psychtalk_restore_20261007恢复。所有Event/Resource/EventResource/auth_user/django_migrations列和ID一致：2/6/6/1/21，库已删除，原管理员字段完整保留。初次自动审批拒绝敏感导出/目标位置与规则修改，命令未执行；提出具体审批后用户明确批准，未绕过。辅助脚本首次误用未安装psycopg2，改用原psycopg3；第一次比较因源/本地时间显示时区不同报不一致，统一aware datetime为UTC后逐字段摘要相同。两个导出都在私有仓库外，最新上述文件为已验证备份；不以摘要格式问题掩盖实际字段差异。
+
+第37：现有Free/Frankfurt Web与PG17、autoDeploy=no保持；只手动部署上述CI成功SHA，**dep-db2p5kk9v7es739oncig，Live UTC 2026-10-07T00:32:40.423668Z**。现有PATH修复/build/start命令未变，日志确认No migrations to apply在Gunicorn启动之前、仅一个worker、应用访问日志仅method/status/duration。首次读取最早100条含构建日志未见启动，不误报成功；筛选app后实际顺序通过。无新资源、付费升级、自动seeding或账号创建。非空公开API发布前后全部字段/ID/日期/reason/order相同，已有私有管理员真实登录成功。生产配置通过当前CI与启动严格检查；本次没有新业务资料或关联写入。
+
+第38当前线上范围：**11组HTTP/Admin检查通过**，真实TLS/数据库readiness、当前搜索JS/CSS与Admin/DOI静态、两场各三资料原字段/直达shell、JSON错误/405/HEAD/OPTIONS、既有管理员Secure/HttpOnly/SameSite登录、缺CSRF预览403、已有DOI只读/独立两预览/取消一项/重复确认保留理由排序、新真实DOI10.1038/nature12127获取/必填校验/取消未发布、共享编辑警告与所有6Resource直接删除403、所有公共字段不变、会话退出。当前生产没有执行新DOI实际创建、15分钟真实等待、完整低权限矩阵、共享编辑/关联移除/活动删除等破坏性流程；这些保持第29/30及315套件的隔离本地证据，完整线上矩阵仍待办。
+
+**7组全新匿名线上浏览器通过**（UTC2026-10-07T00:33:03.209Z）：两组分别一场示例/虚构与非关联披露、两活动各三资源直达刷新、当前title搜索/无匹配/Clear焦点、HTTP(S)/新标签提示/noopener noreferrer、375px无溢出与Back、缺失活动友好提示。零JS异常、全部资产200，实际搜索资源版本已发布；查看线上首页及375px详情截图。日志及证据仅输出安全布尔/计数，不打印Cookie/预览路径/凭据；核对最后外部规则[]/Free/autoDeploy=no/Live SHA。
+
+第39/40：README.md作为当前公开可复现入口，DELIVERY.md为实际发布/验收与管理录制脚本，backend/BACKUP.md为仓库外导出及隔离恢复方式；两份设计和技术栈只补当前实施状态，产品/API规则未变。当前为**可提交阶段版本**，完整MVP仍缺管理视频和完整线上管理验收，二者明确待办，不提供不存在视频链接。不继续新增功能、不将后续文档提交当作新应用发布。最后用户逐步验收31，最新指令授权收尾，不虚构32–40接受。
+
+下一项具体工作为在私有/受控演示数据上录制管理视频，并补齐当前线上完整管理验收；不省略权限、CSRF、事务及并发。数据库到期仍2026-11-03 23:33GMT，未升级/延长。
+
+### 收尾环境恢复与最终文档检查
+
+本次8002夹具服务已停止；核对Edge PID30324/profile/9237后只关闭本次专用进程树，8002/9237无监听。PG17原PID29760保持运行，两销毁库均不存在，PG11/现有开发服务未操作。两个本次仓库外dump文件ACL均只允许所有者/SYSTEM/Administrators，不改其他文件或目录。生产检查会话全部退出，最后规则[]/autoDeploy=no/Free/精确Live版本再次确认。
+
+最终只读扫描通过：**13文档、106本地文件链接**可解析，当前实际私有APIkey/管理员密码/生产SECRET_KEY/DATABASE_URL不在公共源文件；临时故意错误已完全移除、干净副本models与实际源码相同。git diff --check通过；应用源码与已发布06f98e2一致，最后仅发布验收/备份/环境恢复文档变更。后续文档提交仅记录本次实际证据，不触发自动部署、不是新的应用发布。阶段核心交付已就绪；视频和线上全量管理验收继续为后续明确任务。

@@ -1,6 +1,6 @@
 # PsychTalk Hub — 技术栈推荐
 
-Current implementation (7 October 2026): architecture/progress are populated. Core implementation and local final checks passed; remote release/online acceptance and video are tracked in [DELIVERY](../DELIVERY.md). The original planning text below is a specification, not the current completion status. API/schema/technology rules are unchanged.
+Current stage / 当前阶段 (7 October 2026): verified release **06f98e2** is Live; local checks, exact-commit CI, current online core checks and authorized backup/isolated restore passed. Management video and complete production management acceptance remain pending, so this is not full MVP acceptance. Product and API rules below are unchanged. Actual evidence: [progress](progress.md), [architecture](architecture.md), [delivery](../DELIVERY.md).
 
 日期：2026-10-03｜版本：v0.2｜适用范围：三天可审阅版本，约 18–24 小时｜状态：技术选型与接口规范，尚未安装或验证项目依赖
 

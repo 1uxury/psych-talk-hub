@@ -1,7 +1,7 @@
 # Delivery record — 7 October 2026
 
-Current stage: local core implementation and final checks passed; the current
-release's GitHub CI and deployment are being verified. Last explicit user
+Current stage: core implementation, final checks, exact-commit GitHub CI and
+controlled deployment passed. Application release **06f98e2 is Live**. Last explicit user
 acceptance is step 31. The latest instruction authorizes necessary finishing
 steps without inventing individual acceptance replies for steps 32–40.
 
@@ -44,14 +44,35 @@ credentials, cookies, preview addresses and developer tools out of recordings.
 
 ## Remaining delivery items
 
-- Current exact-commit remote CI, controlled redeploy, nonempty data preservation
-  and production backup/isolated restore: pending current run.
-- Current online public and private Admin checks: pending current run; local
-  checks do not count as production acceptance.
+- Full current production management matrix remains pending: new DOI actual
+  creation, real 15-minute wait, low-permission matrix and destructive shared
+  edit/remove/event-delete paths. These are verified locally in isolated data;
+  current production checks cover the safe subset below.
 - **Management video not recorded**; no video link is supplied.
 - Full MVP acceptance remains pending until every design acceptance item and
   video is complete. This is a stage delivery record, not full completion.
 
 Actual links: [GitHub](https://github.com/1uxury/psych-talk-hub),
-[Demo](https://psych-talk-hub.onrender.com). Release evidence will be added after
-the current commit passes CI and becomes Live.
+[Demo](https://psych-talk-hub.onrender.com). Application release [06f98e2](https://github.com/1uxury/psych-talk-hub/commit/06f98e21e0d8ac3eb269d0bacc016c1c657ee0d7)
+passed [CI 37552097967](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967)
+and became Live on 7 October 2026 at 00:32:40 UTC.
+
+## Current release evidence
+
+- Existing Free Frankfurt service, auto-deploy off; actual migration-before-one-worker logs verified.
+- Redeploy preserved every public business field, including IDs and existing dates/recommendations/order.
+- Approved TLS backup stored privately outside Git; isolated local restore matched 2 events, 6 resources, 6 links, 1 administrator and 21 migration records. Restore database deleted, external access closed. See [backup procedure](backend/BACKUP.md).
+- 11 production HTTP/Admin checks: database/HTTPS/static/API methods, secure private login/CSRF, independent existing-DOI previews/cancel and duplicate confirmation, real new DOI fetch/required fields/cancel, shared-edit warning and Resource Delete rejection. All public fields unchanged; sessions logged out.
+- 7 fresh anonymous browser checks: two example talks in both date groups, three readings each, detail direct/refresh, title search/Clear/focus, safe original links, 375px/Back and friendly 404. No JS exceptions, assets 200; screenshots reviewed.
+- Backup/restore initially required explicit sensitive-data approval; the user approved it. No paid resources, new production administrator or new business records were created.
+
+Production database expiry remains **3 November 2026, 23:33 GMT**. Video and
+complete online management acceptance remain explicit follow-ups; existing
+local permission/CSRF/transaction/concurrency tests remain required.
+
+The dedicated browser/fixture server are closed, disposable databases destroyed,
+and the previously running local PostgreSQL 17 is preserved. Private dump files
+are restricted to their owner, SYSTEM and Administrators. Final checks resolved
+106 local links across 13 documents and found no current private credentials
+in public source. Application code remains the verified Live commit; subsequent
+documentation commits record evidence without redeploying the application.

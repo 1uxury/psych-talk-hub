@@ -982,3 +982,17 @@ backend/README.md 保存可重复命令和手动清单，两端指南/AGENTS 同
 安全日志边界：config.safe_logging.SafeRequestFilter 作用于控制台 handler，将 django.request/security 的路径、参数、异常/堆栈替换为固定失败信息和整数状态；config.health 只记数据库异常类型，不查询 Crossref；events.doi_admin 只记固定 lookup 分类及保存异常类型，不记录输入/DOI/预览标识/外部响应。Gunicorn access format 为 `%(m)s %(s)s %(M)sms`，不带 URI、query、用户或 IP；错误流保持控制台。新增四项测试覆盖 request/security/health/lookup/save 敏感哨兵及无业务写入；14日志/部署检查和315全套均通过。
 
 README.md/DELIVERY.md 为当前独立环境、安装/启动/测试/API/管理流程与阶段缺项入口；历史章节仍是当时证据，以最新收尾段为准。第37–40进行中，生产仍旧d8bdd29；视频未录制/完整MVP未验收。Render只读确认Free/Frankfurt/no autoDeploy/PG17/外部规则[]/2026-11-03到期。初始PG17运行PID29760保持，专用测试服务将结束后清理，不操作PG11。
+
+## 76. 当前阶段发布、备份与线上验证边界
+
+已先更新progress。应用版本 **06f98e21e0d8ac3eb269d0bacc016c1c657ee0d7** 经真实Linux [CI37552097967](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) 前后端全部成功后手动发布原Free Frankfurt服务，**dep-db2p5kk9v7es739oncig / Live 2026-10-07T00:32:40.423668Z**。原build PATH修复、migration-before-Gunicorn、单worker、生产TLS/secureCookie、无自动seed/admin、公开GET/HEAD/OPTIONS均保持。应用日志启动顺序及无URI的访问行已实际核对；非空发布前后全部公开字段一致，原管理员仍可登录。
+
+用户明确批准敏感备份/指定仓库外位置/临时本机访问后执行：PG17 TLS只读custom dump，导出后恢复外部规则[]，只在本机5433新销毁库恢复；2 Event/6 Resource/6 EventResource/1 auth_user/21迁移全部列与ID一致（时间统一UTC），恢复库删除。详细排查/自动审批拒绝后实际授权来源见progress；私有备份不进入Git/日志，操作说明在backend/BACKUP.md。PG11和现有开发业务不操作。
+
+当前线上11HTTP/Admin组及7全新匿名浏览器组通过：真实CSRF/session/安全Cookie、已有DOI只读/双预览取消/重复确认、新真实取数必填校验后取消、资源禁删、当前两场各三资源/搜索/375px/直达刷新/友好404、资产200/无JS错误；所有公开字段不变，私有检查会话退出。线上新DOI实际创建、真实15分钟等待、完整低权限矩阵及共享编辑/移除/活动删除尚未在本次生产执行；315正式套件与之前实际隔离浏览器证据继续覆盖，不冒充全量线上验收。
+
+README/DELIVERY及两端指南提供当前可复现入口；规格双语/tech-stack补实际状态而不改产品/契约。第32–37已验证，38仅上述当前线上范围，39文档完成/视频待办，40阶段记录完成/完整MVP待验收。最后用户接受31，收尾授权独立记录。生产固定上述应用SHA，后续文档提交不作为新应用发布；下一项为管理视频及完整线上流程。Free到期2026-11-03 23:33GMT保持。
+
+### 发布后清理
+
+已先记progress：只关闭本次Edge PID30324/profile/9237和8002夹具；原PG17 PID29760保持运行，销毁库不存在，PG11/用户开发服务不操作。仓库外两份dump文件仅所有者/SYSTEM/Administrators可读；生产外部规则[]/私有检查退出/autoDeploy=no保持。最终13文档/106本地链接与私有值扫描/git diff --check通过，应用源码保持Live06f98e2；文档后续提交不作为另一次部署。下一项为视频及完整线上管理验收，阶段交付不冒充完整MVP。

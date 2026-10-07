@@ -10,6 +10,7 @@ PostgreSQL; no public write API.
 - [Backend checks and Admin acceptance](backend/README.md)
 - [Frontend checks and browser acceptance](frontend/README.md)
 - [Deployment, free-plan limits and expiry](backend/DEPLOYMENT.md)
+- [Private backup/isolated restore procedure](backend/BACKUP.md)
 - [Product design](memory-bank/design-document.md) / [中文设计](memory-bank/design-document.zh-CN.md)
 - [Technical/API contract](memory-bank/tech-stack.md), [architecture](memory-bank/architecture.md), [progress](memory-bank/progress.md)
 
@@ -31,7 +32,7 @@ Copy-Item backend/.env.example backend/.env
 Copy-Item backend/.env.example backend/.env.test
 ```
 
-Privately fill both files with a random SECRET_KEY and a PostgreSQL DATABASE_URL
+Privately fill both files with a strong random SECRET_KEY of at least 50 characters and a PostgreSQL DATABASE_URL
 for the **local development** database. Set TEST_DATABASE_NAME to a separate
 `test_` name such as `test_psychtalk`. Do not use production credentials or
 commit filled files. Development reads `.env`; test reads `.env.test`;

@@ -1,6 +1,6 @@
 # Free Render deployment — step 17 handoff
 
-Current finish run (7 October 2026): existing Free Frankfurt service/PG17 and autoDeploy=no were rechecked. Production is still d8bdd29 while the new verified release is prepared. Current CI/deploy/preservation/backup/restore evidence will be recorded in [DELIVERY](../DELIVERY.md); earlier step 17 statements below are historical, including “step 18 has not started”.
+Current stage delivery (7 October 2026): application release **06f98e2** passed [current frontend/backend CI](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) and is **Live** on the existing Free Render service. Clean local lint/30 frontend/build/checks and **315 PostgreSQL backend tests (43.307 s)** passed, as did nine time/layout/keyboard groups, eleven production HTTP/Admin checks and seven fresh anonymous browser groups. Nonempty redeployment preserved every public field; explicitly authorized private backup/isolated restore matched all business/admin/migration fields. See [README](../README.md), [delivery](../DELIVERY.md) and [backup procedure](../backend/BACKUP.md). Management video and the full production management matrix remain pending; this is a stage delivery, not full MVP acceptance. Last explicit user acceptance is step 31; latest instruction authorizes finishing work. Earlier statuses below are historical.
 
 Checked: 5 October 2026 (Europe/London). **The first Free Render deployment is
 Live; migrations, real Gunicorn startup and online HTTP/browser checks passed.
@@ -158,7 +158,7 @@ prove nonempty business-data preservation. Step 17 is user-confirmed.
 Only additive migrations compatible with the still-running previous release belong
 in initial deployments; reverting code does not mean reversing data migrations.
 
-## Free limits and operational record
+## Free limits and historical step 17 operational record
 
 As checked on 4 October: web services sleep after 15 idle minutes, with cold starts;
 each workspace has 750 free instance hours per month and limited build/bandwidth
@@ -177,7 +177,7 @@ zero-paid-services constraint. Do not assume Free prevents every usage charge.
 | First Live deployment | dep-db1ed66gekts73dehfsg / UTC 2026-10-04 23:56:43 / London 5 October 00:56:43 BST |
 | Final-command revalidation | dep-db1egmdg1s2s739qisag / Live / UTC 2026-10-05 00:04:05 / London 01:04:05 BST; same SHA, no migrations remaining, Gunicorn started, 11 HTTP + six browser checks passed again |
 | Initialization / remote acceptance | Completed UTC 2026-10-05 11:51:55 / London 12:51:55 BST; two example talks, six resources/links, private admin; repeat import preserved fields; ten nonempty browser checks + real Admin CSRF/save/anonymous refresh/restoration passed; full MVP acceptance pending |
-| Backup / restore | Pending; manually export before expiry, store outside Git, verify restore into a separately provisioned free database |
+| Backup / restore | Pending; manually export before expiry, store outside Git, verify restore in an isolated disposable local PostgreSQL 17 database |
 
 Never invent creation/expiry dates. An expired database requires controlled
 recovery; do not silently upgrade it. The three-day reviewable milestone and full
@@ -187,3 +187,23 @@ same integration; step 18 search has not started.
 [Local step 17 validation](README.md#step-17-validation--run-by-the-user) ·
 [Architecture](../memory-bank/architecture.md) ·
 [Technology stack](../memory-bank/tech-stack.md)
+
+## Current release — 7 October 2026
+
+| Item | Verified current value |
+| --- | --- |
+| Application commit / exact CI | 06f98e21e0d8ac3eb269d0bacc016c1c657ee0d7 / [37552097967](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967), both jobs/all steps success |
+| Live deploy | dep-db2p5kk9v7es739oncig / UTC 2026-10-07 00:32:40 / London 01:32:40 BST |
+| Service/database | Existing Free Frankfurt Web + PG17; autoDeploy=no, external IP rules=[]; no new resources |
+| Startup | Actual app logs: migrations finished before one Gunicorn worker; access format method/status/duration |
+| Data preservation | All fields/IDs/dates/recommendations/orders of 2 events and 6 links unchanged across redeploy |
+| Backup/restore | Private custom dump outside Git; disposable local PG17 restore matched all business/admin/migration fields; test database destroyed; [procedure](BACKUP.md) |
+| Current online checks | 11 HTTP/Admin groups and 7 fresh anonymous browser groups; real Crossref new preview cancelled, repeat existing link preserved; all public fields unchanged, admin session logged out |
+| Remaining | Full online management matrix and management video; do not claim full MVP |
+
+[Render Free limits](https://render.com/docs/free) were checked on 7 October;
+the actual existing resources and expiry were separately confirmed by API.
+Database expires **3 November 2026 at 23:33 GMT**. No fresh cold-start timing was
+measured in this release; earlier cold-start/platform limits remain documented.
+The existing build PATH repair above is unchanged. Later documentation commits
+record evidence; production application remains the exact verified release above.
