@@ -1,0 +1,9 @@
+# Direct dependencies. Install requirements.txt; this file is for deliberate updates.
+Django>=5.2,<5.3
+djangorestframework>=3.16,<3.17
+django-environ
+psycopg[binary]>=3,<4
+requests>=2,<3
+whitenoise
+tzdata
+gunicorn; sys_platform == "linux"

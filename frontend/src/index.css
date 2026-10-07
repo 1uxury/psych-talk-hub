@@ -1,0 +1,124 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #23332D;
+  background: #FAF8F4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --primary: #245448;
+  --border: #DDDCD4;
+  --secondary: #56645D;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; line-height: 1.6; }
+.site-header, main, footer {
+  max-width: 1080px;
+  margin-inline: auto;
+  padding: 24px;
+}
+.site-header { font-size: 1.25rem; font-weight: 700; }
+h1 { font-size: 2.25rem; line-height: 1.2; }
+h2 { font-size: 1.5rem; }
+a { color: var(--primary); }
+.request-state {
+  margin-block: 24px;
+  padding: 24px;
+  min-height: 144px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+.request-error { color: #A32626; }
+.talk-group { margin-block: 32px; }
+.talk-grid, .resource-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.talk-grid > li, .resource-list > li { min-width: 0; }
+.talk-card, .resource-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  height: 100%;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+.talk-card h3, .resource-card h3 { margin: 0; font-size: 1.25rem; line-height: 1.4; }
+.talk-card p, .resource-card p { margin: 0; }
+.talk-topic, .talk-time, .resource-type, .resource-authors, .resource-year {
+  color: var(--secondary);
+}
+.talk-details { margin-block: 32px; }
+.talk-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.talk-labels p { margin: 0; }
+.talk-status { color: var(--primary); font-weight: 600; }
+.reading-section { margin-block: 32px; }
+.resource-search { display: grid; gap: 8px; }
+.resource-search label { font-weight: 600; }
+.resource-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--secondary);
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  background: white;
+}
+.reading-recommendation { width: 100%; }
+.reading-recommendation h4 { margin: 0 0 8px; font-size: 1rem; }
+.reading-text { white-space: pre-wrap; }
+.example-label {
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.primary-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: auto;
+  padding: 8px 16px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+.primary-link:hover { text-decoration: underline; }
+button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.65; cursor: wait; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 4px; }
+p, li, h1, h2, h3, h4, a { overflow-wrap: anywhere; }
+footer { font-size: 0.875rem; }
+@media (width >= 768px) {
+  .talk-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (width < 768px) {
+  .site-header, main, footer { padding: 16px; }
+  .request-state { padding: 16px; }
+  .talk-card, .resource-card { padding: 16px; }
+  h1 { font-size: 1.75rem; }
+}

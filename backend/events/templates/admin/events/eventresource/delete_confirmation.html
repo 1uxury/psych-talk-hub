@@ -1,0 +1,7 @@
+{% extends "admin/delete_confirmation.html" %}
+
+{% block delete_confirm %}
+  <p>Remove this reading from this talk? Other talks will keep it.</p>
+  <p>Talk: <strong>{{ object.event.title }}</strong><br>Reading: <strong>{{ object.resource.title }}</strong></p>
+  {{ block.super }}
+{% endblock %}

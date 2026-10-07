@@ -1,0 +1,8 @@
+{% extends "admin/delete_selected_confirmation.html" %}
+
+{% block content %}
+  {% if not perms_lacking and not protected %}
+    <p>Delete this talk and its reading links? Shared resources will be kept.</p>
+  {% endif %}
+  {{ block.super }}
+{% endblock %}
