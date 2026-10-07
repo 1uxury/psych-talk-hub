@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+
+{% block form_top %}
+{{ block.super }}
+{% if change and has_change_permission %}
+<ul class="messagelist">
+  <li class="warning">Changes to this resource will appear in every talk that uses it.</li>
+</ul>
+{% endif %}
+{% endblock %}

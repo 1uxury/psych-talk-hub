@@ -61,6 +61,19 @@ a { color: var(--primary); }
 .talk-labels p { margin: 0; }
 .talk-status { color: var(--primary); font-weight: 600; }
 .reading-section { margin-block: 32px; }
+.resource-search { display: grid; gap: 8px; }
+.resource-search label { font-weight: 600; }
+.resource-search input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--secondary);
+  border-radius: 8px;
+  font: inherit;
+  color: inherit;
+  background: white;
+}
 .reading-recommendation { width: 100%; }
 .reading-recommendation h4 { margin: 0 0 8px; font-size: 1rem; }
 .reading-text { white-space: pre-wrap; }

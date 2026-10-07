@@ -90,6 +90,7 @@ def start():
         sys.executable, "-m", "gunicorn", "config.wsgi:application",
         "--bind", f"0.0.0.0:{port}", "--workers", "1",
         "--access-logfile", "-", "--error-logfile", "-",
+        "--access-logformat", "%(m)s %(s)s %(M)sms",
     ])
 
 

@@ -1,8 +1,10 @@
 # PsychTalk Hub — 实施进度
 
-日期：2026-10-05｜最后用户确认步骤：16｜第 17 步本地检查、GitHub CI、免费 Render 发布及线上检查通过，待用户确认｜发布提交 d8bdd29｜最终构建命令重部署 Live｜第 18 步未开始
+日期：2026-10-07｜最后明确用户确认步骤：31｜第 30 步本地验证通过、当前版本远程 CI 待办｜第 31 步用户验收通过｜生产发布仍为 d8bdd29｜第 32 步未开始
 
-以下各步骤保留交接当时的事实，包括当时未提交或未执行的历史描述。第 09–17 步实现提交 a174723 及文档提交 d8bdd29 的 GitHub 前后端 CI 均通过。用户随后授权助手部署，并明确回复“允许”创建两项免费资源；最终 Render 发布已 Live，生产迁移、Gunicorn 和线上 HTTP/浏览器检查通过，详见末尾。生产示例资料与管理员尚未初始化，完整线上业务验收未完成，第 17 步仍待用户确认，第 18 步不推进。文件职责与洞察见 [architecture.md](architecture.md)，复现方法与远程边界见 [backend/README.md](../backend/README.md) 和 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
+最新交接：用户在收到第 31 步完成报告后回复“通过”，确认本地验收；不补写不存在的“通过第 30 步”回复或当前远程 CI 成功。第 31 步完整核对六份 memory-bank 与公开状态实现，现有能力符合设计，无需修改运行代码。前端 lint、30 项测试/build 及 13 组固定夹具浏览器状态检查通过，详见文末；验收入口为 [frontend/README.md](../frontend/README.md#step-31-validation--public-page-states)。第 32 步未开始，必须等待后续明确实施指令。以下待验收及未开始后续的描述保留为当时事实。
+
+以下各步骤保留交接当时的事实，包括当时未提交或未执行的历史描述。第 01–29 步已由用户确认；第 30 步完成本地里程碑验证，并于 7 October 2026（Europe/London）按用户“你帮我检查”复查：lint、30 项前端测试、构建、依赖/Django/迁移检查、静态收集、311 项后端回归及 20 组浏览器路径通过（12 组模拟取数核心流程加 8 组真实 DOI 集成）。过期仍用测试时钟，真实 Crossref 来源和模拟提供方失败分别记录，未新增应用功能。已有 GitHub CI 最新运行成功，但只覆盖已提交的第 17 步版本，当前未提交改动的远程 CI 保留待办。第 30 步待用户验收，第 31 步未开始。生产 d8bdd29 已 Live，包含两场示例、六条资源/关联和私有管理员，已有真实 TLS、CSRF、保存及匿名刷新证据；第 18–30 步尚未提交、推送或部署。非空重部署保留、备份/恢复及完整 MVP 验收仍待办。文件职责与洞察见 [architecture.md](architecture.md)，当前验收指引见 [backend/README.md](../backend/README.md#step-30-validation--second-milestone)，第 18 步清单保留在 [frontend/README.md](../frontend/README.md#step-18-validation--current-event-title-search)，远程边界见 [DEPLOYMENT.md](../backend/DEPLOYMENT.md)。
 
 ## 第 01 步：核对必读文档并初始化架构记录
 
@@ -576,3 +578,502 @@
 - 先请求打开并更新本 progress.md，再补充 architecture.md 的确认与职责交接，同步 AGENTS、backend/README.md、frontend/README.md 和 backend/DEPLOYMENT.md。初始化前的空状态、此前等待确认及未提交描述保留为历史事实，当前指南明确为第 17 步已确认。
 - 本次提交仅包含这六份公开文档，记录实际免费部署、生产初始化及验收状态；所有 .tools 工具、登录凭据、API key、连接地址、截图/profile 和生成产物均保持忽略。沿用现有 docs/clarify-implementation-plan 分支，常规推送到 GitHub origin；不合并默认分支、不创建 PR、不重新部署。
 - 当前生产 release 仍是已验证的 d8bdd29；文档提交的 GitHub 检查与已有发布证据分别看待。非空重部署数据保留、备份/恢复及后续完整 MVP 验收仍为待办，第 17 步的用户确认不将这些未完成事项标成通过。
+
+## 第 18 步：当前活动内的资料标题搜索（用户验收通过）
+
+2026-10-05（Europe/London），按用户指令完整阅读 memory-bank 六份文件、AGENTS.md 和此前进度，仅实施第 18 步。最后已验收步骤仍为 17；第 19 步不得在用户验证之前开始。
+
+- TalkPage.jsx 在成功详情内保存独立查询，去掉两端空白并忽略大小写，只做当前 resources 的标题子串匹配；筛选不修改 API 数组、关联身份或顺序，不请求后端/Crossref。离开活动、刷新或成功重试后搜索重新为空。
+- 有资料时显示 Search resources 标签及 Search by title 占位；显示筛选数量（如 2 of 3 reading resources），通过 status 通知变化。无匹配显示 No resources match your search. 和 Clear search；清空恢复完整数量/顺序，并把键盘焦点交回输入框。零资料仍保留活动信息及原提示，隐藏搜索控件。
+- index.css 增加现有视觉体系的输入样式、至少 44 px 高度及窄屏收缩，沿用清晰焦点和资源单列。没有新增依赖、测试框架、服务端接口、迁移或业务数据操作；既有 30 项测试定义不变。
+
+### 助手实际检查
+
+- 精确运行时 Node 24.14.0/npm 11.9.0；npm.cmd run lint 退出码 0；npm.cmd test 实际 30 通过、0 失败/取消/跳过；npm.cmd run build 退出码 0，生成当前 /static/frontend/assets/ 哈希资源。首次进程遭 Windows 启动异常，重试后取得上述成功结果，不把失败尝试记为通过。
+- 现有 computer-use/node_repl 与 CUA 初始化失败（kernel exited/setup refresh errors）；改用预安装的独立隐藏 Edge、项目专用 profile 和 9239 端口。网络沙箱阻止本机套接字访问及初次浏览器启动，获自动审查允许后运行本机检查；没有自动审批拒绝。
+- 临时 Python 标准库服务器 127.0.0.1:8002 只提供当前构建和从本地演示清单派生的两场资料/零资料夹具，不连接数据库。11 组浏览器检查全部通过，结果 UTC 2026-10-05T14:43:54.065Z：标签/占位/原顺序；大小写/空白/子串；作者与理由不命中；其他活动不出现；键盘 Clear/焦点；空白及手动清空；字面查询与无新增 API；1280/768/375 px 控件/单列/无溢出；经首页切换活动重置；零资料隐藏搜索；完整刷新与原文安全属性。未捕获应用 JS 异常为零，桌面/手机/无结果截图已查看。
+- 检查器最初错误期待单行搜索输入保留换行、Enter 模拟缺少文本事件；仅修正忽略目录的检查器后全部通过，没有因此改动产品逻辑。
+- .tools/step18-browser/serve.py、cdp.mjs、check.mjs、results.json、PNG/profile 仅为忽略的检查工具和证据，不进入产品或 CI。已关闭本次服务器及核对身份后的 Edge 进程树，8002/9239 无监听；未启动或修改 PostgreSQL 17/11、开发库或生产库，也未登录 Admin。
+
+### 交接
+
+先更新本 progress.md，再更新 architecture.md 的当前摘要、文件职责与搜索边界，同步 frontend/README.md、backend/README.md 和 AGENTS.md。两份设计已规定相同搜索规则，本轮产品规范无变化。后端代码/schema 未改，本轮未重跑 135 项后端回归；现有远程 CI/生产发布只覆盖此前版本，不证明第 18 步线上通过。本轮不提交、推送或部署。
+
+首次实施交接时第 18 步状态为“已实现，助手检查通过，等待用户验收”；该历史状态随后由下方用户确认更新。第 19 步 DOI 输入规范化保持未开始。
+
+### 用户确认与验收交接
+
+2026-10-05（Europe/London），用户收到第 18 步完整本地检查/启动/浏览器验收指引后回复“通过”，据此确认第 18 步本地验收。范围为标题匹配、大小写/空白、当前活动隔离、数量/顺序恢复、无结果/零资料、键盘焦点、无额外请求及布局/导航；没有逐项输出或截图，不推断使用了哪种夹具或编造独立测试日志。
+
+本次确认交接先打开并更新 progress.md，再补充 architecture.md 的验收来源与文件职责洞察，同步两份 README 和 AGENTS.md。仅更新文档，没有重跑应用测试、修改代码/数据库、安装依赖、启动或关闭用户服务、提交/推送或部署。既有助手 30 项测试与 11 组浏览器证据保持独立；用户确认不代表本步远程 CI 或线上发布通过，生产仍为 d8bdd29。
+
+最后用户确认步骤为 18。第 19 步未开始，需用户新的明确实施指令；下一步按计划建立 DOI 输入规范化，实施前完整阅读 memory-bank 和既有模型规则。
+
+## 第 19 步：DOI 输入规范化与固定请求目标（用户验收通过）
+
+2026-10-05（Europe/London），用户明确要求阅读全部 memory-bank 并实施第 19 步，验证前不开始第 20 步。已完整阅读六份文档、AGENTS、现有模型/配置/锁定 Requests 源码和此前进度，复用功能分支并保留第 18 步未提交改动。
+
+### 实现与边界
+
+- 新增 events/services/doi.py 的 normalize_doi：接受纯 DOI 或 HTTPS 精确 doi.org 链接，输入去两端空白并转小写；注册者为 4–9 位 ASCII 数字，后缀非空无空白且保留标点。纯标识不解码；链接路径仅 UTF-8 解码一次，拒绝解码后的空白与无效编码，不二次解码或猜测删除末尾标点。
+- 在 urlsplit 前拒绝链接内部空白/C0 控制字符；精确检查 netloc，拒绝其他主机、凭据、所有显式端口（包括 443/空端口）、查询/片段（包括空 ?/#）。所有无效输入为 ValidationError，英文文案 Enter a valid DOI or DOI link.，不调用 HTTP。
+- 新增 events/services/crossref.py 的 request_doi：每次先规范化，仅请求固定 https://api.crossref.org/works/ 下完整编码的单个 DOI；allow_redirects=False，不跟随任何重定向，TLS 校验保留默认开启。为请求边界设置既定连接/读取超时 (3, 7)，没有自动重试。
+- 本步返回原始 Requests Response，由未来调用方负责关闭/转换；不解析 JSON、不映射书目或上游错误、不接入 Admin/路由/会话、不读写业务数据库。第 20 步成功响应转换仍未开始，原模型、演示导入、schema、迁移、依赖锁和公开页面均未改。
+- 新增 test_doi.py 的 16 个 SimpleTestCase 方法：十项规范化、六项请求边界。除常规输入与禁止形式外，覆盖 Unicode 空白、编码路径、百分号保留、plus、二次编码、空查询分隔符；通过真实 Requests 准备与重定向流程、仅 mock HTTPAdapter.send 验证固定目标与 20 种重定向组合都只调用一次传输。所有外部响应模拟，数据库访问被 SimpleTestCase 禁止。
+
+### 助手实际检查
+
+- 专项测试实际 **16 项通过，0.057 秒**，明确跳过未使用的数据库初始化；Django 系统检查无问题。首次受限环境 Python 输出解释器定位诊断，但专项进程退出码 0；没有用该诊断冒充测试失败或成功证据。
+- npm.cmd run build 成功，重新生成当前第 18 步哈希资产，供后端真实构建测试使用；前端源码未在第 19 步改变，未重跑其 lint/30 项测试/浏览器场景。
+- 受限环境数据库状态工具先失败，授权读取 pg_ctl 确认项目 PostgreSQL 17 已运行（PID 2220、项目数据目录），没有执行 start/init。随后在明确 DJANGO_ENV=test 的授权本地连接运行 check --database default、makemigrations --check --dry-run 和完整测试：系统检查无问题、No changes detected、**151 项通过，12.161 秒，退出码 0**，test_psychtalk 自动销毁。测试中的 404/500 日志为已有故障模拟；最终结果 OK。
+- 没有连接真实 Crossref 或生产数据库，也没有迁移/导入/修改开发业务数据、登录 Admin、启动服务器、安装依赖、提交/推送或部署。项目 PG17 保持原已运行状态，PG11 未操作。没有自动审批拒绝；专项 mock 与全套隔离 PostgreSQL 结果不代表真实 DOI 集成或远程 CI。
+
+### 交接
+
+已先更新本 progress.md，再更新 architecture.md 的服务职责/验证范围，同步 README 和 AGENTS。两份设计和技术栈已经规定相同规则，本次产品规范无变化。最后用户确认步骤仍为 18；第 19 步仅助手检查通过，等待用户验收。第 20 步未开始，验收通过之后也需要新的明确实施指令。
+
+### 用户确认与验收交接
+
+2026-10-05（Europe/London），用户收到专项测试命令、预期 16 项/OK、覆盖范围及完整 151 项回归说明链接后回复“通过”，确认第 19 步本地验收。未附逐项输出，不推断用户实际运行了哪些命令，也不编造独立日志或真实 Crossref 验证。前述助手专项与完整回归证据保持独立。
+
+本次先更新 progress.md，再同步 architecture.md、两份 README 和 AGENTS。确认交接仅更新文档，不重跑测试、不修改应用代码/数据库、不提交、推送或部署。最后用户确认步骤为 19；第 20 步未开始，需新的明确实施指令。生产仍为 d8bdd29，真实 DOI 集成、当前版本远程 CI及其他既有待办不因本次确认而标记通过。
+
+## 第 20 步：Crossref 成功响应转换（用户验收通过）
+
+2026-10-05（Europe/London），按用户明确指令完整阅读六份 memory-bank 文档、AGENTS、此前进度及已有服务/模型/测试/配置；保留所有先前未提交工作，仅实施第 20 步。最后用户确认步骤仍为 19，第 21 步未开始。
+
+### 实现与职责
+
+- 新增 events/services/crossref_metadata.py：convert_work 将单个 work 转为不可变 CrossrefMetadata，仅包含 title、authors、year、original_url、请求输入规范化后的 doi、resource_type 与 crossref 来源。没有 ORM、网络或持久化；不改变传入字典，不导入摘要、总结或其他上游字段，不用返回 DOI 替换请求身份。
+- 标题取来源数组中首个去两端空白后非空字符串，不拼接后续标题或借用副标题/期刊标题。超过既有模型 500 字限制时保留首选内容并标记需修正，不改用后续标题。作者按来源顺序组合 given/family，仅在个人姓名缺失时取 name 组织署名，跳过不可用条目，以 `; ` 分隔；缺失为字符串空值。
+- 年份依次检查 published-print、published-online、issued 的 date-parts[0][0]，仅接受 1–9999 的真实整数，不把布尔、字符串或浮点强转为年份。首选无效时回退，无有效年份为 None；日期范围只用起始日期，不取结束日期或 created/deposited 字段。
+- 仅 journal-article/proceedings-article 映射 research_paper，其他类型为 article；来源固定 crossref。只采用返回的 URL，沿用 Django HTTP(S) 语法校验和模型 2048 字长度，拒绝控制字符；缺失或非法留空，不伪造 DOI resolver URL 或借用 link/resource 等字段。
+- missing_required_fields 标出必须补充/修正的标题和链接；needs_review 也标记缺失可选作者/年份，但这些可选空值不阻止保存。此结果不是已保存资源或会话预览，后续表单/模型仍须校验；Admin 页面留第 24 步。
+- crossref.py 新增 fetch_metadata：使用既有 request_doi 的固定编码目标、(3, 7) 超时、默认 TLS、无重定向/重试；在响应上下文中解码成功的单 work JSON，转换后关闭响应。HTTP/JSON/结构异常仍抛出底层异常或 ValueError，没有第 21 步的用户提示映射或入口，不访问数据库/事务/会话。
+- 新增 test_crossref_metadata.py 共 18 个方法：13 项纯转换、3 项模拟成功获取、2 项 PostgreSQL 数据保留与真实模型拒绝保存。模拟数据明确为测试夹具，不宣称真实论文。真实 Requests 请求准备只模拟 HTTPAdapter.send；隔离库包含已编辑书目/关联，并比较三模型全部字段、断言获取零查询。
+
+### 助手实际检查
+
+- 无数据库专项（第 19 步 16 项 + 新转换/成功获取 16 项）实际 **32 项通过，0.140 秒**，无系统问题且跳过未用数据库初始化。沙箱解释器有定位诊断，但测试实际完成、退出码 0。
+- 当前 npm.cmd run build 实际通过，生成既有第 18 步资源供真实静态回归；前端源码不变，没有重跑 lint/30 项或浏览器，不将历史结果冒充本轮执行。
+- 沙箱 pg_ctl 错报未运行；授权读取确认项目 PG17 已运行（PID 2220、项目数据目录），未启停/初始化。明确 DJANGO_ENV=test 后，check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整隔离 PG17 后端 **169 项通过，12.113 秒，退出码 0**，test_psychtalk 销毁。已有故障模拟的 404/500 日志不影响最终 OK。
+- 没有连接真实 Crossref/生产库、迁移开发库、导入/修改开发业务记录、登录 Admin、安装依赖、提交/推送或部署。项目 PG17 保持原运行状态，PG11 未操作；没有自动审批拒绝。真实集成和当前远程 CI 仍未验证。
+
+### 验收交接
+
+已先更新本文件，再补充 architecture.md 的当前职责/验证边界，同步 backend/README.md、frontend/README.md 和 AGENTS。产品规则与现有双语设计/技术栈一致，无需修改规范。用户可先跑 README 的 32 项无数据库专项，再跑隔离 PostgreSQL 的完整 169 项回归（包含两项数据保留/保存拒绝测试）。第 20 步等待用户验收，第 21 步错误转换保持未开始，确认后也需新的明确实施指令。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户收到专项命令、字段规则说明及完整前端构建/数据库状态/系统检查/迁移遗漏检查/169 项回归/状态恢复操作后回复“通过”，确认第 20 步本地验收。未附逐项输出，不推断其实际执行了哪些命令或当前数据库运行状态，不编造新的耗时、日志、真实 Crossref 或远程 CI 证据。前述助手 32 项专项与 169 项回归证据保持独立。
+
+本次先更新 progress.md，再补充 architecture.md 的验收与职责交接，同步两份 README 和 AGENTS。确认交接仅修改文档，没有重跑测试、修改代码/schema/依赖、访问数据库、启停进程、提交/推送或部署。最后用户确认步骤为 20；第 21 步未开始，需新的明确实施指令。生产仍为 d8bdd29，真实 DOI 集成、当前远程 CI 和既有部署/备份待办不因本次确认而标记通过。
+
+## 第 21 步：Crossref 错误转换（用户验收通过）
+
+2026-10-06（Europe/London），收到新的第 21 步实施指令后完整阅读 memory-bank 六份文件、AGENTS、已有 DOI/转换服务、测试和指南，保留此前全部未提交工作。只实施第 21 步；最后用户确认步骤仍为 20，第 22 步未开始。
+
+### 实现与边界
+
+- crossref.py 的 fetch_metadata 将 404、429、5xx、其他非 200 状态、无效 JSON/单 work 结构、连接故障、超时及其他 Requests 传输异常转为 CrossrefLookupError。稳定 code 分别为 not_found、rate_limited、upstream_error、invalid_response、connection_failed、timeout、provider_unavailable；超时先于连接异常判断，正确覆盖同时继承两者的 ConnectTimeout。
+- 404 使用 No publication was found for this DOI.；其他预期获取失败使用 We couldn't fetch publication details. Please try again or add the resource manually.。异常正文/参数仅含固定安全提示，JSON/连接异常抑制底层异常链，不返回上游正文、请求地址或连接详情。未预期的编程错误不被广泛 Exception 捕获并伪装成服务失败。
+- input_value 保留原始输入（包含大小写与两端空白），供后续绑定表单重显；can_add_manually 为 true，404 要求修改 DOI 或手动添加，其余可通过 can_retry 显式重新获取。无效 DOI 仍是既有 ValidationError/invalid_doi，HTTP 前拒绝。该服务不存会话、不生成表单或页面，不能将这些标记写成已存在的按钮/浏览器验收。
+- request_doi 原始传输不变：固定编码目标、TLS、(3, 7) 超时、禁止重定向、无重试。fetch_metadata 一次仅调用一次传输，不等待 Retry-After，也不自动重试；成功/失败响应均通过上下文关闭。不完整合法 work 继续返回第 20 步的补充/审阅结果，而非失败；书目转换规则不变。
+- 新增 test_crossref_errors.py 的 14 个方法：12 个无数据库方法覆盖状态/JSON/结构、所有传输类别、安全提示/异常链/精确输入、恢复标记、人工再次获取成功及编程错误边界；2 个 PostgreSQL 方法覆盖新/已有 DOI 的各类失败、三模型完整快照不变和零业务查询。已有/共享/未关联资源、两场活动、编辑过与刻意清空字段均在隔离夹具中保留。
+- 第 22 步的原子保存/已有 DOI 复用未实施；Admin 获取/重试/手动入口留第 24 步，确认不访问 Crossref 留第 25 步实际入口验证。当前没有确认动作，不能用服务单次请求测试冒充确认流程已通过；真实 DOI 集成仍留第 29 步。
+
+### 助手实际检查
+
+- 44 项无数据库专项（既有 32 + 新错误测试 12）最终 **OK，0.194 秒**，系统检查无问题。首次 44 项执行有五个重定向子测试报错：模拟 Response 缺失 Requests 所需的 request/url；修正适配器夹具，并按 Requests 预备未跟随重定向时会额外 close 的真实行为核对关闭次数后重跑通过。该修正只涉及测试，不放宽网络/错误规则；首次 PowerShell 包装返回码不代表失败套件通过，最终以 OK 及检查退出码为准。
+- 当前前端 npm.cmd run build **通过，248 毫秒**，保留第 18 步既有哈希资产，供真实构建回归使用。前端源码不变，未重跑 lint/30 项 Node/浏览器，未安装依赖或改锁。
+- 沙箱状态误报 PostgreSQL 停止；授权只读 pg_ctl 核对项目实例原已运行 **PID 6588**，未 start/stop/init。DJANGO_ENV=test 下 check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整隔离 PG17 后端 **183 项通过，12.211 秒，退出码 0**，test_psychtalk 自动销毁。既有故障模拟 404/500 日志不影响最终 OK；测试后同 PID 仍运行，保持原状态，PG11 未操作。
+- 所有 Crossref 测试只模拟 HTTPAdapter.send 或既有 get，不发真实查询；仅只读核对官方 Requests/Crossref 文档及本地锁定 Requests 异常源码。没有生产访问、开发业务写入/迁移、Admin 登录、schema/依赖/公开 API 变化、提交/推送或部署。git diff --check 通过；没有自动审批拒绝，当前远程 CI/真实集成仍未验证。
+
+### 验收交接
+
+已先更新本 progress.md，再补充 architecture.md，并同步 backend/README.md、frontend/README.md 和 AGENTS 的当前状态。现有双语设计和技术栈已规定相同错误行为，规范无变化。用户可执行 README 的 44 项无数据库专项，再运行前端构建、隔离数据库检查及完整 183 项回归（包含两项新失败数据保留测试）。第 21 步等待用户验收，第 22 步未开始；验收后也须新的明确实施指令才能推进。
+
+### 用户授权助手重新验证
+
+2026-10-06，用户明确要求“你直接帮我验证”。按当前 README 重新执行第 21 步验证，不开始第 22 步；这是助手实际检查，不是用户回复“通过”的接受记录。
+
+- 无数据库专项使用 verbosity 2，**44 项全部 OK，0.211 秒，退出码 0**；明确跳过未用数据库初始化，系统检查无问题。沙箱解释器定位诊断未阻止测试完成。
+- 当前前端构建 **成功，261 毫秒，退出码 0**，仍为既有哈希资产；未更改前端源码/依赖或重跑 lint/Node/浏览器。
+- DJANGO_ENV=test 下 check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；verbosity 2 完整后端 **183 项全部 OK，12.824 秒，退出码 0**，包含两项失败数据保留测试与既有成功转换/保存拒绝边界；test_psychtalk 创建、迁移、测试后销毁。预期故障模拟的 404/500 日志不影响最终结果。
+- 授权只读 pg_ctl 在前后均确认项目 PG17 原已运行且仍为 **PID 6588**，未启停或初始化，PG11 未操作。未访问真实 Crossref/生产、未修改开发业务记录、应用源码/schema/依赖、未提交/推送/部署；无自动审批拒绝。
+
+本次先记录 progress.md，再补充 architecture.md 和后端指南。第 21 步助手验证通过、仍待用户确认；最后用户确认步骤保持 20，第 22 步未开始。
+
+### 用户确认与验收交接
+
+2026-10-06，用户在收到助手重新验证结果后回复“通过”，确认第 21 步本地验收。依据为前述 44 项专项、183 项完整后端回归、当前前端构建及 Django/迁移检查通过；覆盖安全错误提示、精确输入保留、单次请求/无自动重试和失败后业务数据不变。用户未补充独立输出，不追加未执行的真实 Crossref、Admin 导入界面或远程 CI/生产验收结论。
+
+已先更新本 progress.md，再补充 architecture.md，随后同步指南与 AGENTS。本次确认交接仅修改文档，没有重跑测试、修改应用代码/schema/依赖、访问数据库、启停进程、提交/推送或部署。最后用户确认步骤为 21，第 22 步未开始，须新的明确实施指令；生产仍为 d8bdd29，既有真实集成、非空重部署及备份恢复待办保持原状态。
+
+## 第 22 步：原子保存与已有资源复用（用户验收通过）
+
+2026-10-06（Europe/London），按用户新的第 22 步指令，写代码前完整阅读 memory-bank 六份文件、当前 AGENTS、此前进度和相关模型/服务/测试/指南。后续用户提供的替换 AGENTS 与当前文件规则一致，不取消已授权的第 22 步实施。复用既有功能分支，保留所有此前未提交工作；仅实施本步，第 23 步未开始。
+
+### 实现与边界
+
+- 新增 events/services/resource_save.py 的 save_doi_to_event：参数为目标 event_id、独立 DOI 身份、可选 bibliography 映射及推荐理由/顺序；返回 DoiSaveResult，含当前 Resource、EventResource 和两个 created 标记。DOI 在查询前沿用第 19 步规范化；在一个短 transaction.atomic 内读取目标、按 DOI 匹配或创建资源、按活动/资源组合匹配或创建关联。
+- 已有 DOI 每次读取当前数据库书目，忽略全部预览共享字段，不执行 Resource.save/update，保留人工修改、清空作者/年份、来源和 seed_key。已有关联直接返回当前原记录，不验证或采用新的理由/顺序，不覆盖已编辑/清空值。新关联只保存当前活动语境，另一活动的关联不变。
+- 新 Resource 只初始化 title/authors/year/original_url/resource_type 五个书目字段，身份来自独立规范化 DOI，来源固定 crossref，忽略映射中的 DOI/source/seed/id/摘要等额外值。允许通过 dataclasses.asdict 转换第 20 步结果并在后续表单补充；服务本身不获取网络或改动输入。普通 Resource/EventResource.save 沿用 full_clean。
+- 资源与关联失败共同回滚；校验、数据库或目标不存在错误在事务退出后原样传播，不吞掉数据库故障。atomic 可嵌入调用方事务，后续附加状态保存失败也可回滚本次新增，但本步没有会话结果/预览/确认入口。
+- 没有 HTTP、Admin/公开路由、权限表单、会话、模型/schema、迁移或依赖变更。服务调用方以后必须验证可信身份、权限及预览状态，不能把此函数直接当作公开写入入口。真正同时竞争、独立连接与预期唯一冲突恢复留第 23 步；本步仅顺序模拟预览之后同 DOI 已创建/编辑的情形，不宣称并发验证已完成。Admin 预览/确认仍留第 24–25 步。
+- 新增 test_resource_save.py 的 14 个 PostgreSQL TestCase 方法：新建/白名单/规范化、另一活动仅建关联、重复不同字段仍保留原记录、已编辑关联重读、预览后创建/编辑的书目复用、可选字段默认值/无预览复用、无效书目/DOI、关联校验失败回滚/再调用、真实 PostgreSQL NOT NULL 写入失败/连接恢复、已有共享书目失败保留、调用方事务回滚及目标已删除拒绝。完整字段快照保护已有数据；所有专项用例禁止 Requests Session.request，保存无外部请求。
+
+### 助手实际检查与排查
+
+- 首次文件工具异常：新服务文件只落入空字节，测试文件未成功创建，第一次专项报告 ModuleNotFoundError（未建测试库），不能视为通过。受限执行器随后报 setup refresh 错误；只重写本次两个新增文件，读取确认正常文本，再发现 14 项测试。没有覆盖此前代码或凭据，没有自动审批拒绝。
+- 进入测试前授权只读 pg_ctl 曾确认 PG17 原已运行 PID 6588；文件工具异常之后测试连接超时，随后 pg_ctl/pg_isready/监听读取确认该项目实例已停止，原因未确定，不归因于应用或用户。只启动既有 .tools/postgres17/data（版本 17、127.0.0.1:5433），不 init/reset，不操作 PG11。恢复后专项 **14 项 OK，0.783 秒，退出码 0**；test_psychtalk 创建、迁移并自动销毁。
+- 当前前端 Vite 构建 **通过，342 毫秒，退出码 0**，既有哈希资产未变。受限执行器首次启动失败，改用授权进程完成构建；没有安装或升级 npm，没有前端源码变更、lint/30 项 Node/浏览器重跑。
+- DJANGO_ENV=test 下 check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整后端 **197 项 OK，13.510 秒，退出码 0**（历史 183 + 本步 14），临时测试库销毁。既有 404/500 故障模拟日志不影响最终 OK；所有 Crossref 模拟，不访问真实服务或生产。
+- 测试后只读确认 PG17 **PID 28764、5433 accepting connections**，保持运行，恢复本轮最初记录的运行状态；不能沿用旧 PID 或宣称从未启动。没有开发业务写入/迁移、示例导入、账号创建、生产访问、提交/推送/部署。
+
+### 验收交接
+
+先更新本 progress.md，再补充 architecture.md 的职责/验证边界，同步 README/AGENTS。双语设计与技术栈已经规定相同复用、事务和字段规则，产品规范无需修改。最后用户确认步骤仍为 21；第 22 步实现及助手检查通过，等待用户验收。用户可按 backend/README.md 运行 14 项 PostgreSQL 专项和当前 197 项完整回归。第 23 步未开始，必须等用户验收以及后续明确指令；当前远程 CI、真实 DOI/Admin 导入、非空重部署及备份恢复仍待办，生产保持 d8bdd29。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户收到当前前端构建、项目数据库状态、隔离环境下 Django/迁移检查、14 项专项及 197 项完整回归的具体验收操作和预期结果后回复“通过”，据此确认第 22 步本地验收；交接中断后用户再次明确回复“通过22”。范围为新 DOI 原子创建、跨活动复用、重复调用保留原字段/理由/排序、预览后已创建/修改书目复用，以及校验/关联数据库错误和调用方事务失败时回滚。前述助手实际测试结果保持独立；用户未附逐项输出，不推断其具体执行命令或当前数据库状态，不编造新日志、耗时、真实 Crossref/Admin 导入或并发竞争验证。
+
+本次先更新 progress.md，再补充 architecture.md 的用户确认与职责交接，随后同步 README/AGENTS。仅文档更新，不重跑测试、不修改应用代码/schema/依赖，不访问数据库或启停进程，不提交、推送或部署。最后用户确认步骤为 22，第 23 步未开始，需新的明确实施指令；独立连接并发保存和唯一冲突恢复仍留第 23 步，生产保持 d8bdd29，真实集成、非空重部署及备份恢复等既有待办不变。
+
+## 第 23 步：独立连接并发保存与预期唯一冲突恢复（用户验收通过）
+
+2026-10-06（Europe/London），用户明确授权本步、验证前不开始第 24 步。写代码前完整阅读六份 memory-bank、当前 AGENTS、既有服务/模型/测试/指南、锁定 Django 校验源码及 CI，确认第 22 步已接受；保留所有既有未提交工作。
+
+### 实现与职责
+
+- resource_save.py 保留第 22 步的白名单、模型 full_clean、当前书目/关联优先和调用方事务组合。捕获发生在整个 atomic 退出之后，不在失败事务内查询；每次恢复重新读取 Event、当前 DOI 资源及关联，丢弃失败尝试的模型实例与 created 标记，不覆盖赢家数据。
+- 只识别正在新增 Resource 的 DOI 唯一冲突或 EventResource 的活动/资源组合唯一冲突。数据库错误要求 Psycopg SQLSTATE 23505、精确表名及 events_resource_doi_key/unique_event_resource；不按错误文本识别。模型校验则要求只有对应字段/非字段唯一错误，code、model_class、unique_check 全部匹配。混合字段错误不被吞掉。
+- 回滚后还必须查到该 DOI/目标关联的赢家，否则原错误继续抛出。每种身份最多恢复一次，最多三个完整保存尝试；同种冲突重复、其他唯一约束、NOT NULL、检查约束、连接等数据库错误均传播。无 HTTP、自动外部重试或长事务；没有新增锁、schema、迁移、依赖、Admin/会话/公开路线。
+- 新增 test_resource_save_concurrency.py 的 14 个方法：7 个 TransactionTestCase 与 7 个错误边界 TestCase。真实竞争使用线程独立连接，核对不同 pg_backend_pid、同一 test_ 库；Barrier 在校验后的 INSERT 前同步，实际触发 PG 唯一冲突，不模拟数据库异常。新 DOI 同活动、不同活动、已存 DOI 同活动三场景各重复三轮。
+- 额外协调胜者先提交、败者再 full_clean，覆盖真实模型唯一错误；三个连接验证单个请求先 DOI 校验冲突再关联 SQL 冲突、第三次返回赢家。恢复分类入口用真实 SELECT 1 验证回滚完成，返回后每条原连接查询成功、autocommit 恢复且 needs_rollback=false；finally 关闭全部工作连接。
+- 验证书目、身份、理由和排序属于赢家；已有人工书目、清空值、来源和 seed 不被覆盖。调用方结果写入失败仍回滚本请求的新关联，另一连接已提交的赢家保留。错误边界实际触发 seed_key 唯一、关联主键唯一、年份检查错误；连接故障采用模拟，混合校验、无赢家以及重复同种冲突终止也有验证。每例阻止 Requests HTTP；第 22 步原有 14 项回滚/复用验证保持通过。
+
+### 助手实际检查
+
+- 首轮既有 14 + 新增 12 项专项 **26 项 OK，4.970 秒**；补充两阶段竞争和次数上限后，最终 **28 项 OK，5.199 秒，退出码 0**。隔离 test_psychtalk 创建、迁移并销毁，无跳过并发场景；新文件最终 14 个方法。
+- 当前 Vite 8.3.2 构建 **成功，255 毫秒，退出码 0**；前端源码/依赖未改，不重跑 lint/30 项 Node/浏览器。Django check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整后端 **211 项 OK，15.777 秒，退出码 0**，含所有 197 个原测试和新增 14 个方法，测试库销毁。预期 API 故障模拟日志不影响 OK。
+- 初始受限和授权只读检查均确认项目 PG17 已停止、5433 no response；只启动既有实例供测试，未 init/reset。结束调用项目 stop 成功，pg_ctl no server running / pg_isready no response，恢复初始停止状态；这些状态命令退出非零是停止的预期结果，不是回归失败。旧 PG11 未操作。所有业务写入只在隔离测试库，没有开发迁移/业务写入、真实 Crossref/生产访问、账号创建、提交/推送/部署。
+
+### 验收交接
+
+先更新本 progress.md，再补充 architecture.md 的服务职责、独立连接证据和错误恢复边界，随后同步 backend/README.md、frontend/README.md 和 AGENTS。双语设计/技术栈已要求这些行为，无产品规范变化；CI 自动发现新增测试，本轮未推送，远程结果仍只覆盖历史版本。用户可按后端 README 运行 28 项保存专项及当前 211 项完整回归。
+
+最后用户确认仍为 22；第 23 步只标记实现与助手检查通过、等待用户验收。第 24 步 Admin 预览没有开始，必须等用户确认及后续明确实施指令。生产仍 d8bdd29；真实 DOI、完整 Admin/会话、非空重部署和备份恢复等既有待办不变。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户收到第 23 步实现及助手 28 项保存专项、211 项完整后端回归、当前前端构建和 Django/迁移检查通过的报告后回复“通过”，确认第 23 步本地验收。范围为独立 PostgreSQL 连接协调竞争、同活动一资源一关联/跨活动一资源两关联、只恢复预期身份唯一冲突、保留赢家字段及回滚后连接可用，并包含两阶段恢复、有限次数和其他错误传播。用户未提供新的逐项输出，不推断其实际命令或当前数据库状态；助手既有实测与用户接受分别记录，不追加真实 Crossref、Admin/会话、远程 CI 或生产验收证据。
+
+此次先更新 progress.md，再补充 architecture.md，随后同步 README/AGENTS。确认交接只改文档，不重跑测试、不修改代码/schema/依赖，不访问数据库或启停进程，不提交、推送或部署。最后用户确认步骤为 23；第 24 步未开始，必须等新的明确实施指令。生产仍 d8bdd29，第 18–23 步尚未发布，既有真实集成、非空重部署及备份恢复待办不变。
+
+## 第 24 步：Admin DOI 预览页面（用户验收通过）
+
+2026-10-06（Europe/London），收到新的第 24 步实施指令后完整阅读六份 memory-bank、当前 AGENTS、此前进度及相关模型、Admin、服务、配置、锁和 Django 会话源码。确认第 23 步已接受，保留全部未提交工作；只实施第 24 步，第 25 步未开始。
+
+### 实现与职责
+
+- Event 编辑页提供 Import reading by DOI；Admin 包装的 /admin/events/event/{id}/doi/ 与独立随机预览地址始终显示目标活动。获取使用 CSRF POST，先匹配数据库 DOI，命中则不请求 Crossref；未命中调用已有固定目标/安全错误服务。失败保留原输入、给出重试或手动添加入口，不影响其他预览。
+- doi_forms.py 校验输入与书目；doi_admin.py 负责权限、目标、页面及操作分派。已有书目每次从当前数据库重读，以完整只读文本展示；服务端禁用字段并保留原空白，伪造 POST 不能改书目。新书目可补充标题/作者/年份/HTTP(S) URL/类型并填写理由和有符号顺序；标题和 URL 必填，作者/年份可空。长书目与 HTML 按转义文本显示。
+- doi_preview.py 将每个预览的独立 48 位十六进制随机 ID、管理员/会话/目标绑定、可信 DOI 和书目保存到数据库会话。成功加载时固定 loaded_at/900 秒期限；检查、编辑、失败重试不延期。读取核对当前会话认证身份、绑定、状态和期限；到期时刻起拒绝。取消通过 POST 只将自己的状态设为 cancelled，并返回目标活动。
+- config/session_backend.py 继承 Django db SessionStore，仍使用 django_session、签名/JSON、原生 Cookie 和 SessionMiddleware，无 schema 变化。预览服务在短事务内 select_for_update 并解码最新会话、合并单个预览；HTTP 在锁/事务外。普通整份会话 save/asave 也先锁行并保留数据库最新 doi_previews，不能由旧快照覆盖或复活取消状态；新会话/轮换清空该命名空间，删除后的旧会话写入继续 UpdateError，不重建登录状态。与原 db 会话签名兼容。
+- 所有页面需要 Event/Resource/EventResource view 权限；POST 还需 Event change/EventResource add，新 DOI 获取或检查需 Resource add。所有入口均经过 Admin 身份包装与真实 CSRF，未增加活动所有权规则。模型权限完整后续复核仍在第 28 步。
+- 页面沿用 Admin forms/按钮，获取时禁用重复控件并显示 Fetching…；Check details 仅表单校验，成功提示 Details checked. No resource has been saved.，未接入 save_doi_to_event，也没有 Save to event 按钮/保存入口。实际确认及同事务成功结果只留第 25 步。浏览器 Back 的 pageshow 恢复控件；Cancel preview 可跳过浏览器必填校验。
+
+### 助手实际检查与排查
+
+- test_doi_preview.py 增加 23 个 PostgreSQL TestCase 方法，test_doi_preview_concurrency.py 增加 3 个 TransactionTestCase 方法，共 **26 项专项最终 OK（5.032 秒）**。覆盖成功/全部安全失败/取消后完整三模型快照、字段校验/输入保留/只读长书目转义、公开 API 不泄露预览身份、权限/真实 CSRF、会话/目标篡改、期限边界、登录失效、目标删除、会话写失败及没有保存入口。
+- 并发用真实 Admin 请求、同一会话 Cookie、独立连接及不同 pg_backend_pid，在实际会话 SELECT FOR UPDATE 前 Barrier 协调；并发获取三轮均保留两个预览。另验证获取与取消竞争，以及取消与旧普通会话 save 竞争；原连接无失败事务状态，其他预览和业务快照不变。顺序验证 SAVE_EVERY_REQUEST、旧快照恶意 namespace、原 db 会话兼容和已注销行不复活。Crossref 全部模拟，禁止真实 Requests HTTP。
+- 当前 Vite 构建成功（253 毫秒）；Django check --database default 无问题，makemigrations --check --dry-run 为 No changes detected。最终完整后端 **237 项 OK（20.527 秒，退出码 0）**，test_psychtalk 创建/迁移后销毁。第一次完整 237 项也通过（21.317 秒）；最终回归包含后续只读显示/测试修正。
+- 初次专项有 6 个失败断言未考虑 HTML 对英文撇号的安全转义，只修正期望后 26 项通过；追加长书目原值测试发现禁用 CharField 默认 trim 会改变校验结果，改为只读字段不 trim 后专项和全套通过，未发生书目保存。
+- CUA 与 node_repl/sky 初始化分别异常退出（kernel reset/setup refresh），未执行页面输入；已阅读 computer-use 技能与相关规则，改用已有预装隐藏 Edge、专用 profile/9237 和忽略的 CDP 检查器，不操作个人浏览器。临时 StaticLiveServerTestCase 使用 test_psychtalk_step24_browser 和测试账号，模拟 1 秒提供方延迟。**8 组实际浏览器检查通过，零 JS 异常**（最终结果 UTC 2026-10-06T17:17:08.622Z）：真实登录/CSRF、已有只读书目、新 DOI 待加载按钮、缺字段浏览器校验、补充检查、独立预览/取消、1280/375 px 布局与退出。最终 live test OK（8.024 秒），三模型快照不变，测试库销毁；桌面/手机截图已查看。首次/调整后检查器轮询错过短暂 pending 状态；静态脚本实为 200，改在真实 submit 事件观察按钮后通过。临时写入检查器时的一次 PowerShell 解析错误未改应用。
+- PG17 开始时受限及授权检查均确认停止，只启动既有 5433 实例供测试，未初始化或重置。结束核对专用 profile 后关闭 Edge；9237 无监听（仅 TIME_WAIT），临时 LiveServer 已退出；项目 stop 成功，pg_ctl no server running/pg_isready no response，恢复原停止状态。PG11 未操作。所有业务夹具/账号只在销毁式测试库；无开发迁移/业务写入、真实 Crossref/生产访问、依赖/schema/公开 API/React 源码改动、提交/推送/部署；前端 lint/30 项 Node/公开页浏览器未重跑。
+
+### 验收交接
+
+先更新本 progress.md，再补充 architecture.md 的预览/会话职责和证据，随后同步 README/AGENTS。两份产品设计和技术栈已规定相同行为，无规范变化；CI 自动发现 237 项，但未推送，远程 CI 仍是历史版本。后端 README 提供 26 项专项、237 项回归及本地 Admin 预览验收入口。
+
+最后用户确认步骤仍为 23；第 24 步等待用户验收，第 25 步未开始，验收后也须新的明确实施指令。生产仍 d8bdd29，第 18–24 步尚未发布；真实 DOI 完整保存集成、第 25 步结果事务/幂等确认、既有非空重部署及备份恢复仍待办。
+
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户收到第 24 步完成报告、26 项专项/237 项后端回归及 8 组浏览器检查通过的结果和 README 验收指引后回复“通过”，确认第 24 步本地验收。范围为 Admin DOI 获取、已有书目只读、新书目补充校验、独立预览取消、15 分钟期限及会话并发保护。Check details 仍只校验，不保存 Resource/EventResource；实际保存与成功结果事务仍属第 25 步。用户未提供新的逐项输出，不推断其执行命令、当前数据库状态或真实 Crossref/生产验证；助手实测与用户接受分别记录。
+
+本次先更新 progress.md，再更新 architecture.md 和相关指南。仅文档更新，不重跑测试、不修改应用代码/schema/依赖，不访问数据库或操作进程，不提交、推送或部署。第 01–24 步已接受，第 25 步未开始，需后续明确实施指令。生产仍 d8bdd29，第 18–24 步尚未发布；真实完整导入、非空重部署、备份恢复等既有待办不变。
+
+## 第 25 步：Admin 确认保存与成功结果事务（用户验收通过）
+
+2026-10-06（Europe/London），收到新的第 25 步指令。写代码前完整阅读全部六份 memory-bank、当前 AGENTS、前序实现及本地锁定 Django 事务/会话/测试服务器源码。用户上下文中的旧第 22 步交接已被连续的第 23–24 步确认和仓库记录更新；保留全部已有未提交工作，仅实施第 25 步，不开始第 26 步。
+
+### 实现与职责
+
+- doi_permissions.py 共用现有模型权限；doi_confirmation.py 新增 confirm_preview 和 saved_result。确认使用服务器预览的 DOI、管理员/会话/活动身份，不采用提交的 DOI、目标、资源、来源或预览隐藏字段。重新读取当前用户及权限，锁定会话行、重读最新绑定状态并锁定目标活动；固定 900 秒在锁等待之后和业务保存之后再次检查，期限不刷新，到期时刻起拒绝并回滚。
+- 新书目通过 DoiReviewForm 必填标题/HTTP(S) URL、可选作者/年份及整数顺序校验；已存 DOI 重新读取数据库书目，禁用共享字段，预览后已创建/修改的当前书目优先。调用第 22–23 步 save_doi_to_event，不在确认事务内访问 Crossref。资源、关联及会话成功结果在同一个短事务持久化；结果写入失败回滚本次新增资源/关联，原预览仍可在原期限内重试。
+- 成功状态保存资源/关联 ID 与创建标记。重复 POST/刷新只返回当前原关联，不修改理由或顺序；成功结果的关联已移除时，旧预览拒绝，即使相同组合后来重建，也不能用旧结果重新创建或定位新关联。已有关联显示 This resource is already linked to this talk.，新关联显示 Resource added to this talk.；提供已有阅读记录与公开活动链接。成功 POST 重定向到结果 GET。
+- Admin 原预览模板增加 Save to event / Saving…，复用既有原生 submit 禁用/恢复逻辑；Check details 继续只验证，不发布。保存失败显示安全英文提示并保留当前提交内容；取消、无效/过期状态、已删除目标均拒绝写入并提供对应管理/重新获取入口。所有实际提交与重复确认仍受 Admin 身份、模型权限及真实 CSRF 保护；第 28 步完整权限复核仍待对应指令。
+- 无模型/schema、迁移、依赖、公开 API、React 源码或正式浏览器工具链变化。仅更新两项旧预览测试以适应已提供保存按钮和未知动作拒绝，新确认测试独立验证业务写入。共享编辑与排序维护没有新增实现，第 26 步未开始。
+
+### 助手实际验证
+
+- 新 test_doi_confirmation.py 有 24 个 TestCase，test_doi_confirmation_concurrency.py 有 4 个 TransactionTestCase，共 28 项；与既有预览 26 项合跑，最终 **54 项 OK（14.117 秒，退出码 0）**。覆盖实际保存/匿名 API、服务器身份、必填与输入保留、固定期限和等待/保存期间到期回滚、取消/其他会话/退出/密码变化/撤权/删除目标、重复与已移除结果、真实 CSRF、完整业务/会话快照及失败后连接和重试。
+- 四项并发为真实 Admin 请求/独立 PostgreSQL PID，同库协调起点：同预览重复确认保留赢家、同会话不同活动的两个预览均保存、独立会话不同活动在实际 Resource INSERT 前竞争并产生 SQLSTATE 23505 后恢复、取消与确认只有一个最终状态。另一未提交预览及原结果保留，原工作连接 SELECT 1/事务状态正常。首轮 51 项的一项断言错期待一个请求 200；两请求在页面阶段都读到 active，正常均返回 302，修正断言并统一重复 POST 的结果 GET 重定向后通过。
+- 当前 Vite build 成功（268 毫秒），哈希资产保持 index-BK7cLyoJ.css / index-D0wzXxLL.js；Django check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整隔离后端 **265 项 OK（30.218 秒，退出码 0）**，test_psychtalk 创建/迁移后销毁，原故障模拟日志不影响 OK。前端源码未变，未重跑 lint/30 项 Node 测试。
+- computer-use/浏览器工具初始化仍异常退出，未执行 UI 输入；已读取技能和指导，使用既有独立隐藏 Edge、专用 profile/9237 和忽略的 .tools/step25-browser。临时 LiveServerTestCase 的 test_psychtalk_step25_browser 仅创建测试账号/夹具，模拟提供方及一次结果写入失败；当前构建收集至专用忽略目录，通过真实 WhiteNoise 提供资产。
+- **8 组浏览器检查通过，零 JS 异常**，结果 UTC **2026-10-06T18:28:37.649Z**，Live test **OK（10.183 秒）**，测试库销毁。真实表单登录/CSRF、已有只读书目确认、新字段浏览器必填与 Check 不发布、Saving…禁用重复控件、失败后值/按钮恢复、重试保存/结果链接、刷新/实际重复 POST、独立预览取消与 375 px、退出后真实 React 匿名阅读/刷新均有证据；已查看桌面/失败保留/手机/公开页截图。ORM 核对 2 个资源/2 个关联、原共享书目不变及新理由/顺序。
+- 首次浏览器 pending 断言包含了 Admin 的退出按钮，改为只检查当前 DOI 表单；之后匿名页面白屏诊断为临时 StaticLiveServer 的前端资产 404。仅修正临时测试服务为收集当前构建+WhiteNoise 后全部通过，没有为检查修改产品代码。全部外部 HTTP 被阻止，模拟结果不冒充真实 Crossref 集成（仍为第 29 步）。
+- PG17 初始受限及授权检查均为停止，只启动现有 5433 实例供测试，未 init/reset。测试后核对专用 profile 并关闭本次 Edge，9237 无监听，临时服务器已退出；项目 stop 成功，pg_ctl no server running / pg_isready no response，恢复初始停止状态。PG11 未操作。无开发迁移/业务写入、生产访问、提交/推送/部署；当前 CI 未获新的远程证据。
+
+### 验收交接
+
+先更新本 progress.md，再补充 architecture.md 的实际职责和验证来源，同步后端验收指南、前端 README 与 AGENTS。两份设计/技术栈已规定相同行为，无产品规则变化。用户可按 README 单跑 28 项确认专项，或合跑 54 项确认/预览专项及当前 265 项完整回归；本地 Admin 的 Save to event 会实际写入开发数据，自动化验收仅写销毁式测试库。
+
+首次实施交接时，最后用户确认步骤为 24，第 25 步已实施并通过助手检查，待用户验收；第 26 步未开始，确认后也须新的明确实施指令。生产仍 d8bdd29，第 18–25 步尚未发布，真实 DOI、非空重部署、备份恢复等既有待办不变。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户在收到第 25 步完成报告及验收指引后回复“通过”。据此记录第 25 步用户验收通过，最后用户确认步骤更新为 25；用户未另提供逐项测试输出，前述 54 项专项、265 项回归及 8 组浏览器结果仍为助手验证证据，不据此新增真实 Crossref 或生产验证结论。
+
+本次仅先更新 progress.md，再同步 architecture.md、AGENTS 和两端 README；不重跑测试，不操作应用、数据库或服务，不提交、推送或部署。第 26 步仍未开始，须用户新的明确实施指令；生产及既有待办保持上述状态。
+
+## 第 26 步：共享元数据修改与活动独立排序（用户验收通过）
+
+2026-10-06（Europe/London），收到新的第 26 步指令后完整阅读全部六份 memory-bank、仓库 AGENTS、当前进度、既有模型/Admin/API/测试及锁定 Django 原生 change_form 模板。用户提供的旧第 22 步状态由后续明确指令、确认和仓库记录衔接；保留所有此前未提交修改，只实施本步，第 27 步未开始。
+
+### 实现与职责
+
+- ResourceAdmin 指定新的 admin/events/resource/change_form.html，继承原生 Admin 表单，只在编辑已有资源且具备修改权限时，在字段之前显示规定英文提示：Changes to this resource will appear in every talk that uses it.。新增表单不显示该提示；字段错误重显仍保留提示，沿用原 CSRF、保存控件、校验及资源禁删。
+- 共享五项书目字段沿用既有 Resource 编辑；DOI/来源只读、seed_key 不在表单中。手动与 Crossref 书目编辑均保留身份和来源；所有引用活动在下一次公开读取看到相同新书目，无外部获取或自动合并。
+- 推荐理由/数字 display_order 沿用原 EventResourceAdmin 表单，已有关联活动/资源身份只读。仅保存当前关联；默认 0、负数、自定义值及 display_order/id 升序仍由原模型/API 实现，无拖拽或新排序路径。未改模型/schema/迁移、依赖、公开接口或 React 源码，也未实施移除入口或第 28 步全面权限复核。
+- 新 test_admin_reading_edits.py 共 8 项 PostgreSQL TestCase：真实 Admin 表单和独立匿名 API 验证共享提示/GET 无写入、两类来源共享编辑与只读身份保护、仅理由/清空或仅排序的单场隔离、默认 0/反向资源 ID 的关联同值顺序、倒序编辑后的自定义同值稳定性、非法/越界数字不部分保存及无效书目重显提示。完整字段快照保护两场活动、共享/其他书目及其他关联，每例禁止 Requests HTTP。
+
+### 助手实际验证
+
+- 新 8 项与原 test_admin.py 21 项合跑：**29 项 OK（4.479 秒，退出码 0）**，test_psychtalk 创建/迁移后销毁，系统检查无问题。
+- 当前 Vite 8.3.2 构建成功（280 毫秒），31 个模块，原哈希资产未变；Django check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整隔离 PG17 后端 **273 项 OK（29.932 秒，退出码 0）**，测试库销毁，预期 API 故障模拟日志不影响 OK。前端源码/测试不变，未重跑 lint/30 Node。
+- CUA getState 和 computer-use 的 node_repl/sky 初始化均异常退出，未执行 UI 输入；已读取技能及指导/确认规则，改用预装隐藏 Edge、专用 step26 profile/9237、忽略的 CDP 检查器。临时 LiveServerTestCase 只用 test_psychtalk_step26_browser，收集当前构建至专用忽略目录，经 WhiteNoise 服务；所有外部 HTTP 阻止。
+- **6 组浏览器检查通过、零 JS 异常**，结果 UTC **2026-10-06T19:35:57.550Z**；Live test **OK（6.150 秒）**，测试库销毁。实际登录/CSRF、字段前共享提示、共享标题保存后两场匿名 API 更新、新增表单无提示、单场理由/顺序保存与只读身份、回到 0 同值顺序、375 px 提示换行无横向溢出、退出后真实 React 两场阅读/刷新均通过；前端资产实际 200，已查看桌面/手机/公开截图。ORM 核对两条资源/四条关联、来源/DOI 保持、B 全字段未变。临时工具不进入应用/CI/依赖。
+- 初次受限数据库状态工具失败；授权 pg_ctl 确认 PG17 起初停止，仅启动既有 5433 实例测试，无 init/reset。结束核对专用 profile/PID 并关闭本次 Edge，9237 无监听，临时服务器已退出；项目 stop 后 pg_ctl no server running，恢复原停止状态，PG11 未操作。无开发迁移/业务写入、真实 Crossref/生产访问、账号初始化、Git 提交/推送或部署；无自动审批拒绝。
+
+### 验收交接
+
+先更新本 progress.md，再补充 architecture.md 的实际职责与证据，随后同步 backend/README.md、frontend/README.md 和 AGENTS。双语设计/技术栈已经规定相同行为，无规范变更。README 提供 8 项新专项/29 项 Admin 回归/273 项完整回归和两场活动的手动验收步骤；用户本地手动保存会改变开发数据，自动化检查仅写销毁式测试库。
+
+首次实施交接时，最后用户确认仍为 25；第 26 步仅实施与助手检查通过，等待用户验收。第 27 步未开始，验收后仍需新的明确实施指令。生产仍 d8bdd29，第 18–26 步未发布；真实 DOI、非空重部署、备份恢复及完整 MVP 待办不变。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户在收到第 26 步完成报告与验收指引后回复“通过”，据此记录第 26 步用户验收通过，最后用户确认步骤为 26。范围为共享编辑提示、两场活动共享书目更新、单场推荐理由及数字排序隔离、默认/负数/同值稳定排序与输入错误不部分保存。用户未附逐项输出，29 项 Admin 专项、273 项回归和 6 组浏览器结果仍为助手执行证据，不增加真实 Crossref、远程 CI 或生产验证结论。
+
+此次先更新 progress.md，再同步 architecture.md、AGENTS 和两端 README。确认交接仅修改文档，不重跑测试、不修改应用/schema/依赖，不访问数据库或操作服务，不提交、推送或部署。第 01–26 步已接受，第 27 步未开始，须新的明确实施指令；生产及既有待办保持上述状态。
+
+## 第 27 步：移除当前活动的阅读关联（用户验收通过）
+
+2026-10-06（Europe/London），按新的明确指令完整阅读全部六份 memory-bank、当前 AGENTS、既有模型/Admin/测试/指南及本地锁定 Django 的 submit_row、删除确认、权限与取消源码。保留此前全部未提交工作，仅处理第 27 步；工作途中用户重复相同指令，继续本步，不开始第 28 步。
+
+### 实现与职责
+
+- 新增 `admin/events/eventresource/submit_line.html`，由原生 submit_row 按模型自动选择，继承原生按钮块并仅将当前关联的删除链接命名为 `Remove from this talk`。保留保存/继续/关闭按钮、原权限判定及活动筛选参数；新增关联页不提供移除。
+- 既有关联确认模板继续显示 `Remove this reading from this talk? Other talks will keep it.`，增加完整、自动转义的活动标题及资料标题，供核对目标。确认/取消、CSRF、删除收集器和权限复查仍由原生 Django Admin 承担；未新增删除服务或公开入口。
+- 移除沿用原 EventResource 删除：仅删除 URL 定位的关联，保留 Resource、活动及其他关联；即使资料不再被引用，也保留共享记录。原 Resource 全局禁删和 DOI 成功结果不重建已移除关联的规则不变。
+- 新 `test_admin_reading_removal.py` 定义 10 项 PG17 TestCase：入口/保存控件/筛选、确认目标转义/GET 与空 POST/取消不写、确认后匿名列表及详情计数/其他场完整字段不变/原生日志、最后引用保留资料及零资料活动、伪造目标不搬移删除、匿名/非 staff/缺删除权限拒绝/公开删除仍拒绝、撤权复查及最小删除权限、真实 CSRF、重复确认不删其他关联、Admin 移除后旧 DOI 确认不重建。各例阻止 Requests HTTP。这里只补本步移除边界，未实施第 28 步全操作权限矩阵。
+
+### 首次交接的检查、阻塞与环境状态（历史）
+
+- 文件读取确认改动已正常写入；源码核对发现测试 staff 用户名重复，改为独立名称，并简化转义 HTML 的断言。`git diff --check` 通过（仅常规 LF/CRLF 警告）。这些是静态检查，不是运行测试。
+- 初始受限及授权只读 pg_ctl 均确认项目 PG17 停止。既有实例 start 命令工具返回退出码 0/无输出，但随后只读 pg_ctl 仍为 `no server running`；不声称成功启动或归因具体故障。当前确认仍停止，PG11 未操作，无 init/reset。
+- 39 项 Admin 专项（10 新 + 21 基础 + 8 编辑）命令被自动审批服务阻止，未启动进程。理由为用量限额，导致审批审查无法完成；返回明确说明这是审查失败而非安全性判定，不能绕过。未创建测试库、未运行任何第 27 步测试、Django/迁移检查、前端构建或浏览器验证。
+- 当前源码预计自动发现 283 项（历史已通过 273 + 新定义 10），283/39/10 均是待执行数量，不是通过证据。历史第 26 步 273 项/6 组浏览器成功不证明本版本。无 schema/依赖/API/React 源码变化，无开发业务写入/迁移、真实 Crossref/生产访问、账号创建、Git 发布或部署。
+
+### 验收交接
+
+先更新 progress.md，再补充 architecture.md 的实际职责和阻塞，同步 README/AGENTS。后端 README 提供 10/39 项专项、预期 283 项完整回归及浏览器取消/确认/另一活动/共享资料保留的验收方法。用量恢复后须继续执行并修复验证，或者由用户按指南执行并反馈；当前不标记本步完成或通过。
+
+最后用户确认步骤保持 26，第 27 步待验证及用户验收，第 28 步未开始。生产仍 d8bdd29，第 18–27 步未发布；真实 DOI、非空重部署、备份恢复及完整 MVP 待办不变。
+
+### 用量查询后恢复验证与当前交接
+
+2026-10-06，用户询问重置用量后为何仍被阻塞。当前账号查询显示普通使用可用、五小时已用 5%、每周已用 1%；授权命令重试成功。此前是审批审查请求返回限额故障，不能据此推断重置无效，也没有证据解释当时状态为何不一致。合法重试后继续原已授权第 27 步，没有绕过审批。
+
+- 授权 pg_ctl 状态确认既有 PG17 已运行（PID 28576）；本次恢复阶段未再次启动。此前 start 返回 0，而沙箱状态显示停止，两者不一致；以此次授权检查作为当前运行证据，不推断具体原因。没有 init/reset，PG11 未操作。
+- 10 新项、21 基础 Admin、8 编辑合跑：**39 项 OK（5.932 秒，退出码 0）**；test_psychtalk 创建/迁移并销毁，系统检查无问题。当前 Vite 8.3.2 构建成功（237 毫秒、31 模块、原哈希不变），Django check --database default 无问题，makemigrations --check --dry-run 为 No changes detected；完整隔离 PG17 后端 **283 项 OK（34.865 秒，退出码 0）**，测试库销毁。React 源码不变，未重复 lint/30 Node。
+- computer-use 的 CUA/sky 初始化失败，未执行 UI 输入；遵循已读技能及指导，改用预装隐藏 Edge、专用 step27 profile/9237 和忽略的 CDP 检查器。临时 LiveServerTestCase 仅使用 test_psychtalk_step27_browser，WhiteNoise 服务当前收集构建，禁止 Requests 外部 HTTP。
+- **5 组真实浏览器检查通过，零 JS 异常**，结果 UTC **2026-10-06T20:32:01.178Z**；Live test **OK（7.720 秒，退出码 0）**，测试库销毁。实际 Admin 登录、命名入口/保存控件、完整确认目标、原生 Cancel/history 返回不写、375 px 无横向溢出、真实 CSRF 确认只删 A 的 URL 关联、独立匿名 API 即时计数/完整 B 保留、Resource 禁删、退出后真实 React A 刷新及 B 阅读/理由保留全部通过；前端资产 200，已查看三张截图。ORM 完整字段核对所有活动/资料及 B 关联不变，仅总关联 3→2。工具/结果位于忽略的 .tools/step27-browser，不进入应用/依赖/CI。
+- 本次测试 Edge PID/profile 核对后关闭，9237 无监听、LiveServer 退出；项目 stop 返回 0，最终授权 pg_ctl 为 no server running，恢复初始停止状态。第一次最终 status 命令遗漏 pgsql 路径段，未运行工具；按项目脚本核实路径后成功复查，未重复启停。无开发业务写入/迁移、真实 Crossref/生产访问、Git 提交/推送或部署。
+
+先更新本 progress.md，再同步 architecture.md、AGENTS 和两端指南。第 27 步实施及助手验证已完成，仍待用户验收；最后确认步骤仍为 26，第 28 步未开始，须验收及新的明确实施指令。生产与既有待办不变。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户在收到第 27 步恢复验证报告及验收指南后回复“通过”，据此记录第 27 步用户验收通过，最后用户确认步骤更新为 27。范围为原生关联移除入口、完整确认目标、取消不写入、确认仅删除当前活动关联、共享资料及其他活动保留、权限/CSRF/重复确认边界和公开计数刷新。用户未附逐项输出，39 项 Admin 专项、283 项完整回归及 5 组浏览器检查仍为助手执行证据，不追加真实 Crossref、远程 CI 或生产验证结论。
+
+此次先更新 progress.md，再同步 architecture.md、AGENTS 和两端 README。确认交接只修改文档，不重跑测试、不修改应用/schema/依赖，不访问数据库或启停服务，不提交、推送或部署。第 01–27 步已接受，第 28 步未开始，须新的明确实施指令；生产仍 d8bdd29，第 18–27 步未发布，既有待办不变。
+
+
+## 第 28 步：后台模型权限矩阵与真实 CSRF 验证（待用户验收）
+
+2026-10-06（Europe/London），按用户新指令完整阅读六份 memory-bank、当前 AGENTS、既有 Admin/DOI 服务/测试、环境隔离及锁定 Django 权限/批量确认源码。第 01–27 步已接受，保留此前全部未提交工作；本次只实施第 28 步，用户验证前不开始第 29 步。
+
+### 实现与职责
+
+- 复核现有三个 ModelAdmin 的原生授权、CSRF、创建/编辑/移除与单条/批量删除路径，以及两个自定义 DOI URL 的 admin_site.admin_view 包装。现有授权符合技术栈矩阵，无需修改运行代码、表单或路由；新增 events/tests/test_admin_permissions.py 的 28 个 PostgreSQL TestCase 方法，将分散操作纳入跨入口回归。
+- 创建 Event/手动 Resource 分别需要 add_event/add_resource；选择已有资源需要 add_eventresource、change_event、view_resource。共享书目修改需要 change_resource；理由/顺序修改需要 change_eventresource；移除需要 delete_eventresource。正向最小权限测试确认没有额外所有权、活动或书目修改权限要求。
+- DOI 查看明确需要三个 view 权限；获取、检查、保存、取消还需 change_event/add_eventresource，新资源获取/检查/保存需 add_resource。每项分别撤权后验证拒绝，包括已成功结果的重复确认；已有 DOI 复用不需要新增/修改 Resource 权限，取消不需要 Resource 新增权限。额外在页面已经缓存允许权限之后、最终事务之前撤销 add_resource，确认服务仍重新读取并拒绝保存。
+- 匿名、持有全部模型权限的非 staff/失效账户，以及无模型权限 staff 均无法执行这些操作。拒绝请求逐次比较 Event、Resource、EventResource、Admin LogEntry 全字段及服务器预览命名空间；获取拒绝在提供方调用之前，真实外部 HTTP 全部阻止，允许路径仅用模拟书目。
+- Client(enforce_csrf_checks=True) 对所有新增/修改/导入/取消/移除/活动及资源删除入口检查缺失令牌、结构有效但伪造的令牌，以及有效令牌配合不可信 Origin，均返回 403 且没有业务/预览/日志变化。合法令牌实际走通创建、共享编辑、理由/排序、获取/检查/保存/取消、移除及活动单条/批量删除；不是模拟 CSRF 中间件。
+- 活动删除要求 Event 与 EventResource 两种 delete 权限，即使无关联；预览确认后撤销任一权限再次拒绝。单条 GET/空 POST、批量未确认 POST 均不删业务数据；确认后仅删选中活动及其关联，保留共享、独占、未关联全部 Resource 和未选活动 B。Resource 对显式拥有删除权限的 staff 与 superuser，单条/直接 URL/伪造批量/底层 Admin 钩子均禁删。
+- 原生批量动作缺权限时不在动作列表中，伪造提交返回原生列表 200 且不执行；单条禁止路径返回 403。GET 携带写操作参数也不写数据：列表将无效筛选重定向到 ?e=1，自定义预览不会 fetch/save/cancel。这些原生状态不是公开写入能力，不为改成统一状态码另建路由。
+
+### 助手实际验证与清理
+
+- 首轮 26 项有两项 GET 列表状态断言失败：错误预期只返回 200/403，实际原生 Admin 将无效 action 筛选重定向 302。核对安装源码后精确断言 ?e=1 重定向及落地 200，仍逐次核对数据/预览不变；只修正测试，不修改产品。另补最终事务 Resource 撤权及可信令牌/不可信 Origin 两项。
+- 最终专项 **28 项 OK（5.748 秒，退出码 0）**，test_psychtalk 创建、应用迁移后销毁；系统检查无问题。当前 Vite 8.3.2 构建成功（252 毫秒、31 模块，原 JS/CSS 哈希保持）；Django check --database default 无问题、makemigrations --check --dry-run 为 No changes detected。完整回归 **311 项 OK（41.612 秒，退出码 0）**，包含原 283 项与新 28 项，测试库销毁。既有 API 404/500 故障模拟不影响 OK。
+- 初始授权 pg_ctl 确认项目 PG17 停止，仅启动已存在的 .tools/postgres17/data（5433）供测试；结束项目 stop 成功，授权 pg_ctl 再次确认 no server running，恢复原停止状态。没有 init/reset、PG11 操作、开发业务写入/迁移或生产访问。
+- 本次没有 UI/运行代码变化，使用真实 Admin HTTP 请求与数据库会话/CSRF中间件完成权限验收，没有新浏览器检查或服务器；前端源码/30 项 Node 测试不变，未重跑 lint/Node。没有新依赖/schema/API、真实 Crossref、Git 暂存/提交/推送/PR或部署，旧远程 CI/生产证据不扩展到本步。
+
+### 验收交接
+
+先记录 progress.md，再补充 architecture.md 的当前矩阵与测试职责，同步 backend/README.md、frontend/README.md 和 AGENTS。README 提供 28 项专项及完整 311 项回归命令，模型权限/删除的状态差别明确说明。双语设计与技术栈规定相同规则，产品规范无需变更。
+
+最后用户确认步骤仍为 27；第 28 步已实现、助手验证通过，等待用户验收。第 29 步真实 DOI 集成未开始，不以模拟书目冒充真实验证，须用户验收及后续明确实施指令。生产仍 d8bdd29，第 18–28 步未发布，非空重部署/备份恢复及其他既有待办不变。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户在收到第 28 步完成报告和验收说明后回复“通过”，据此记录第 28 步用户验收通过，最后用户确认步骤更新为 28。验收范围为后台模型权限矩阵、最小允许权限、撤权后拒绝、真实 CSRF/Origin 校验、GET 不写入、活动删除确认与资料保留，以及 Resource 全面禁删。用户未附逐项输出，28 项专项、311 项完整回归和构建/检查仍为助手执行证据，不新增真实 Crossref、浏览器、远程 CI 或生产验证结论。
+
+本次先更新 progress.md，再同步 architecture.md、AGENTS 和两端 README；确认交接只修改文档，不重跑测试、不修改应用/schema/依赖，不访问数据库或启停服务，不提交、推送或部署。第 01–28 步已接受，第 29 步未开始，须后续明确实施指令；生产仍 d8bdd29，第 18–28 步未发布，既有待办不变。
+
+## 第 29 步：真实 DOI 集成验证（待用户验收）
+
+2026-10-06（Europe/London），按新的第 29 步指令完整阅读全部六份 memory-bank、当前 AGENTS 与前序实现。用户提供的旧第 22 步状态已由后续明确指令、验收和仓库记录更新；最后用户确认仍为 28。本次仅验证第 29 步，第 30 步未开始。
+
+### 真实来源与完整链路
+
+- 使用已确认存在的 DOI `10.1038/nrn2762`。development 配置下先通过原 `fetch_metadata` 单独真实查询一次；随后 Admin 浏览器获取通过同一原服务真实查询一次。两次均请求固定编码地址 `https://api.crossref.org/works/10.1038%2Fnrn2762`，TLS 默认校验、(3, 7) 超时、不跟随重定向、不自动重试，未修改网络规则。
+- 真实 work 的 DOI、首标题、来源作者顺序、published-print 年及 URL 分别为 `10.1038/nrn2762`、`The memory function of sleep`、`Susanne Diekelmann; Jan Born`、2010、`https://doi.org/10.1038/nrn2762`。预览、保存模型及公开 API 全部逐字段匹配；类型 research_paper、来源 crossref、seed_key 为 NULL。核对的是当次真实 Crossref 响应，不使用旧演示 JSON 替代查询。
+- 临时 LiveServer 使用 **DJANGO_ENV=development** 及 `test_psychtalk_step29_browser`，继承项目原数据库环境和 PG17，由隔离运行器创建/迁移/销毁。仅该库创建两个虚构示例活动和临时管理员，不写已有 `psych_talk_dev`，不借用用户或生产凭据。DEBUG=False/WhiteNoise 服务当前构建；真实取数在事务外，确认不调用外部服务。
+- 输入带空白/大写的 HTTPS DOI 链接，真实 CSRF 表单获取后两场匿名计数均为零。预览显示目标和真实五项书目；确认 A 后公开显示原书目、理由及 -3 顺序。重复确认及再次获取/保存均返回原关联，忽略新理由/顺序，原 ID/字段不变。B 导入复用相同 Resource，只新建 B 关联及自己的理由/顺序，最终 **1 Resource / 2 EventResource**；浏览器链路仅一次真实 Crossref 请求。
+- 新获取动作的提供方不可用通过验证工具受控抛出 ConnectionError，明确是模拟故障，未关闭用户网络或更改应用。页面保留 DOI、显示规定安全提示/Retry/Add manually，三模型最终无额外记录；退出后匿名 API、真实 React 两场及完整刷新继续可读，提供方故障期间公开读取没有再次查询 Crossref。
+- Read original 实际打开新标签页并保留原活动页面。后续只读核对最终抵达 `https://www.nature.com/articles/nrn2762`，标签标题 `The memory function of sleep | Nature Reviews Neuroscience`。验证原文目标，不宣称全文免费可读或绕过出版方限制。
+
+### 助手检查、排查与清理
+
+- **8 组真实浏览器检查通过、零未捕获 JS 异常**，结果 UTC **2026-10-06T21:54:10.059Z**；临时 live test **OK，11.431 秒，退出码 0**，测试库销毁。1280 px 预览/结果/公开阅读、375 px 公开阅读截图已查看，前端资产实际 200。来源字段及最终 ORM 断言见 `.tools/step29-browser/database-results.json`，截图/浏览器结果仅为忽略的本机验证证据。
+- 当前 Vite build **通过，251 毫秒**，31 模块及原 JS/CSS 哈希不变；Django check --database default 无问题、makemigrations --check --dry-run 为 No changes detected；完整隔离后端 **311 项 OK，57.826 秒，退出码 0**，test_psychtalk 销毁。没有新增正式测试、依赖或 CI 网络请求，现有常规测试保持模拟 Crossref；前端源码未改，不重跑 lint/30 Node。
+- CUA 与 computer-use 初始化因 Windows sandbox setup refresh 错误退出，没有 UI 输入；按已读技能和既有验证方式使用预装隐藏 Edge、专用 profile/9237。首个只读探测命令因 shell 引号出现 SyntaxError，未执行查询；改为忽略目录脚本后成功。web 工具不能读取 Crossref API/Nature 跳转，不把这些读取失败当作应用网络不可用，实际原 Requests 查询和浏览器原文目标均成功。
+- PG17 初始授权 pg_ctl 为停止，只启动现有 5433 实例（PID 28696），不 init/reset。结束核对专用 profile/PID 14020 后仅关闭本次 Edge；9237 及临时服务 2821 无监听，两个测试库销毁。项目 stop 后授权 pg_ctl 确认 no server running，恢复初始停止，PG11 未操作。
+- 现有导入实现满足真实链路，无需产品运行代码/UI/schema/API/迁移/依赖修改。临时 probe/live_test/check、来源白名单、结果和截图均在被忽略 `.tools/step29-browser`，没有完整提供方响应、密钥或 Cookie 输出；未新增持久账号/开发业务数据、生产访问、Git 暂存/提交/推送/PR 或部署。
+
+### 验收交接
+
+先更新 progress.md，再更新 architecture.md 的真实集成边界及证据，随后同步两端 README 和 AGENTS。backend/README.md 保存来源表、检查结果及可重复的本地 Admin 验收步骤；若用户现有库已含同 DOI，应区分已有书目复用与真正的新 DOI 获取，不删除已有资料来强迫查询。
+
+第 29 步仅为助手验证通过、待用户验收，最后用户确认保持 28。**第 30 步未开始，须本步验收及后续明确实施指令。** 当前生产仍 d8bdd29，第 18–29 步未发布；本地真实集成不代表当前版本 GitHub CI、线上 DOI 或完整 MVP 验收，非空重部署、备份恢复和视频等既有待办保留。
+
+### 用户确认与验收交接
+
+2026-10-06（Europe/London），用户收到第 29 步完成报告后回复“通过”，确认真实 DOI 查询、来源核对、预览、确认保存、匿名阅读、重复导入及跨活动复用的本地验收。第 01–29 步现已用户验收通过；前述待验收描述保留为实施交接时的历史事实。
+
+用户未提供逐项测试输出；8 组浏览器、311 项后端回归及构建/检查仍为助手执行证据，提供方不可用仍为受控模拟故障。本次交接仅更新文档，先更新本文件，再同步 architecture.md 和相关指南，不新增测试、代码、数据库操作、服务启停或 Git 发布/部署。生产仍 d8bdd29，第 18–29 步未发布。**第 30 步未开始，须用户新的明确实施指令。**
+
+## 第 30 步：验证第二个里程碑（本地验证通过、待用户验收）
+
+2026-10-06（Europe/London），按新的第 30 步指令完整阅读全部六份 memory-bank、当前 AGENTS 和既有实现。第 01–29 步已接受，最后用户确认保持 29。本步验证既有第二阶段能力，无应用代码修复或新产品行为；第 31 步未开始。
+
+### 当前本地自动检查
+
+- 核对现有 Node **24.14.0**、npm **11.9.0**、独立 Python **3.13.16**，未安装依赖或修改全局环境。前端 lint 通过、**30 项 Node 测试通过（332.9551 毫秒，无失败/跳过）**、Vite 8.3.2 build 通过（248 毫秒、31 模块），JS/CSS 哈希保持 `index-D0wzXxLL.js` / `index-BK7cLyoJ.css`。
+- pip check 为 No broken requirements found；`DJANGO_ENV=test` 下 Django check --database default 无问题、makemigrations --check --dry-run 为 No changes detected；collectstatic 为 3 copied / 163 unmodified / 156 post-processed。
+- 当前完整后端 **311 项 OK（41.926 秒，退出码 0）**，包括权限/真实 CSRF、会话合并、确认幂等、真实 PostgreSQL 并发、保存回滚、共享编辑/移除/删除及实际前端 bundle；测试仍模拟 Crossref。`test_psychtalk` 创建、迁移后销毁，既有 404/500 故障日志不是测试失败。
+
+### 可重复的真实浏览器路径
+
+忽略的 `.tools/step30-browser/live_test.py` 使用 `DJANGO_ENV=test`、销毁式 **test_psychtalk_step30_browser**、临时管理员和两个虚构示例活动。DEBUG=False/WhiteNoise 服务当前真实 React 构建与真实数据库 API；原 Admin 表单、数据库会话、CSRF 和保存路径均执行。取数替换为演示清单书目，Requests 外部请求一律阻止，本轮没有真实 Crossref/出版方访问。
+
+**12 组浏览器检查通过、零未捕获 JS 异常、全部前端资产 200**，结果 UTC **2026-10-06T22:13:05.329Z**；临时 live test **OK（23.236 秒，退出码 0）**，库已销毁。具体路径如下：
+
+1. 真实 Admin 登录、两场匿名零资料基线；新 DOI 获取/Check details 不发布，真实 CSRF 确认后立即公开，重复 POST 保持原数据。
+2. 已有 DOI 书目只读，同活动重复导入保留原 ID/理由/顺序，另一活动复用同一 Resource、各自保存理由/顺序；确认/复用不再次查询。
+3. 原生手动添加两个相同标题/URL 的资源，保持两条独立记录；选择其中一个关联 A，手动 DOI 为 NULL、来源 manual，B 不变。
+4. 实际 React 搜索仅当前标题，大小写/两端空白、作者不匹配、无结果、Clear search 后顺序和焦点恢复；输入不增加 API 请求，切换 B 后查询不沿用。
+5. 两个独立预览并存，取消 A 后 GET/旧确认不能保存，B 仍有效；公开数据保持不变。
+6. 测试时钟在原状态 **loaded_at + 900 秒的恰好到期边界**触发旧浏览器确认和重复 POST，显示 `This preview is no longer valid. Fetch metadata again.`，业务数据不变。未真实等待 15 分钟，未更改系统时间、应用或会话的原时间戳；期限之前/之后及编辑不延期由正式后端套件覆盖。
+7. 共享 Resource 修改前警告可见，无删除入口；修改标题同步 A/B，DOI/source 保留。A 关联只改理由/数字顺序，B 完整字段不变，API/React 按关联排序。
+8. 原生关联移除确认显示警告；取消无变化，确认只移除 A 的共享关联，B 和 Resource 保留。
+9. 活动删除先确认，取消无变化；确认后 A/API 消失，仅其剩余关联级联清除，全部资料及 B 保留，包括未关联手动资源仍无 Delete。
+10. 退出登录后匿名直接访问/刷新 B 继续显示共享修改，375 px 无横向溢出；已删 A 显示未找到。查看五张搜索页/过期/共享编辑/删除确认/移动端截图，无需产品布局修复。
+
+最终 ORM 断言为 **3 Resource / 1 EventResource**、A 已删除、B 理由/order=7 保留、两条同标题/URL 手动资料未合并、取消/过期的新 DOI 未入库。仅三次模拟取数（新建/取消/过期）；结果/安全白名单与截图在被忽略工具目录，不写出 Cookie 或密钥。
+
+### CI、排查和环境恢复
+
+- 只读 GitHub Actions API 核对现有最新 [Project checks 37320118006](https://github.com/1uxury/psych-talk-hub/actions/runs/37320118006)，SHA **01e1dd094277cb8b89ba5d2bb791d62b0f24f972**，前后端 jobs 及其全部 steps success；旧 a174723/d8bdd29 运行也 success。此 SHA 是第 17 步实现后的已提交文档，**不覆盖第 18–30 步未提交改动**。当前远程 CI 待发布后验证；本轮不提交/推送、触发工作流或部署，不声称第 30 步全部远程验收完成。干净依赖安装/故意 CI 失败检查仍是第 34 步范围。
+- CUA/sky 初始化因 Windows sandbox setup refresh 失败，无 UI 输入；沿用已安装的专用隐藏 Edge/9237 和已有 CDP 连接器。浏览器首轮因忽略的检查脚本重复声明 input 失败（9.808 秒、测试库销毁）；仅修复该脚本作用域，重跑 12 组成功，不修改应用来适配测试。一次只读工作流文件路径探测不存在，改读实际 backend.yml；沙箱 CIM/公共 API 读取失败后授权只读核对成功。
+- 初始授权 pg_ctl 确认 PG17 停止，仅启动已有 `.tools/postgres17/data`/5433（PID 28384）；未 init/reset、未操作 PG11、未向现有开发库迁移/写业务。结束核对专用 Edge 的 profile/端口/PID 18260 后关闭该进程树，临时 LiveServer 退出、两个测试库销毁。项目 stop 后授权 pg_ctl 明确 no server running、实际退出码 **3**，5433/9237 无监听，恢复初始停止。首次清理断言误期待 pg_ctl 无服务器退出码 1，核对实际 3 后只读复查通过，没有重复启停。
+- 本步仅修改进度/架构/两端 README/AGENTS；验证脚本、profile、构建/收集产物及证据均忽略。没有新正式测试、依赖/schema/迁移/公开 API/运行代码变化、已有开发业务写入、持久账号、生产访问、Git 暂存/提交/推送/PR 或部署。
+
+### 文档与验收交接
+
+先更新本文件，再更新 architecture.md 第 71 节，明确服务边界、Public API contract 引用、900 秒会话状态与合并锁、模型权限、事务/幂等和测试覆盖，再同步 AGENTS 与两端 README 的当前状态及人工复核清单。中英文设计的 15 分钟期限、重复导入/确认、共享删除/活动保留与阶段/完整交付边界一致；现有产品行为无调整，两份设计及技术栈无需改写。
+
+最终只读文档检查通过：六份 memory-bank 加 AGENTS/两端 README 共 **9 份文档、67 个本地文件链接**可解析，代码块闭合，两份设计均有对应的 10 个主章节及相同关键英文提示，当前最后确认 29/第 31 步未开始/远程 CI 待办状态一致。`git diff --check` 通过；临时浏览器脚本/结果/文档检查器均由 git check-ignore 确认忽略。该结构检查不代替上面的语义对照，也不声明远程链接或线上全流程通过。
+
+**第 30 步本地验证通过，待用户验收及当前版本远程 CI；最后用户确认仍为 29。第 31 步未开始，须本步验收后新的明确实施指令。** 生产保持 d8bdd29，第 18–30 步未发布；非空重部署、备份恢复、完整线上验收、可复现干净安装及视频等待办保持原状态，本地里程碑不等于完整 MVP。
+
+### 2026-10-07 用户授权助手复查本地核心验收
+
+用户询问项目完成程度和验收方式后要求“你帮我检查”。这是第 30 步验收复查，不是用户回复“通过”，也不是启动第 31 步；最后用户确认仍为 29。
+
+- 复用现有准确运行时，frontend lint、**30 项测试通过（290.874 毫秒，无失败/跳过）**、build 通过（249 毫秒、31 模块及原哈希）。pip check 无问题、Django check --database default 无问题、makemigrations 为 No changes detected、collectstatic 为 2 copied / 164 unmodified / 156 post-processed。完整 **311 项后端 OK（44.641 秒，退出码 0）**，隔离 test_psychtalk 销毁；预期故障模拟日志不影响结果。
+- 原 step30-browser live_test/check 再跑 **12 组全部通过、零 JS 异常、前端资产全部 200**，live test OK **23.780 秒**，UTC **2026-10-06T23:00:49.930Z**（伦敦 7 October）。覆盖前述新/已有 DOI、手动独立书目、搜索、两个预览/取消、恰好 900 秒拒绝、共享编辑与关联顺序、移除/活动删除的取消和确认、保留资料、退出/匿名刷新/375 px。此库仍用 test 配置，模拟取数并阻止全部真实外部 HTTP，最终三资源/一关联断言通过；test_psychtalk_step30_browser 销毁。
+- 再复用 step29-browser 做 **8 组真实 DOI 集成检查，全部通过、零 JS 异常、资产 200**；live test OK **9.309 秒**，UTC **2026-10-06T23:01:25.172Z**。development 配置仅写销毁式 test_psychtalk_step29_browser；原服务真实读取 Crossref 一次 HTTP 200，仍在事务外、固定编码地址/TLS/(3,7) 超时/禁重定向。标题、作者、2010 年、原链接与预览/模型/API 逐字段一致；确认、重复保存和 B 复用不再次取数，最终一资源/两关联。提供方失败仍为受控 ConnectionError，已有匿名阅读/刷新不受影响。原文打开新标签，稍后只读确认最终 Nature URL/匹配标题；不宣称免费全文。测试库销毁。
+- 查看本轮五张核心截图及真实预览/故障/移动端截图，未发现需修复的业务问题。既有忽略证据先复制到各工具目录的 evidence-before-recheck 子目录，再生成本轮结果；没有加入 CI 或新的正式测试。一次只读探测误读并不存在的 step30-browser/cdp.mjs，实际连接器在 step26-browser，未修改应用或连接器。
+- 只读重新核对 GitHub CI 37320118006/SHA 01e1dd0：前后端 jobs 及全部 steps success；结论仍仅覆盖已提交旧版本，第 18–30 步当前远程 CI 未验证。复查已有文档结构/67 个本地文件链接及 git diff --check 通过；同步本文件后再同步 architecture/AGENTS/两端 README 的最新来源。
+- **本轮初始 PG17 已在运行（PID 29760）**，不 start/stop/init/reset，不按前次“初始停止”记录关闭用户数据库。核对本次专用 Edge/recheck-profile/9237/PID 33136 后只关闭该进程树；9237 无监听，临时 LiveServer 退出、三个测试库销毁，最终授权 pg_ctl 保持相同 PID 的运行状态。PG11 和已有开发服务未操作，无现有开发业务写入或生产访问。
+
+本轮只复查并更新交接文档，无应用/schema/依赖变化、Git 暂存/提交/推送/PR、工作流触发或部署。核心路径本地验收证据通过，当前 CI/线上发布/备份恢复/可访问性/干净复现/视频等仍按原计划待办；**第 30 步待用户验收，第 31 步未开始。**
+
+## 第 31 步：公开页面状态核对与固定夹具验收（用户验收通过）
+
+2026-10-07（Europe/London），用户再次明确要求阅读全部 memory-bank 并继续第 31 步，验证前不开始第 32 步。该指令明确授权推进本步，优先于旧交接中的等待第 31 步指令；不将其改写为用户另行回复“通过30”。完整读取六份文档、当前 AGENTS、已有页面/请求模块和验收指南，保留全部既有未提交工作。
+
+### 实现核对与验收补齐
+
+- RequestState 负责 loading/not_found/error 与 Retry；HomePage 成功分支保留两个空组及总空提示；TalkDetails 区分零资料和搜索无结果，Clear search 恢复顺序、计数和焦点。API client 先判断 HTTP 再解码，不把 500 空数组或坏 JSON 当作空成功；Hook 离页取消并屏蔽旧结果。现有实现满足本步，无运行代码、产品规范、正式测试或依赖变更。
+- frontend/README.md 新增第 31 步逐项状态矩阵、已有只读夹具入口、DevTools 延迟/断网/重试/取消与 500/坏 JSON 的可复现操作。backend/README.md 与 AGENTS 同步本地证据和第 32 步门槛。双语设计原有英文文案一致，无需修改。
+
+### 助手实际验证
+
+- 固定 Node 24.14.0/npm 11.9.0：lint 退出码 0，**30 项 Node 测试通过，288.267 毫秒，0 失败/跳过/取消**；Vite 8.3.2 build **250 毫秒**、31 模块，原 JS/CSS 哈希保持。没有重装依赖或重跑无改动的 311 项后端；其最近通过来源仍为第 30 步复查。
+- **13 组浏览器检查全部通过，零未捕获 JS 异常，全部前端资产 200**，结果 UTC **2026-10-06T23:13:02.711Z**。两页延迟加载且不显示空/失败；全空且两组标题保留；仅 Past/仅 Upcoming；无资料保留活动且隐藏搜索；无搜索结果/清空恢复与无额外请求；404/Back；两页 500（正文为空数组）/Retry/加载过渡/成功移除错误；两页坏 JSON 可重试；两页实际浏览器 Offline 后恢复/Retry；加载中详情离页取消、延迟失败不显示在首页。观察到 4 条取消网络请求，包含最终明确的离页取消断言。查看加载/全空/首页错误/详情错误/搜索无结果五张截图。
+- computer-use/sky 与 CUA 初始化均因 Windows sandbox setup refresh 错误失败，无 UI 输入；沿用预装专用隐藏 Edge/CDP，不使用用户日常浏览器。忽略的 `.tools/step31-browser/serve.py` 只提供当前 dist 与本地演示清单派生的固定只读夹具，固定 2000/2099 年区分两组；控制端点仅属于本机临时测试服务，未加入应用/API。check.mjs 复用 step26 连接器，浏览器自身 Offline 仅影响专用会话。没有连接 Django/数据库、真实外部服务或生产，不将夹具结果当作真实存储或线上验收。
+- 恢复专用浏览器网络与正常夹具后，核对 profile/9237/PID 34200 并关闭仅该 Edge 进程树，停止本次 8002 夹具服务；用户开发服务及 PostgreSQL 17/11 未启停、初始化或修改，无测试数据库/账号创建。脚本、profile、结果及构建均为忽略产物，不进入 Git/CI/部署。
+
+### 交接边界
+
+先更新本文件，再补充 architecture 第 73 节及两端 README/AGENTS。第 31 步本地验证通过、待用户验收；**第 32 步未开始**。当前远程 CI、非空重部署、备份恢复、干净复现、完整视觉/可访问性与视频仍按原计划待办。生产仍 d8bdd29，第 18 步之后的本地工作尚未发布；本轮无 Git 暂存/提交/推送、工作流触发或部署。
+
+最终只读文档结构检查通过：9 份文档、69 个本地文件链接、闭合代码块及对应 10 个双语章节/关键提示；当前明确确认29/授权31/等待验收/32未开始及远程CI待办一致。直接执行 README 新控制台夹具确认正常读取、500、坏JSON、同源GET限定、取消拒绝及Admin/外网/POST不覆盖，全部通过。git diff --check 通过；授权只读端口检查确认8002/9237无监听，临时工具/证据均忽略。
+
+### 用户确认与验收交接
+
+2026-10-07（Europe/London），用户收到第 31 步完成报告与验收清单后回复“通过”，据此确认第 31 步本地验收，最后明确用户确认步骤更新为 31。范围为公开加载、全空/单组空、零资料、搜索无结果/清空、404、失败/Retry 与离页取消。用户未提供新的逐项输出，30 项 Node、13 组浏览器及构建证据仍为助手执行来源，不追加真实数据库、当前远程 CI 或线上验收结论。
+
+本次先更新 progress.md，再补充 architecture.md 与 AGENTS/两端 README。仅文档交接，不重跑应用测试、不修改运行代码/数据库/依赖、不启停服务、不提交/推送或部署。第 32 步未开始，须用户新的明确实施指令；生产和既有待办保持不变。
+
+## 截止前收尾：第 32–36 步与阶段交付（2026-10-07）
+
+最新用户要求“继续实施必要的步骤，要截止了，我必须尽快收尾”，授权推进必要收尾，不再逐步等待；最后明确用户验收仍为 31，不虚构 32–40 的“通过”。完整读取全部六份 memory-bank、根 AGENTS 和当前指南，保留所有前期未提交工作。
+
+- 第 32/33 步：现有运行实现无需修改。专用隐藏 Edge/本机只读夹具九组通过，零 JS 异常、资产全部 200（UTC 2026-10-07T00:20:50.226Z）。冬夏/两次 DST/开始 ±1ms 在洛杉矶和上海设备时区仍显示伦敦、首页详情一致；直达/刷新/前进返回/快速切换取消旧响应；375/768/1280 两页长标题和 URL 无横向溢出，间距字号断点符合设计。键盘 Tab/Enter 可探索、输入搜索、清空恢复焦点和打开原文新标签；九项正文/背景对比度 5.86–13.27:1。已查看四张移动端/桌面截图。CUA/sky 初始化受 sandbox helper 错误阻塞，无 UI 操作；使用已安装专用 Edge/CDP。一次辅助脚本 Enter 事件缺字符导致检查失败，修正脚本后通过，没有修改产品适配测试。
+- 第 34 步本地部分：只复制 Git 公共源文件到忽略的 delivery-clean，全新 Python 3.13.16 虚拟环境和锁定包、pip check 通过；Node24.14.0/npm11.9.0 全新离线 npm ci 后 lint/30测试/build 通过，原资产哈希保持。Django check、迁移遗漏检查、collectstatic及全部 **315 后端 OK（43.307秒）**；销毁 test_psychtalk_delivery_clean。临时错误仅注入干净副本：lint、失败测试、遗漏迁移均 exit1，恢复均 exit0；未生成迁移文件/实际应用迁移或业务写入。辅助读取输出因 Windows gbk 解码错误出现线程日志，不影响被执行命令退出码与全部恢复断言；后续脚本固定 UTF-8。当前 Linux CI 仍须提交后核对。
+- 第 35 步：当前完整套件包含真实 dist/DEBUG=False/WhiteNoise/限定页面入口/API错误/Admin资产检查；第30步实际数据库浏览器还覆盖直达与刷新。线上当前版本验证留发布后执行，不把本地作为线上结论。
+- 第 36 步：新增 config/safe_logging.py 标准请求/安全日志过滤器，清除路径、参数及异常敏感详情；health 失败只记异常类别，doi_admin 只记白名单 lookup 类别/保存异常类型。scripts/deploy.py Gunicorn access format 只记 method/status/duration。四项正式日志测试和原10部署测试通过（14 OK，0.677秒），全部315回归通过。SimpleTestCase 首次 teardown 因 mock connection.cursor 与 Django wrapper 冲突，改为 mock 整个 connection 后通过；不是应用缺陷。无 schema/依赖/前端/API 契约变更。
+- 根 README/DELIVERY 为当前可复现入口与演示脚本；未录制视频，不提供不存在的视频链接。第37–40步进行中，仍为阶段交付，不能宣称完整MVP。
+
+只读 Render API 确认原 Frankfurt Web/PG17 仍 Free、自动部署 no、外部访问规则 []、数据库 expiresAt=2026-11-03T23:33:20.802631Z，生产仍 d8bdd29。拟发布当前已验证源代码到现有分支，经对应 GitHub CI 成功后才部署同一提交；无付费资源/升级。PG17初始 PID29760 已运行，保持原状态；PG11未操作。

@@ -1,5 +1,7 @@
 # PsychTalk Hub — Product Design Document
 
+Implementation status / 实施状态 (7 October 2026): core implementation and steps 32–36 local final checks passed; current remote release/online checks remain in progress, management video pending. This remains a stage delivery, not full MVP acceptance. Product requirements below remain unchanged. Actual evidence: [progress](progress.md), [architecture](architecture.md), [delivery](../DELIVERY.md).
+
 Version: MVP v0.2 | Date: 3 October 2026 | Status: Design specification; implementation not yet verified
 
 [中文版](design-document.zh-CN.md) · [Technology stack](tech-stack.md)

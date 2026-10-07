@@ -1,13 +1,15 @@
-"""Basic content management; DOI import is added in later steps."""
+"""Talks, shared bibliography, per-talk reading and DOI import management."""
 
 from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin.widgets import AdminSplitDateTime
 from django.core.exceptions import PermissionDenied
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import Event, EventResource, Resource
+from .doi_admin import doi_preview_view
 
 
 class LondonDateTimeWidget(AdminSplitDateTime):
@@ -37,13 +39,28 @@ class EventAdminForm(forms.ModelForm):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     form = EventAdminForm
-    fields = (*EventAdminForm.Meta.fields, "public_page")
-    readonly_fields = ("public_page",)
+    fields = (*EventAdminForm.Meta.fields, "public_page", "doi_import")
+    readonly_fields = ("public_page", "doi_import")
     list_display = ("title", "starts_at", "speaker", "is_example", "public_page")
     search_fields = ("title", "topic", "speaker")
     ordering = ("starts_at", "id")
     delete_confirmation_template = "admin/events/event/delete_confirmation.html"
     delete_selected_confirmation_template = "admin/events/event/delete_selected_confirmation.html"
+
+    def get_urls(self):
+        return [
+            path("<int:event_id>/doi/", self.admin_site.admin_view(self.doi_view), name="events_event_doi_lookup"),
+            path("<int:event_id>/doi/<str:preview_id>/", self.admin_site.admin_view(self.doi_view), name="events_event_doi_preview"),
+        ] + super().get_urls()
+
+    def doi_view(self, request, event_id, preview_id=None):
+        return doi_preview_view(self, request, event_id, preview_id)
+
+    @admin.display(description="DOI reading")
+    def doi_import(self, obj):
+        if not obj.pk:
+            return "Save this talk before importing reading."
+        return format_html('<a href="{}">Import reading by DOI</a>', reverse("admin:events_event_doi_lookup", args=[obj.pk]))
 
     def view_on_site(self, obj):
         # Django serves this declared page; React reads its data through the API.
@@ -83,6 +100,7 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Resource)
 class ResourceAdmin(admin.ModelAdmin):
+    change_form_template = "admin/events/resource/change_form.html"
     fields = ("title", "authors", "year", "original_url", "resource_type", "doi", "metadata_source")
     readonly_fields = ("doi", "metadata_source")
     list_display = ("title", "authors", "year", "resource_type", "metadata_source")

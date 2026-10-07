@@ -1,5 +1,7 @@
 # PsychTalk Hub — 产品设计文档
 
+Implementation status / 实施状态 (7 October 2026): core implementation and steps 32–36 local final checks passed; current remote release/online checks remain in progress, management video pending. This remains a stage delivery, not full MVP acceptance. Product requirements below remain unchanged. Actual evidence: [progress](progress.md), [architecture](architecture.md), [delivery](../DELIVERY.md).
+
 版本：MVP v0.2｜日期：2026 年 10 月 3 日｜状态：设计规范，尚未验证实现
 
 [English version](design-document.md) · [技术栈](tech-stack.md)

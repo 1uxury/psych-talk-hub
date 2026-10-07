@@ -1,5 +1,7 @@
 # Free Render deployment — step 17 handoff
 
+Current finish run (7 October 2026): existing Free Frankfurt service/PG17 and autoDeploy=no were rechecked. Production is still d8bdd29 while the new verified release is prepared. Current CI/deploy/preservation/backup/restore evidence will be recorded in [DELIVERY](../DELIVERY.md); earlier step 17 statements below are historical, including “step 18 has not started”.
+
 Checked: 5 October 2026 (Europe/London). **The first Free Render deployment is
 Live; migrations, real Gunicorn startup and online HTTP/browser checks passed.
 Step 17 was user-confirmed on 5 October 2026.** The user separately authorised creating

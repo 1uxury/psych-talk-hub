@@ -80,7 +80,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {"default": configuration["database"]}
 CONFIGURED_DATABASE_NAME = configuration["database_name"]
 TEST_RUNNER = "config.test_runner.IsolatedDatabaseRunner"
-SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_ENGINE = "config.session_backend"
 
 if DJANGO_ENV == "production":
     SESSION_COOKIE_SECURE = True
@@ -143,3 +143,17 @@ STORAGES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"safe_requests": {"()": "config.safe_logging.SafeRequestFilter"}},
+    "formatters": {"standard": {"format": "{levelname} {name}: {message}", "style": "{"}},
+    "handlers": {"console": {
+        "class": "logging.StreamHandler", "filters": ["safe_requests"], "formatter": "standard",
+    }},
+    "loggers": {
+        name: {"handlers": ["console"], "level": "INFO", "propagate": False}
+        for name in ("django", "events", "config")
+    },
+}

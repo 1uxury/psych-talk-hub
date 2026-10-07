@@ -1,7 +1,11 @@
 """Small readiness probe: check this application and PostgreSQL, never Crossref."""
 
+import logging
+
 from django.db import DatabaseError, connection
 from django.http import JsonResponse
+
+logger = logging.getLogger(__name__)
 
 
 def healthz(request):
@@ -13,7 +17,8 @@ def healthz(request):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT 1")
                 ready = cursor.fetchone() == (1,)
-        except DatabaseError:
+        except DatabaseError as error:
+            logger.warning("Readiness check failed (%s).", type(error).__name__)
             ready = False
         response = JsonResponse(
             {"status": "ok"} if ready else {"detail": "Service unavailable."},

@@ -1,6 +1,306 @@
 # PsychTalk Hub frontend
 
-## Current handoff: step 17 user-confirmed on 5 October 2026
+Current finish work (7 October 2026): the user authorized necessary finishing steps before the deadline; this supersedes historical per-step waiting gates. Last explicit user acceptance remains step 31. Steps 32–36 passed local checks: clean locked dependencies, lint/30 frontend tests/build, Django/migration/static checks, 315 backend tests (43.307 s), nine additional time/navigation/responsive/contrast/keyboard browser groups, and deliberate failure/restoration checks. Safe request/health/DOI categories and URI-free access logs are implemented. See [root README](../README.md) and [delivery record](../DELIVERY.md). Current-commit CI, publication/production backup/restore/online checks are in progress; video remains pending. Earlier handoff statements below are historical.
+
+Current work: **step 31 public states are user-accepted on 7 October 2026,
+after local assistant verification. Step 32 has not started.** The user's explicit step 31
+instruction authorises this step; no separate “passed step 30” reply is recorded.
+Latest lint, **30 Node tests (288.267 ms)** and build (250 ms) passed. Thirteen
+read-only fixture browser groups passed, zero JS exceptions, assets 200;
+five screenshots reviewed. No runtime code or dependency changes were needed.
+The dedicated fixture server/browser were closed; no database was accessed or
+operated. Current remote CI and production delivery remain pending.
+See [the step 31 checklist](#step-31-validation--public-page-states).
+
+Historical step 30 handoff: **steps 01–29 are user-accepted**. Step 30 second milestone passed
+local assistant verification, rechecked on 7 October 2026; user acceptance and remote CI
+for the current uncommitted version remain pending. **Step 31 has not started.**
+Current frontend lint, all **30 Node tests** (290.874 ms), build (249 ms),
+dependency/Django/migration checks, static collection and **311 backend tests /
+OK (44.641 s)** passed. Frontend/application source and dependencies are unchanged.
+
+Twenty browser groups passed real Admin/CSRF/database sessions/public API and the
+current built React served through WhiteNoise: 12 core groups plus 8 real DOI
+integration groups. Core checks covered DOI preview/save/reuse, independent
+manual records, title search/no extra requests/clear/focus/event scope, independent
+previews/cancel/exact expiry, shared edits/reason/order, association removal,
+event deletion preserving resources, logout/anonymous refresh and 375 px display.
+Live tests OK (23.780 s core, 9.309 s real DOI), zero JS exceptions, assets 200;
+screenshots reviewed. Core lookup was mocked with external HTTP blocked; a test
+clock triggered exact 900-second expiry without waiting 15 minutes. The separate
+real chain made one Crossref HTTP 200 request, confirmed source fields/save/repeat/
+reuse/anonymous refresh and Nature's original-link target; provider failure was
+simulated. These checks used disposable PG17 test data, not fake API replies.
+
+Three test databases were destroyed; dedicated test servers/browser closed and PG17
+kept in its initially running state, PG11/existing development services untouched.
+No existing development business
+writes, production access, Git publication or deployment occurred. Production
+remains d8bdd29; steps 18–30 are unpublished. Existing successful CI run 37320118006
+only covers published step 17 code/documents (SHA 01e1dd0), not current local changes.
+See [step 30 results and acceptance checklist](../backend/README.md#step-30-validation--second-milestone).
+
+## Step 31 validation — public page states
+
+Run `npm.cmd run lint`, `npm.cmd test` (30 passing tests) and `npm.cmd run build`
+from frontend using the pinned Node/npm versions. Then use the existing local
+development services and a fresh browser tab. These checks require only public
+GET requests; do not delete/edit records to force empty states.
+
+| State | How to trigger locally | Expected result |
+| --- | --- | --- |
+| Loading, both pages | Network: disable cache and select Slow 3G, then enter Home/detail using an in-app link | Loading talks… / Loading resources…; no empty/error content while pending. Detail keeps Back to talks. |
+| All talks empty | Use the existing [Home fixture](#step-15-validation-3-single-group-and-completely-empty-home), scenario empty | Talks will appear here when they are added.; both Upcoming/Past headings and their empty hints remain; no Retry. |
+| One group empty | Repeat that fixture with upcoming and past | No past talks yet. / No upcoming talks yet. Explore past talks below.; the populated group remains usable and no global empty hint appears. |
+| Zero readings | Use a real zero-reading talk or the [detail fixture](#step-16-validation-4-missing-optional-fields-and-zero-readings), scenario empty | Activity information and Reading resources will be added here soon.; search absent, no error. |
+| No search matches | In a populated detail, enter no-such-reading-step31 | No resources match your search.; Clear search restores count, API order and input focus with no extra API request. |
+| Missing activity | Open a numeric ID confirmed absent in the local API | We couldn't find this talk.; Back to talks works, no zero-reading message or Retry. |
+| Network failure, both pages | First load the page online, select Offline, then follow an in-app link to the other page | We couldn't load this page. Please try again.; Retry visible, no empty success. Set No throttling, click Retry; normal content returns and error disappears. |
+| HTTP/decoding failure | Use the temporary console override below, then follow an in-app link | Same safe failure for a 500 body of [] or malformed 200 JSON; restoring normal reads and Retry recovers. |
+| Leaving a pending request | Under Slow 3G, enter detail and immediately click Back to talks while Loading resources… is visible | The detail request is cancelled in Network; after Home succeeds and the old request's delay passes, no detail error appears. Restore No throttling. |
+
+The optional override below is limited to public API GETs in this local tab.
+Start with a full reload to remove other fixtures, paste it once, and select
+`http`, `invalid`, `slow`, or `slow-error`. After setting the mode, leave/re-enter
+the target through the product links to trigger its request; a full reload
+removes the override. `slow` tests loading; `slow-error` tests leaving detail
+before a delayed failure. For Retry, set mode to `normal` before clicking Retry.
+Repeat HTTP/invalid cases on Home and detail. Do not apply this to Admin or use
+fixture outcomes as evidence of stored/production data.
+
+~~~javascript
+window.step31Read = { mode: 'http' }
+const step31Fetch = window.fetch.bind(window)
+window.fetch = async (input, options) => {
+  const url = new URL(typeof input === 'string' ? input : input.url, location.href)
+  if (url.origin !== location.origin || !/^\/api\/events\//.test(url.pathname)
+      || (options?.method ?? 'GET') !== 'GET') return step31Fetch(input, options)
+  const mode = window.step31Read.mode
+  if (mode === 'slow' || mode === 'slow-error') {
+    await new Promise((resolve, reject) => {
+      const signal = options?.signal
+      const abort = () => {
+        clearTimeout(timer)
+        reject(new DOMException('Aborted', 'AbortError'))
+      }
+      const timer = setTimeout(() => {
+        signal?.removeEventListener('abort', abort)
+        resolve()
+      }, 3000)
+      if (signal?.aborted) abort()
+      else signal?.addEventListener('abort', abort, { once: true })
+    })
+  }
+  if (mode === 'http' || mode === 'slow-error' || mode === 'invalid') {
+    return new Response(mode === 'invalid' ? 'not JSON' : '[]', {
+      status: mode === 'invalid' ? 200 : 500,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+  return step31Fetch(input, options)
+}
+~~~
+
+Restore with a full reload, reset Network to No throttling and confirm real
+content loads. Browser evidence on 7 October 2026: 13 groups passed using fixed
+demo-derived local responses and the current bundle, including actual browser
+Offline, both-page Retry and observed cancelled network requests. This is
+separate from Node lifecycle tests and prior real database/DOI evidence.
+The user replied “通过” on 7 October 2026, accepting step 31 locally. No new
+individual outputs were supplied; earlier checks remain assistant evidence.
+The acceptance handoff only updates documents, without rerunning tests or
+operating services/databases. **Step 32 remains unstarted and requires a new
+explicit implementation instruction.**
+
+## Historical handoff: step 18 user-confirmed on 5 October 2026
+
+Step 29 is the last user-accepted step. Step 30 is locally verified, awaiting
+user acceptance and current remote CI; step 31 has not started. This section
+describes step 18 frontend work.
+On 5 October 2026, step 18 adds
+instant title substring filtering within the loaded event's reading list.
+Queries ignore case and surrounding whitespace; filtering preserves the API
+association order, changes no data and sends no additional request. Search has
+a visible label, matching/total count, and the specified no-results/Clear search
+state. Clearing restores the list and focuses the input. Zero readings hide the
+search control. Navigating to another event or reloading resets the query.
+
+Assistant checks passed lint, all existing 30 request/time tests and the current
+build, plus 11 isolated browser scenarios with temporary read-only API fixtures
+derived from the local demo manifest. These verify title-only matching, scope,
+order, clearing, keyboard focus, zero readings, navigation/reload, no extra API
+requests, and layout at 375/768/1280 px. Screenshots were reviewed; no application
+JS exceptions occurred. The fixtures do not prove real database or production
+behaviour. No dependencies, test definitions, backend code or schema changed.
+Temporary server/browser processes were closed; databases were not accessed.
+Current step 18 is uncommitted, unpushed and undeployed; production remains
+d8bdd29. After receiving the local validation instructions, the user replied
+“通过” on 5 October 2026, confirming step 18 local acceptance. No individual
+outputs or screenshots were supplied; this does not imply remote CI or online
+search acceptance. The confirmation handoff only updates documentation, with
+no test rerun or code/database change. A subsequent instruction now implements
+step 19 backend DOI normalization and fixed-target transport, user-confirmed on
+5 October 2026 after the acceptance instructions, without individual outputs;
+see [backend validation](../backend/README.md#step-19-validation--doi-normalization-and-fixed-request-target).
+That step rebuilt the current frontend for the passing 151-test backend regression,
+without changing frontend source or rerunning its lint/Node/browser checks.
+Step 20 backend successful Crossref conversion is implemented and user-confirmed
+on 6 October 2026, without individual outputs; [current backend validation](../backend/README.md#step-20-validation--crossref-successful-metadata-conversion)
+documents 32 database-free tests and 169 complete backend tests. Step 20 rebuilt
+the current frontend without changing its source or rerunning lint/Node/browser
+checks. The confirmation handoff only updates documentation, with no test rerun,
+code/database changes or process operations. A subsequent instruction implements
+step 21 backend error conversion, user-confirmed on 6 October 2026 after the
+assistant's requested verification; see
+[current backend validation](../backend/README.md#step-21-validation--crossref-lookup-errors).
+On 6 October 2026 the assistant passed 44 database-free lookup tests, Django/migration
+checks and all 183 backend tests, including two new failure/persistence checks.
+The current frontend was rebuilt for real-asset regression; its source was unchanged,
+and lint/30 Node/browser checks were not rerun. No real Crossref/production access,
+commit/push or deployment occurred. The user's acceptance adds no new real
+integration/remote evidence; the confirmation only updates documentation, with
+no test rerun or code/database/process operation. At that acceptance handoff, step 22 had not started; its subsequent implementation is documented below.
+
+Step 22 backend atomic DOI save/reuse is now implemented and user-accepted on 6 October 2026;
+at that acceptance handoff the last accepted step was 22. The user confirmed after the validation instructions and explicitly replied “通过22”; the confirmation only updates documentation, without a test rerun or code/database/process operation. The assistant passed 14 new PostgreSQL save tests,
+Django/migration checks and all 197 backend tests on 6 October 2026. The current
+frontend build passed for real-asset regression; frontend source and its 30 tests
+are unchanged, with no lint/Node/browser rerun. No schema/dependency/Admin/public
+API change, real Crossref/production access, commit/push or deployment occurred.
+The temporary database was destroyed; project PG17 was restored to the initially
+recorded running state after being found stopped during tool failures. See
+[current backend validation](../backend/README.md#step-22-validation--atomic-doi-save-and-reuse).
+At that step 22 acceptance handoff, step 23 had not started. Its subsequent implementation is below.
+Production remains d8bdd29.
+
+
+Step 23 backend concurrent DOI save/recovery is implemented and user-accepted on 6 October 2026; at that handoff the last accepted step was 23. The user replied “通过” after the assistant validation report, with no new individual output. This confirmation only updates documentation, without tests, code/database changes, process operations or publication. On 6 October 2026 the assistant
+passed 28 PostgreSQL save tests, Django/migration checks and all 211 backend tests.
+Independent-connection races verify same-talk 1/1 and different-talk 1/2 results,
+current winner data and usable connections after rollback. Current frontend build
+passed; frontend source/30 tests are unchanged, with no lint/Node/browser rerun.
+PG17 was confirmed stopped before testing, only the existing project instance was
+started and stopped afterwards, restoring that state. The isolated database was
+destroyed and worker connections closed; PG11 was not operated. No schema/dependency/
+Admin/public API change, real Crossref/production access, development business write,
+commit/push or deployment occurred. See
+[current backend validation](../backend/README.md#step-23-validation--concurrent-doi-saves).
+At that step 23 handoff, step 24 had not started. It is now implemented as described below.
+Production remains d8bdd29; steps 18–23 are unpublished.
+
+
+Step 24 adds the **Django Admin** DOI preview (user-accepted on 6 October 2026), with
+lookup, readonly current bibliography, field checking and per-preview cancellation.
+On 6 October 2026 assistant checks passed 26 PostgreSQL preview tests, 237 full
+backend tests, Django/migration checks, current frontend build (253 ms), and eight
+disposable-database Admin browser scenarios with zero JS exceptions. Database
+sessions merge independent previews under row locks; ordinary session writes retain
+the current namespace. Check details does not publish reading; at that step 24
+handoff, step 25 saving had not started. This step changes no React source or frontend tests/dependencies;
+frontend lint/30 Node tests/public-page browser checks were not rerun. Both test
+DBs were destroyed, dedicated browser/server closed and project PG17 restored to
+its initial stopped state; PG11 was not operated. No real Crossref/production access,
+development business writes, commit/push or deployment. See
+[step 24 acceptance](../backend/README.md#step-24-validation--admin-doi-previews).
+Steps 18–24 are unpublished; production remains d8bdd29.
+The user replied “通过” after the implementation report and acceptance guide,
+without new individual test output. This confirmation only updates documentation,
+with no test rerun, application/database changes, process operations or publication.
+At that confirmation handoff, step 25 required a new implementation instruction.
+
+Step 25 in Django Admin is user-accepted on 6 October 2026. Save to event
+commits resource, association and trusted session result together, with fixed expiry,
+permission/state rechecks, rollback and original-result replay. Assistant checks
+passed 54 confirmation/preview tests, all 265 backend tests, current Vite build
+(268 ms), Django/migration checks and 8 disposable-database browser scenarios.
+The latter include actual current-bundle anonymous reading/refresh after saving;
+Crossref is mocked, no React source/dependency/Node-test change or lint/30-test rerun.
+Test DBs destroyed, dedicated browser/server closed, PG17 restored stopped, PG11 untouched.
+No real Crossref/production access, development writes, commit/push or deployment.
+See [step 25 acceptance](../backend/README.md#step-25-validation--admin-confirmation).
+The user replied “通过” without individual test outputs; that acceptance handoff only updated documentation. At that handoff step 26 had not started; its implementation is below.
+
+Step 26 adds the shared-impact warning to the native Django Admin Resource edit
+form and verifies existing per-talk recommendation/numeric-order maintenance.
+It is user-accepted on 6 October 2026. The user replied “通过” without individual
+test outputs; this confirmation handoff updates documentation only. Assistant
+checks passed 29 Admin tests (8 new), all 273 backend tests, Django/migration
+checks and the current Vite build (280 ms). Six disposable-database browser
+scenarios passed with zero JS exceptions, including shared-title changes on both
+talks and independent reasons/order after logged-out React reading/refresh.
+The actual current assets were served through WhiteNoise. No React source,
+frontend tests, dependency, schema or public API changes; lint/30 Node not rerun.
+Both test DBs destroyed, dedicated browser/server closed, PG17 restored stopped,
+PG11 untouched. No development business writes, real Crossref/production access,
+commit/push or deployment. See [step 26 acceptance](../backend/README.md#step-26-validation--shared-bibliography-and-reading-order).
+At the step 26 handoff, steps 18–26 were unpublished and step 27 had not started; its current state follows below.
+
+Step 27 names the native Admin association action Remove from this talk and adds
+full escaped target titles to its existing confirmation. Assistant checks passed
+39 combined Admin tests (10 new), 283 full backend tests, current frontend build
+and Django/migration checks. Five isolated browser scenarios passed with zero JS
+exceptions: actual Cancel without writes, native confirmation removing only A's
+link, B/shared record preservation, 375 px confirmation and logged-out React
+refresh. Actual assets returned 200; screenshots/ORM snapshots checked. Results
+UTC 2026-10-06T20:32:01.178Z. Initial usage-limit approval failure is resolved;
+approved retries succeeded. React source unchanged; lint/30 Node not rerun.
+Test databases destroyed, temporary browser/server closed, PG17 restored to
+initial stopped state; PG11 untouched. The user confirmed step 27 with “通过”
+on 6 October 2026; steps 01–27 are accepted, with no additional test outputs supplied.
+No schema/dependency/API/React changes, development writes, real Crossref or
+production access, Git publication or deployment. Steps 18–27 are unpublished,
+production remains d8bdd29. At the step 27 acceptance handoff, step 28 had
+not started; its current state is recorded at the top of this README. See
+[step 27 acceptance](../backend/README.md#step-27-validation--remove-reading-from-one-talk).
+
+## Step 18 validation — current event title search
+
+Run these checks with the existing pinned runtimes/dependencies:
+
+~~~powershell
+Set-Location G:\STUDY\psych-talk-hub\frontend
+npm.cmd run lint
+if ($LASTEXITCODE -ne 0) { throw 'Frontend lint failed.' }
+npm.cmd test
+if ($LASTEXITCODE -ne 0) { throw 'Frontend tests failed.' }
+npm.cmd run build
+if ($LASTEXITCODE -ne 0) { throw 'Frontend build failed.' }
+~~~
+
+Expected: no lint warnings/errors, 30 passing tests and successful build. These
+existing Node tests cover requests and time/grouping, not search DOM interaction.
+For real local browsing, follow [the existing development startup instructions](#step-14-validation-2-start-existing-development-services)
+below, then open [local Home](http://localhost:5173/). Do not use the live Render
+site to accept this un-deployed search change.
+
+1. Open an event with readings. Confirm Search resources, Search by title and
+   the initial total/order against Network's detail resources array.
+2. Enter a substring of an actual title, then repeat with different case and
+   surrounding spaces. Results and order must match; the count shows, for
+   example, 2 of 3 reading resources. Search updates as you type.
+3. Search an author name or recommendation phrase that does not also occur in
+   a title. It must not match. Search a title exclusive to another event; that
+   event's readings must not appear. Choose examples from the actual responses.
+4. Enter an absent title string: No resources match your search. and Clear
+   search appear, while event information stays visible. Use Tab and Enter on
+   Clear search: the full count/order return, the input empties and gains focus.
+   Manually clearing the input or entering only spaces also restores the list.
+5. Observe Network while typing/clearing: no new API/Crossref requests. Navigate
+   through Home to another event and refresh detail; its query begins empty and
+   only its readings appear. Original link/new-tab behaviour remains unchanged.
+6. For a real zero-reading event, or the existing Step 16 empty-response fixture
+   below, expect the event information and Reading resources will be added here
+   soon. with no search input. Record fixture use separately from stored data.
+7. At 375, 768 and 1280 px, search/clear controls fit, keyboard focus is visible,
+   readings remain one column and there is no horizontal overflow. Check loading,
+   failure/Retry and not-found regressions using the existing Step 14 checklist.
+
+If real local data is unavailable, keep that part pending; fixtures do not change
+database records or constitute online acceptance. The user has confirmed step 18
+after receiving this checklist; retain it for reproducibility. Step 19 DOI
+normalisation has not started.
+
+## Historical step 17 handoff: user-confirmed on 5 October 2026
 
 Step 17 is the last user-accepted step. Step 17 adds production asset
 integration: build URLs use /static/frontend/ while Vite development remains at
@@ -100,7 +400,7 @@ application backend is introduced.
 | src/pages/HomePage.jsx | Automatic list read; successful-list time snapshot, ordered groups and all three empty messages |
 | src/components/TalkCard.jsx | Semantic card, optional topic/speaker, example label, London time, accurate count and accessible detail link |
 | src/utils/talks.js | Shared Home/detail classification against an explicit instant; non-mutating grouping/sort; Europe/London Intl display |
-| src/pages/TalkPage.jsx | Real detail read and successful-load time snapshot, status/event information, ordered readings, no-reading state and disclosures |
+| src/pages/TalkPage.jsx | Real detail read/time snapshot, event information, current-event title filtering/count/clear, ordered readings and empty states |
 | src/components/ResourceCard.jsx | Association-keyed card, type/title, author/year placeholders, optional recommendation and accessible new-tab original link |
 | src/pages/NotFoundPage.jsx | Unknown page or non-numeric talk route; no API request; Back to talks |
 | src/components/RequestState.jsx | Shared English loading/not-found/failure messages, live status/alert and Retry |
@@ -109,7 +409,7 @@ application backend is introduced.
 | src/api/types.js | JSDoc reference to the existing API contract, including empty strings and nullable year/DOI |
 | tests/api-client.test.js | 20 isolated request/lifecycle tests; detail order/null preservation and rejection of bad metadata/unsafe original URLs; no React DOM coverage |
 | tests/talks.test.js | Ten time/grouping tests; shared Home/detail boundary, ties, immutability, empty groups, London DST and browser name fallbacks |
-| src/index.css | Visual base, states, responsive activity grid, always-single-column reading list, text line breaks/wrapping and visible focus |
+| src/index.css | Visual base, labelled search input, responsive activity grid, always-single-column reading list, wrapping and visible focus |
 | vite.config.js | Development base /, localhost:5173/strictPort and unchanged /api proxy; build base /static/frontend/ |
 | package.json / package-lock.json / .npmrc | Runtime, exact dependencies, dev/lint/test/build/preview and installation policy |
 | ../.github/workflows/backend.yml | Existing PostgreSQL backend job plus frontend locked install/lint/test/build |

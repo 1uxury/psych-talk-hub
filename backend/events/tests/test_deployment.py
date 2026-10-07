@@ -69,6 +69,11 @@ class DeploymentTests(SimpleTestCase):
         self.assertIn("config.wsgi:application", arguments)
         self.assertEqual(arguments[arguments.index("--workers") + 1], "1")
         self.assertEqual(arguments[arguments.index("--bind") + 1], "0.0.0.0:10000")
+        access_format = arguments[arguments.index("--access-logformat") + 1]
+        self.assertEqual(access_format, "%(m)s %(s)s %(M)sms")
+        # URLs/queries contain private preview IDs; access logs retain only metrics.
+        for private_atom in ("%(r)s", "%(U)s", "%(q)s", "%(h)s", "%(u)s"):
+            self.assertNotIn(private_atom, access_format)
 
     def test_check_or_migration_failure_never_launches_gunicorn(self):
         failure = subprocess.CalledProcessError(1, ["migrate"])

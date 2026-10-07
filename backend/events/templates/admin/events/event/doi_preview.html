@@ -1,0 +1,55 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block extrahead %}{{ block.super }}<script src="{% static 'events/doi_preview.js' %}" defer></script>{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}">{% endblock %}
+{% block content %}
+<div id="content-main">
+  {% if event %}<h2>Target talk: {{ event.title }}</h2>{% endif %}
+  {% if state_error %}
+    <p class="errornote" role="alert">{{ state_error }}</p>
+    {% if event %}<p><a href="{{ lookup_url }}">Fetch metadata again</a></p>{% endif %}
+  {% elif result %}
+    <p role="status">{% if result.association_created %}Resource added to this talk.{% else %}This resource is already linked to this talk.{% endif %}</p>
+    <p>{{ result.resource.title }}</p>
+    <p><a href="{{ association_url }}">View reading link</a></p>
+    <p><a href="{{ public_url }}">View public talk page</a></p>
+    <p><a href="{{ lookup_url }}">Import another reading</a></p>
+  {% elif review_form %}
+    <p>DOI: {{ doi }}</p>
+    {% if existing %}<p>Saved bibliography is read-only. Edit shared details on the Resource edit page.</p>{% endif %}
+    {% if needs_review %}<p role="status">Some details are missing. Review before saving.</p>{% endif %}
+    {% if checked %}<p role="status">Details checked. No resource has been saved.</p>{% endif %}
+    <form method="post" data-doi-form>
+      {% csrf_token %}
+      {{ review_form.non_field_errors }}
+      <fieldset class="module aligned">
+        {% for field in review_form %}
+          <div class="form-row">
+            {{ field.errors }}
+            {% if field.field.disabled %}
+              <div><label>{{ field.label }}:</label><div class="readonly" data-field="{{ field.name }}">{% if field.name == 'resource_type' %}{{ resource_type_label }}{% else %}{{ field.value|default_if_none:""|linebreaksbr }}{% endif %}</div></div>
+            {% else %}{{ field.label_tag }}{{ field }}{% endif %}
+          </div>
+        {% endfor %}
+      </fieldset>
+      <div class="submit-row">
+        <button type="submit" class="button default" name="action" value="save" data-pending="Saving…">Save to event</button>
+        <button type="submit" class="button" name="action" value="review" data-pending="Checking…">Check details</button>
+        <button type="submit" class="button" name="action" value="cancel" formnovalidate data-pending="Cancelling…">Cancel preview</button>
+      </div>
+    </form>
+  {% else %}
+    <form method="post" data-doi-form>
+      {% csrf_token %}
+      {{ lookup_form.non_field_errors }}
+      <fieldset class="module aligned">
+        {% for field in lookup_form %}<div class="form-row">{{ field.errors }}{{ field.label_tag }}{{ field }}</div>{% endfor %}
+      </fieldset>
+      <div class="submit-row"><button type="submit" class="button" name="action" value="fetch" data-pending="Fetching…">{% if can_retry %}Retry{% else %}Fetch metadata{% endif %}</button></div>
+    </form>
+    {% if perms.events.add_resource %}<p><a href="{% url 'admin:events_resource_add' %}">Add manually</a></p>{% endif %}
+  {% endif %}
+  {% if event %}<p><a href="{{ event_url }}">Back to talk administration</a></p>{% endif %}
+  <p><a href="{{ event_list_url }}">Back to talks administration</a></p>
+</div>
+{% endblock %}
