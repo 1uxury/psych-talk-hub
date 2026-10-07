@@ -32,7 +32,11 @@ requires a controlled separately authorized connection.
 Local lint/32 frontend tests/build, Django/migration checks, collectstatic and
 **325 PostgreSQL backend tests / OK (47.142 s)** passed. Ten new image cases cover
 validation, permissions, API/no server fetch, preservation/backfill and poster assets.
-Production extension pending. Counts/statuses below are historical evidence.
+Release **b85902b** passed [exact CI 37602418895](https://github.com/1uxury/psych-talk-hub/actions/runs/37602418895)
+and is Live. Production enrichment added six talks/five resources/eighteen links and
+filled two old empty covers. All other old fields/admin data were preserved, repeat
+import unchanged, database external access closed. Eight poster responses and real
+Admin fields/CSRF checks passed. Counts/statuses below are historical evidence.
 
 Current stage delivery (7 October 2026): application release **06f98e2** passed [current frontend/backend CI](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) and is **Live** on the existing Free Render service. Clean local lint/30 frontend/build/checks and **315 PostgreSQL backend tests (43.307 s)** passed, as did nine time/layout/keyboard groups, eleven production HTTP/Admin checks and seven fresh anonymous browser groups. Nonempty redeployment preserved every public field; explicitly authorized private backup/isolated restore matched all business/admin/migration fields. See [README](../README.md), [delivery](../DELIVERY.md) and [backup procedure](../backend/BACKUP.md). Management video and the full production management matrix remain pending; this is a stage delivery, not full MVP acceptance. Last explicit user acceptance is step 31; latest instruction authorizes finishing work. Earlier statuses below are historical.
 

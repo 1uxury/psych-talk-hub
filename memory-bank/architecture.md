@@ -10,7 +10,11 @@ Event 的迁移 0004 增加 `cover_image_url`（可空字符串、2048）与 `co
 
 精选清单扩展到 8 场虚构活动、11 条真实共享资源、24 条关联；原两场 seed_key、日期及原书目不变，新活动首次导入使用同一时刻偏移 +7/+14/+21/-14/-21/-28 天。8 张原生 SVG 不含脚本、链接或外部资产。新增机构文章来源包含 NIMH stress、NCCIH mindfulness/music、NIH habits 两篇，清单记录核对 URL 和日期，未知年份为 null。
 
-默认导入仍 preserve existing records。显式 `seed_demo --fill-missing-covers` 在同一 atomic 中锁定现有活动，仅补符合原题名/示例/两图片字段为空的预置记录；自定义封面、替代文字、题名及非示例不变。既有已清空封面在普通重复导入时不会填回。325 后端/32 前端及15组只读浏览器检查通过，迁移及静态收集通过；线上扩展待交付。检查入口 backend/README.md、frontend/README.md。
+默认导入仍 preserve existing records。显式 `seed_demo --fill-missing-covers` 在同一 atomic 中锁定现有活动，仅补符合原题名/示例/两图片字段为空的预置记录；自定义封面、替代文字、题名及非示例不变。既有已清空封面在普通重复导入时不会填回。325 后端/32 前端及15组只读浏览器检查通过，迁移及静态收集通过。检查入口 backend/README.md、frontend/README.md。
+
+发布 **b85902b** 经 CI [37602418895](https://github.com/1uxury/psych-talk-hub/actions/runs/37602418895) 两任务/全部步骤成功；既有 Free Render 部署 **dep-db318n7lk1mc73936ohg** 于 **2026-10-07T09:45:23.224798Z** Live，日志确认迁移 0004 先于 Gunicorn。随后单独 TLS 事务新增6活动/5资源/18关联并补2旧封面，总8/11/24，既有其余业务/管理员字段保留、重复导入零变化，数据库外部访问恢复 []。生产八 SVG 全部200，原公开字段/日期/阅读精确保留，Admin图片字段与CSRF检查及12组匿名真实浏览器检查通过，零JS异常；本次扩展待用户查看，原视频/完整生产管理矩阵待办仍保留。
+
+仅本次夹具8002/PID31364及无头promotion-profile浏览器9237/PID38848在核对命令行后关闭；原PG17/PID29760继续运行，测试库销毁，PG11与用户服务未操作。私人CV与凭据未提交。
 
 日期：2026-10-07｜最后明确用户确认步骤：31｜第 30 步本地验证通过、当前版本远程 CI 待办｜第 31 步用户验收通过｜生产 SHA 仍为 d8bdd29｜第 32 步未开始
 

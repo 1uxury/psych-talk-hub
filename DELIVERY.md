@@ -3,8 +3,15 @@
 Latest user-requested extension: promotional images and expanded demo are implemented
 and locally verified (325 backend/32 frontend tests, 15 browser groups). Eight original
 posters, eight fictional talks, eleven real resources and twenty-four reading links.
-Exact-commit CI, existing Free Render deployment and controlled production enrichment
-are pending; the previous release and evidence below remain historical.
+Release **b85902b** passed [exact CI 37602418895](https://github.com/1uxury/psych-talk-hub/actions/runs/37602418895)
+and is Live on the existing Free Render service: **dep-db318n7lk1mc73936ohg**,
+**2026-10-07T09:45:23.224798Z**. Real logs confirm migration 0004 before Gunicorn.
+Controlled TLS enrichment created six talks/five resources/eighteen links and filled
+two old covers. All other existing business/admin fields were preserved; repeat import
+unchanged, external DB access closed. Public field preservation/eight poster HTTP checks,
+real Admin/CSRF and twelve production browser groups passed. User review of the extension
+remains; original video/full management matrix follow-up remains. Earlier release records
+below are historical.
 
 Current stage: core implementation, final checks, exact-commit GitHub CI and
 controlled deployment passed. Application release **06f98e2 is Live**. Last explicit user

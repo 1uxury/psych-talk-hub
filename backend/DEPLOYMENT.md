@@ -1,5 +1,16 @@
 # Free Render deployment — step 17 handoff
 
+Latest image/demo extension: **b85902b45df9a8b6b84dbdc9614b4fc6148aa710** passed
+[CI 37602418895](https://github.com/1uxury/psych-talk-hub/actions/runs/37602418895);
+**dep-db318n7lk1mc73936ohg** Live **2026-10-07T09:45:23.224798Z** on the same Free
+service. Logs confirm image migration 0004 OK before Gunicorn. Static SVGs survive
+redeployment as tracked assets; no uploaded files/persistent disk were introduced.
+Explicit separate TLS demo enrichment gives 8 talks/11 resources/24 links, only fills
+two old empty covers, preserves original dates/readings/admin data and repeats without
+changes. Temporary external database access was restored to []. Production poster/API/
+Admin/CSRF and 12 browser groups passed. Existing build PATH, plan, branch, autoDeploy=no
+and database expiry below are unchanged; old releases are historical evidence.
+
 Current stage delivery (7 October 2026): application release **06f98e2** passed [current frontend/backend CI](https://github.com/1uxury/psych-talk-hub/actions/runs/37552097967) and is **Live** on the existing Free Render service. Clean local lint/30 frontend/build/checks and **315 PostgreSQL backend tests (43.307 s)** passed, as did nine time/layout/keyboard groups, eleven production HTTP/Admin checks and seven fresh anonymous browser groups. Nonempty redeployment preserved every public field; explicitly authorized private backup/isolated restore matched all business/admin/migration fields. See [README](../README.md), [delivery](../DELIVERY.md) and [backup procedure](../backend/BACKUP.md). Management video and the full production management matrix remain pending; this is a stage delivery, not full MVP acceptance. Last explicit user acceptance is step 31; latest instruction authorizes finishing work. Earlier statuses below are historical.
 
 Checked: 5 October 2026 (Europe/London). **The first Free Render deployment is

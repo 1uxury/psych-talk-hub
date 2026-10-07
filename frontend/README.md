@@ -10,7 +10,10 @@ tolerated during deployment. Vite proxies bundled `/static/events` to Django.
 Lint, **32 Node tests** and build passed; 15 offline actual-build browser groups passed:
 1280/768/375 px, eight talk details, search/clear/focus/Back and blank/broken/unsafe-image
 fallback. Normal poster/JS/CSS were 200, zero JS exceptions; screenshots reviewed.
-Current online extension pending.
+Release **b85902b** is Live; [exact CI 37602418895](https://github.com/1uxury/psych-talk-hub/actions/runs/37602418895)
+passed both jobs. Twelve production browser groups passed at the same three widths,
+including all eight details and search/navigation; all posters/assets 200, no JS
+exceptions. Production desktop and phone screenshots were reviewed.
 
 Manual check: Home initially has four upcoming/four past talks with distinct posters.
 Open each talk: cover, three readings, fictional disclosure, search and Back. In Admin
